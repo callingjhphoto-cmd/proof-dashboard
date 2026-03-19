@@ -1,13 +1,1683 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>proof-dashboard</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Proof | AI Operations Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --bg-secondary: #F5F5F7;
+    --bg-card: #FFFFFF;
+    --border: #E5E5EA;
+    --border-light: #F0F0F2;
+    --text-primary: #1D1D1F;
+    --text-secondary: #6E6E73;
+    --text-muted: #AEAEB2;
+    --accent: #0071E3;
+    --accent-light: rgba(0,113,227,0.08);
+    --green: #34C759;
+    --green-bg: rgba(52,199,89,0.08);
+    --green-border: rgba(52,199,89,0.2);
+    --amber: #FF9500;
+    --amber-bg: rgba(255,149,0,0.08);
+    --amber-border: rgba(255,149,0,0.2);
+    --red: #FF3B30;
+    --red-bg: rgba(255,59,48,0.08);
+    --red-border: rgba(255,59,48,0.2);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-xs: 8px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo-area { display:flex; align-items:center; gap:10px; }
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #0071E3, #5856D6);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px;
+    letter-spacing: -0.5px;
+  }
+  .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-primary); }
+  .header-meta { display: flex; align-items: center; gap: 16px; }
+  .header-date { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
+  .header-badge {
+    background: var(--accent-light);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+
+  /* ===== VENUE BAR ===== */
+  .venue-bar {
+    background: white;
+    border-bottom: 0.5px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .venue-bar::-webkit-scrollbar { display: none; }
+  .venue-chip {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .venue-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .venue-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .venue-info {
+    margin-left: auto;
+    display: flex; gap: 20px;
+    font-size: 12px; color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .venue-info strong { color: var(--text-secondary); font-weight: 500; }
+
+  /* ===== TAB NAV ===== */
+  .tab-nav {
+    background: white;
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: 14px 20px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tab-btn:hover { color: var(--text-secondary); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* ===== MAIN CONTAINER ===== */
+  .main { max-width: 1400px; margin: 0 auto; padding: 20px 24px 40px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-md); }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+
+  /* ===== BENTO GRID ===== */
+  .bento-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .bento-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .bento-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .bento-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .bento-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
+  .gap-16 { gap: 16px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-20 { margin-top: 20px; }
+
+  /* ===== HERO KPI CARDS ===== */
+  .kpi-hero {
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-hero .kpi-icon {
+    width: 40px; height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  .kpi-hero .kpi-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .kpi-hero .kpi-value {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+  }
+  .kpi-hero .kpi-comparison {
+    font-size: 12px;
+    margin-top: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .kpi-hero .kpi-target {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .kpi-hero .traffic-indicator {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .tl-green { background: var(--green); box-shadow: 0 0 8px rgba(52,199,89,0.4); }
+  .tl-amber { background: var(--amber); box-shadow: 0 0 8px rgba(255,149,0,0.4); }
+  .tl-red { background: var(--red); box-shadow: 0 0 8px rgba(255,59,48,0.4); }
+
+  /* ===== AI BRIEFING ===== */
+  .ai-briefing {
+    background: linear-gradient(135deg, rgba(0,113,227,0.04), rgba(88,86,214,0.04));
+    border: 1px solid rgba(0,113,227,0.12);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 20px;
+  }
+  .ai-briefing-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .ai-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .ai-briefing-title { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .ai-briefing-time { margin-left: auto; font-size: 11px; color: var(--text-muted); }
+  .ai-briefing-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .ai-briefing-body strong { color: var(--text-primary); font-weight: 600; }
+  .ai-briefing-body .hl-green { color: var(--green); font-weight: 600; }
+  .ai-briefing-body .hl-amber { color: var(--amber); font-weight: 600; }
+  .ai-briefing-body .hl-red { color: var(--red); font-weight: 600; }
+  .ai-actions {
+    margin-top: 16px;
+    padding: 16px;
+    background: white;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border);
+  }
+  .ai-actions-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .ai-actions ul { padding-left: 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.9; }
+  .ai-actions li { margin-bottom: 4px; }
+
+  /* ===== PERIOD TABS ===== */
+  .period-pills {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xs);
+    padding: 3px;
+    width: fit-content;
+    margin-bottom: 16px;
+  }
+  .period-pill {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .period-pill:hover { color: var(--text-secondary); }
+  .period-pill.active { background: white; color: var(--text-primary); box-shadow: var(--shadow-sm); }
+
+  /* ===== CHARTS ===== */
+  .chart-box { position: relative; height: 240px; }
+  .chart-box-sm { position: relative; height: 200px; }
+  .chart-box-lg { position: relative; height: 300px; }
+
+  /* ===== TABLES ===== */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+  .data-table th:first-child { border-radius: 8px 0 0 0; }
+  .data-table th:last-child { border-radius: 0 8px 0 0; }
+  .data-table td {
+    padding: 12px 14px;
+    border-bottom: 0.5px solid var(--border-light);
+    color: var(--text-secondary);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--bg-secondary); }
+
+  /* ===== BADGES ===== */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 0.5px solid var(--green-border); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); border: 0.5px solid var(--amber-border); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 0.5px solid var(--red-border); }
+
+  /* ===== SCHEDULE ===== */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: 120px repeat(7, 1fr);
+    gap: 2px;
+    font-size: 12px;
+  }
+  .sched-cell { padding: 10px 6px; text-align: center; border-radius: 6px; }
+  .sched-head { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px; background: var(--bg-secondary); }
+  .sched-name { text-align: left; color: var(--text-primary); font-weight: 500; padding: 10px 8px; }
+  .sched-name small { display: block; font-size: 10px; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+  .sched-on { background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 500; }
+  .sched-off { color: var(--text-muted); font-size: 11px; background: var(--bg-secondary); }
+  .sched-ot { background: var(--red-bg); color: var(--red); font-size: 11px; font-weight: 500; }
+
+  /* ===== INSIGHT CARDS ===== */
+  .insight-card {
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid;
+    background: white;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .insight-card.insight-red { border-left-color: var(--red); }
+  .insight-card.insight-amber { border-left-color: var(--amber); }
+  .insight-card.insight-green { border-left-color: var(--green); }
+  .insight-card.insight-blue { border-left-color: var(--accent); }
+  .insight-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+  .insight-body { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+  .insight-impact { font-size: 11px; font-weight: 600; margin-top: 8px; color: var(--text-muted); }
+
+  /* ===== ALERT LIST ===== */
+  .alert-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border-light);
+  }
+  .alert-row:last-child { border-bottom: none; }
+  .alert-row-label { font-size: 13px; color: var(--text-secondary); }
+
+  /* ===== SECTION LABEL ===== */
+  .section-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: -12px;
+    margin-bottom: 16px;
+  }
+
+  /* ===== DAYPART BAR ===== */
+  .daypart-bar {
+    display: flex;
+    height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+  .daypart-bar > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    transition: width 0.4s ease;
+  }
+
+  /* ===== COMPARISON GRID ===== */
+  .compare-card {
+    text-align: center;
+    padding: 16px;
+  }
+  .compare-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .compare-value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+  .compare-delta { font-size: 12px; font-weight: 500; margin-top: 4px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 11px;
+    border-top: 0.5px solid var(--border);
+    margin-top: 20px;
+    background: white;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .bento-4 { grid-template-columns: repeat(2, 1fr); }
+    .bento-3 { grid-template-columns: repeat(2, 1fr); }
+    .bento-2-1, .bento-1-2 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .header { padding: 0 16px; height: 48px; }
+    .venue-bar { padding: 10px 16px; }
+    .tab-nav { padding: 0 16px; }
+    .main { padding: 16px; }
+    .bento-4, .bento-3, .bento-2 { grid-template-columns: 1fr; }
+    .venue-info { display: none; }
+    .kpi-hero .kpi-value { font-size: 26px; }
+    .schedule-grid { grid-template-columns: 90px repeat(7, 1fr); font-size: 10px; }
+    .section-label { font-size: 18px; }
+    .card { padding: 18px; }
+  }
+  @media (max-width: 480px) {
+    .schedule-grid { overflow-x: auto; min-width: 600px; }
+    .card { border-radius: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-mark">P</div>
+    <div class="logo-text">Proof</div>
+  </div>
+  <div class="header-meta">
+    <div class="header-date" id="headerDate"></div>
+    <div class="header-badge">AI-Powered</div>
+  </div>
+</div>
+
+<!-- VENUE BAR -->
+<div class="venue-bar">
+  <button class="venue-chip active" onclick="selectVenue(0)">The Fox &amp; Hounds</button>
+  <button class="venue-chip" onclick="selectVenue(1)">Annabel's Mayfair</button>
+  <button class="venue-chip" onclick="selectVenue(2)">Dani Garcia Barcelona</button>
+  <div class="venue-info" id="venueInfo"></div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('briefing')">Morning Briefing</button>
+  <button class="tab-btn" onclick="switchTab('revenue')">Revenue</button>
+  <button class="tab-btn" onclick="switchTab('labour')">Labour</button>
+  <button class="tab-btn" onclick="switchTab('stock')">Stock &amp; GP</button>
+  <button class="tab-btn" onclick="switchTab('insights')">AI Insights</button>
+</div>
+
+<div class="main">
+
+  <!-- ============ MORNING BRIEFING TAB ============ -->
+  <div class="tab-content active" id="tab-briefing">
+    <div class="section-label" id="briefingGreeting">Good morning</div>
+    <div class="section-sub" id="briefingDate"></div>
+
+    <!-- Hero KPI Cards -->
+    <div class="bento-4" id="heroKPIs"></div>
+
+    <!-- AI Briefing -->
+    <div class="ai-briefing" id="aiBriefing"></div>
+  </div>
+
+  <!-- ============ REVENUE TAB ============ -->
+  <div class="tab-content" id="tab-revenue">
+    <div class="section-label">Revenue Intelligence</div>
+
+    <div class="period-pills" id="revPeriodPills">
+      <button class="period-pill active" onclick="setRevPeriod('daily')">Daily</button>
+      <button class="period-pill" onclick="setRevPeriod('weekly')">Weekly</button>
+      <button class="period-pill" onclick="setRevPeriod('monthly')">Monthly</button>
+    </div>
+
+    <!-- Revenue Summary Cards -->
+    <div class="bento-4" id="revSummaryCards"></div>
+
+    <!-- Charts Row -->
+    <div class="bento-2 mt-20">
+      <div class="card">
+        <div class="card-title">Revenue Trend &mdash; Last 7 Days</div>
+        <div class="chart-box"><canvas id="revTrendChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Revenue by Daypart</div>
+        <div class="chart-box"><canvas id="daypartChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Comparison -->
+    <div class="bento-2 mt-16">
+      <div class="card">
+        <div class="card-title">vs Same Day Last Week</div>
+        <div class="bento-3" id="compLastWeek"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">vs Same Day Last Year</div>
+        <div class="bento-3" id="compLastYear"></div>
+      </div>
+    </div>
+
+    <!-- Revenue per Cover -->
+    <div class="card mt-16">
+      <div class="card-title">Revenue per Cover &mdash; 7 Day Trend</div>
+      <div class="chart-box-sm"><canvas id="revPerCoverChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ============ LABOUR TAB ============ -->
+  <div class="tab-content" id="tab-labour">
+    <div class="section-label">Labour Intelligence</div>
+
+    <div class="bento-2">
+      <div class="card">
+        <div class="card-title">Labour % by Day (Target Overlay)</div>
+        <div class="chart-box"><canvas id="labourPctChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Cost per Cover (Labour Component)</div>
+        <div class="chart-box"><canvas id="labourCPCChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="card mt-16">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="card-title" style="margin-bottom:0">Staff Schedule &mdash; This Week</div>
+        <div id="overtimeAlerts"></div>
+      </div>
+      <div style="overflow-x:auto" id="scheduleContainer"></div>
+    </div>
+
+    <!-- Overtime Alerts -->
+    <div class="card mt-16">
+      <div class="card-title">Overtime &amp; Compliance Alerts</div>
+      <div id="labourAlertsList"></div>
+    </div>
+  </div>
+
+  <!-- ============ STOCK & GP TAB ============ -->
+  <div class="tab-content" id="tab-stock">
+    <div class="section-label">Stock &amp; Gross Profit Intelligence</div>
+
+    <!-- GP by Category -->
+    <div class="bento-2">
+      <div class="card">
+        <div class="card-title">GP% by Category</div>
+        <div class="chart-box"><canvas id="gpCatChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Par Levels vs Actual Stock</div>
+        <div class="chart-box"><canvas id="stockLevelChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Wastage & Par Warnings -->
+    <div class="bento-2 mt-16">
+      <div class="card">
+        <div class="card-title">Wastage Alerts (Above Threshold)</div>
+        <div id="wastageAlerts"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Par Level Warnings &amp; Suggested Orders</div>
+        <div id="parWarnings"></div>
+      </div>
+    </div>
+
+    <!-- Variance Table -->
+    <div class="card mt-16">
+      <div class="card-title">Variance Analysis &mdash; Theoretical vs Actual Usage (7 Days)</div>
+      <table class="data-table" id="varianceTable"></table>
+    </div>
+  </div>
+
+  <!-- ============ AI INSIGHTS TAB ============ -->
+  <div class="tab-content" id="tab-insights">
+    <div class="section-label">AI Insights &amp; Analysis</div>
+
+    <!-- Daily AI Briefing (expanded) -->
+    <div class="card">
+      <div class="card-title">Daily Intelligence Report</div>
+      <div id="aiDailyReport"></div>
+    </div>
+
+    <!-- Anomaly Detection -->
+    <div class="card mt-16">
+      <div class="card-title">Anomaly Detection</div>
+      <div id="anomalyAlerts"></div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="card mt-16">
+      <div class="card-title">Recommendations with Impact Estimates</div>
+      <div id="aiRecommendations"></div>
+    </div>
+
+    <!-- Trend Analysis -->
+    <div class="card mt-16">
+      <div class="card-title">Trend Analysis (3-Week Lookback)</div>
+      <div id="trendAnalysis"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Proof &copy; 2026 &mdash; AI Operations Intelligence for Hospitality &mdash; Built by Liquid Studios
+</div>
+
+<script>
+// ============================================================
+// DATA — 3 VENUES WITH REALISTIC, DETAILED SAMPLE DATA
+// ============================================================
+const venues = [
+  {
+    name: "The Fox & Hounds",
+    type: "Gastropub",
+    capacity: 85,
+    hours: "11:00 - 23:00",
+    currency: "\u00a3",
+    pnl: {
+      daily:   { revenue: 4820, target: 4500, yesterday: 4210, lastWeek: 4650, lastYear: 4180, covers: 142, coversTarget: 130, labourPct: 31, labourTarget: 28, gpPct: 71, gpTarget: 72 },
+      weekly:  { revenue: 31450, target: 31500, yesterday: 28900, lastWeek: 30200, lastYear: 27800, covers: 892, coversTarget: 910, labourPct: 29, labourTarget: 28, gpPct: 72, gpTarget: 72 },
+      monthly: { revenue: 128600, target: 126000, yesterday: 125400, lastWeek: 124800, lastYear: 112300, covers: 3640, coversTarget: 3650, labourPct: 28.5, labourTarget: 28, gpPct: 72.5, gpTarget: 72 }
+    },
+    revenueTrend: [4210, 3890, 5120, 4960, 6340, 6780, 4820],
+    daypart: { lunch: 1680, afternoon: 420, dinner: 2320, late: 400 },
+    revPerCover: [33.9, 30.6, 36.6, 34.9, 38.2, 40.5, 33.9],
+    comp: {
+      lastWeek: { rev: 4650, covers: 136, avgSpend: 34.2 },
+      lastYear: { rev: 4180, covers: 118, avgSpend: 35.4 }
+    },
+    gp: { spirits: 81, wine: 72, beer: 66, food: 68 },
+    stock: [
+      { item: "Hendrick's Gin", par: 8, actual: 2, unit: "btl", cost: 22 },
+      { item: "Tanqueray", par: 6, actual: 2, unit: "btl", cost: 18 },
+      { item: "Absolut Vodka", par: 6, actual: 5, unit: "btl", cost: 16 },
+      { item: "Jameson", par: 5, actual: 4, unit: "btl", cost: 21 },
+      { item: "Malbec (House)", par: 12, actual: 10, unit: "btl", cost: 5.50 },
+      { item: "Sauvignon Blanc", par: 12, actual: 7, unit: "btl", cost: 5.20 },
+      { item: "Peroni Nastro", par: 4, actual: 3, unit: "keg", cost: 105 },
+      { item: "Camden Hells", par: 3, actual: 3, unit: "keg", cost: 112 },
+      { item: "Guinness", par: 3, actual: 2, unit: "keg", cost: 118 },
+      { item: "Fever-Tree Tonic", par: 48, actual: 18, unit: "btl", cost: 0.90 }
+    ],
+    variance: [
+      { item: "Hendrick's Gin", theoretical: 14, actual: 18, unit: "measures", costPer: 1.10 },
+      { item: "House Malbec", theoretical: 22, actual: 26, unit: "glasses", costPer: 1.38 },
+      { item: "Peroni Nastro", theoretical: 84, actual: 91, unit: "pints", costPer: 1.25 },
+      { item: "Tanqueray", theoretical: 11, actual: 14, unit: "measures", costPer: 0.90 },
+      { item: "Sauvignon Blanc", theoretical: 18, actual: 20, unit: "glasses", costPer: 1.30 },
+      { item: "Guinness", theoretical: 62, actual: 68, unit: "pints", costPer: 1.41 }
+    ],
+    labour: {
+      dayPct: [26, 32, 27, 29, 25, 22, 24],
+      costPerCover: [4.20, 5.80, 4.10, 4.50, 3.80, 3.30, 3.60],
+      target: 28,
+      staff: [
+        { name: "Sarah M.", role: "FOH Lead", shifts: ["11-19","OFF","11-19","11-19","16-23","16-23","OFF"], hours: 40, overtime: false },
+        { name: "Tom K.", role: "Head Chef", shifts: ["7-15","7-15","7-15","7-17","7-17","OFF","OFF"], hours: 46, overtime: true },
+        { name: "Priya S.", role: "Sous Chef", shifts: ["12-21","OFF","12-21","12-21","12-22","12-22","OFF"], hours: 45, overtime: false },
+        { name: "Jake R.", role: "Bartender", shifts: ["16-23","16-23","OFF","16-23","16-24","16-24","16-23"], hours: 48, overtime: true },
+        { name: "Amy L.", role: "Server", shifts: ["OFF","11-19","11-19","OFF","16-23","16-23","11-19"], hours: 37, overtime: false },
+        { name: "Marcus D.", role: "KP", shifts: ["12-20","12-20","OFF","12-20","12-21","12-21","OFF"], hours: 38, overtime: false }
+      ]
+    },
+    briefing: {
+      oneLiner: "Labour is 3% above target. Consider reducing Tuesday evening FOH by 1 staff member \u2014 covers have averaged 54 for 6 consecutive weeks.",
+      text: `Yesterday delivered <strong>142 covers</strong> on a Thursday, <span class="hl-green">12% above your Thursday average</span>. Revenue came in at <strong>\u00a34,820</strong> \u2014 solid for midweek. However, <span class="hl-red">labour hit 31%</span>, which is 3 points over your 28% target. The culprit: Tom stayed an extra 2 hours on a quiet prep afternoon, and Jake's close ran 45 minutes over.<br><br>Your <strong>beverage GP came in at 76%</strong>, <span class="hl-amber">2 points below target</span>. Gin pours are running heavy \u2014 the variance analysis shows 28.6% overuse on Hendrick's this week. Worth a chat with the bar team about measure discipline.<br><br><strong>Best performer:</strong> Table 12 put through \u00a3450 (2 covers, wine-led). <strong>Worst table turn:</strong> Table 6 sat for 2h40m on a \u00a338 bill \u2014 consider reservation time limits on Fridays.`,
+      actions: [
+        "Reorder: 6x Hendrick's Gin, 4x Tanqueray, 30x Fever-Tree Tonic \u2014 stock is critically below par",
+        "Reduce Tuesday evening FOH by 1 \u2014 covers have averaged 54 for 6 consecutive weeks (capacity 85)",
+        "Flag: Tom K. is at 46 hours this week. Approve overtime or adjust Friday schedule",
+        "Review: Hendrick's pour variance is 28.6% over theoretical. Retrain or re-calibrate measures"
+      ]
+    },
+    insights: {
+      report: `<p>Thursday 13 March 2026 was a strong trading day for The Fox & Hounds, with revenue of \u00a34,820 from 142 covers representing a 7.1% uplift on budget and a 12% beat on the Thursday rolling average. The dinner daypart was the primary driver, contributing \u00a32,320 (48% of total), bolstered by a \u00a3450 wine-led spend on Table 12 that significantly lifted the per-cover average.</p>
+<p>However, the positive topline is partially offset by labour inefficiency. Labour cost as a percentage of revenue hit 31%, three points above the 28% target. The root cause is identifiable: Tom K. (Head Chef) accumulated 2 hours of unplanned overtime during a low-volume prep window, and Jake R. (Bartender) ran 45 minutes over on close. Neither instance correlates with demand \u2014 this is process discipline, not capacity strain.</p>
+<p>Beverage gross profit underperformed at 76% against a 78% target. Variance analysis points to gin as the primary concern: Hendrick's usage is 28.6% above theoretical, suggesting either heavy-handedness on pours or unrecorded wastage. Food GP held at 68%, marginally below the 70% target but within acceptable tolerance for the current menu mix.</p>
+<p>Looking at the week holistically, the venue is trading well on revenue but leaking margin through labour and beverage control. The Tuesday evening opportunity is notable: average covers of 54 for six consecutive weeks against 85 capacity suggests either a structural demand issue or an opportunity to drive mid-week activation through promotions or events.</p>`,
+      anomalies: [
+        { type: "red", title: "Hendrick's Gin Variance", body: "28.6% overuse detected over 7 days. This equates to approximately \u00a34.40 in lost margin per day, or \u00a31,606 annualised. Likely causes: over-pouring, unrecorded staff drinks, or incorrect recipe builds.", impact: "~\u00a31,600/year if uncorrected" },
+        { type: "amber", title: "Tuesday Evening Under-Utilisation", body: "6 consecutive weeks averaging 54 covers on Tuesday evenings. Capacity is 85. Labour is being deployed for 85-cover readiness.", impact: "~\u00a3120/week in excess labour cost" },
+        { type: "amber", title: "Tom K. Overtime Pattern", body: "3 of the last 4 weeks have seen Tom exceed 44 hours. This is becoming a structural issue, not an exception.", impact: "\u00a3180/week in overtime premiums" }
+      ],
+      recommendations: [
+        { title: "Implement Gin Pour Audit", body: "Run a blind pour test with bar team this week. Re-calibrate jiggers. Consider switching to measured spirit dispensers for premium spirits.", impact: "Est. \u00a31,200-1,600/year saving", type: "green" },
+        { title: "Tuesday Evening Menu Activation", body: "Launch a \u00a325 midweek set menu or 'Gin & Jazz' event on Tuesdays. Target 15 additional covers per week. Even at breakeven food cost, the beverage uplift covers the proposition.", impact: "Est. \u00a3375-500/week additional revenue", type: "blue" },
+        { title: "Restructure Chef Rota", body: "Add a prep shift (7am-12pm) 2 days per week using a part-time CDP. This removes Tom's overtime requirement and provides prep redundancy.", impact: "Net neutral or \u00a350/week saving", type: "amber" }
+      ],
+      trends: [
+        { title: "Beverage GP Declining", body: "Beverage GP% has declined from 78.2% to 76.0% over 3 weeks. The trend correlates with increased gin cocktail popularity since the new spring menu launch. Recommend reviewing gin cocktail recipes for cost accuracy." },
+        { title: "Saturday Revenue Acceleration", body: "Saturday revenue has increased for 4 consecutive weeks: \u00a35,900 \u2192 \u00a36,200 \u2192 \u00a36,540 \u2192 \u00a36,780. Cover count is stable (165-172), so the growth is driven by increasing average spend. The wine list additions appear to be working." },
+        { title: "Kitchen Labour Efficiency Improving", body: "Kitchen cost per cover has decreased from \u00a34.80 to \u00a34.10 over the past month, despite the menu expansion. This reflects the new prep schedule working well during high-volume periods." }
+      ]
+    }
+  },
+  {
+    name: "Annabel's Mayfair",
+    type: "Members' Club",
+    capacity: 200,
+    hours: "18:00 - 03:00",
+    currency: "\u00a3",
+    pnl: {
+      daily:   { revenue: 42500, target: 40000, yesterday: 38200, lastWeek: 39800, lastYear: 36100, covers: 186, coversTarget: 180, labourPct: 24, labourTarget: 28, gpPct: 78, gpTarget: 75 },
+      weekly:  { revenue: 268000, target: 260000, yesterday: 252000, lastWeek: 258000, lastYear: 234000, covers: 1180, coversTarget: 1200, labourPct: 25, labourTarget: 28, gpPct: 77, gpTarget: 75 },
+      monthly: { revenue: 1120000, target: 1080000, yesterday: 1095000, lastWeek: 1085000, lastYear: 980000, covers: 4860, coversTarget: 4800, labourPct: 25.5, labourTarget: 28, gpPct: 77.5, gpTarget: 75 }
+    },
+    revenueTrend: [38200, 35600, 42100, 48900, 56200, 62400, 42500],
+    daypart: { earlyEvening: 8500, dinner: 18700, lateNight: 12400, privateEvents: 2900 },
+    revPerCover: [205, 198, 226, 248, 275, 296, 228],
+    comp: {
+      lastWeek: { rev: 39800, covers: 178, avgSpend: 223.6 },
+      lastYear: { rev: 36100, covers: 162, avgSpend: 222.8 }
+    },
+    gp: { spirits: 84, wine: 76, beer: 68, food: 74 },
+    stock: [
+      { item: "Dom P\u00e9rignon", par: 24, actual: 18, unit: "btl", cost: 95 },
+      { item: "Cristal", par: 12, actual: 9, unit: "btl", cost: 165 },
+      { item: "Grey Goose", par: 10, actual: 8, unit: "btl", cost: 28 },
+      { item: "Hibiki 17yr", par: 6, actual: 2, unit: "btl", cost: 85 },
+      { item: "Ch\u00e2teau Margaux 2015", par: 6, actual: 5, unit: "btl", cost: 320 },
+      { item: "Clase Azul Reposado", par: 4, actual: 3, unit: "btl", cost: 68 },
+      { item: "Perrier-Jou\u00ebt Belle Epoque", par: 12, actual: 6, unit: "btl", cost: 85 },
+      { item: "Belvedere", par: 8, actual: 7, unit: "btl", cost: 26 },
+      { item: "Macallan 18yr", par: 4, actual: 1, unit: "btl", cost: 140 },
+      { item: "Veuve Clicquot", par: 36, actual: 22, unit: "btl", cost: 32 }
+    ],
+    variance: [
+      { item: "Grey Goose", theoretical: 42, actual: 48, unit: "measures", costPer: 1.40 },
+      { item: "Dom P\u00e9rignon", theoretical: 8, actual: 9, unit: "bottles", costPer: 95 },
+      { item: "Veuve Clicquot", theoretical: 18, actual: 22, unit: "bottles", costPer: 32 },
+      { item: "Macallan 18yr", theoretical: 12, actual: 16, unit: "measures", costPer: 7.00 },
+      { item: "Belvedere", theoretical: 28, actual: 30, unit: "measures", costPer: 1.30 },
+      { item: "Cristal", theoretical: 4, actual: 5, unit: "bottles", costPer: 165 }
+    ],
+    labour: {
+      dayPct: [22, 26, 24, 23, 21, 19, 20],
+      costPerCover: [18.20, 22.40, 19.80, 19.10, 17.60, 16.20, 16.80],
+      target: 28,
+      staff: [
+        { name: "Laurent B.", role: "Ma\u00eetre d'", shifts: ["18-02","OFF","18-02","18-02","18-03","18-03","OFF"], hours: 44, overtime: false },
+        { name: "Chen W.", role: "Head Chef", shifts: ["14-23","14-23","14-23","14-23","14-24","OFF","OFF"], hours: 46, overtime: false },
+        { name: "Sofia R.", role: "Sommelier", shifts: ["17-01","OFF","17-01","17-01","17-02","17-02","17-01"], hours: 52, overtime: true },
+        { name: "James P.", role: "Bar Lead", shifts: ["18-03","18-03","OFF","18-03","18-04","18-04","18-03"], hours: 50, overtime: true },
+        { name: "Olivia T.", role: "Server", shifts: ["OFF","18-01","18-01","OFF","18-02","18-02","18-01"], hours: 36, overtime: false },
+        { name: "Dev K.", role: "Server", shifts: ["18-01","OFF","OFF","18-01","18-02","18-02","18-01"], hours: 35, overtime: false }
+      ]
+    },
+    briefing: {
+      oneLiner: "All KPIs green. Revenue 6.3% above target. Member spend per head up 17% month-on-month \u2014 the new cocktail menu is driving incremental beverage revenue.",
+      text: `Last night delivered <strong>186 covers</strong>, with revenue at <strong>\u00a342,500</strong> \u2014 <span class="hl-green">6.3% above your Thursday target</span>. The private dining room accounted for \u00a312,800 alone (corporate booking, Dom P\u00e9rignon-heavy). Labour is running <span class="hl-green">well under target at 24%</span> \u2014 excellent efficiency.<br><br>Beverage GP is <span class="hl-green">82%, 4 points above target</span>. Your champagne margin is doing the heavy lifting here. However, <span class="hl-amber">Macallan 18yr is down to 1 bottle</span> with 2 member reservations tonight who regularly order it. That is an urgent reorder.<br><br><strong>Member insight:</strong> Table spend is averaging \u00a3228/head this week, up from \u00a3195 last month. The new cocktail menu is driving incremental beverage revenue \u2014 particularly the \u00a332 Negroni Aged.`,
+      actions: [
+        "Urgent reorder: 3x Macallan 18yr, 4x Hibiki 17yr \u2014 critically low for tonight's reservations",
+        "Reorder: 6x Perrier-Jou\u00ebt Belle Epoque, 14x Veuve Clicquot",
+        "Flag: Sofia R. (Sommelier) is at 52 hours this week. Mandatory rest day required Sunday",
+        "Opportunity: Table spend per head is up 17% MoM. Consider featuring premium pairings menu"
+      ]
+    },
+    insights: {
+      report: `<p>Thursday 13 March delivered an exceptional session at Annabel's, with \u00a342,500 in revenue from 186 covers representing a 6.3% beat on the \u00a340,000 daily target. This is the third consecutive Thursday above target, suggesting a structural shift in midweek member engagement rather than a one-off spike.</p>
+<p>The private dining room was the standout, generating \u00a312,800 from a single corporate booking. This is \u00a32,800 above the typical PDR average and was driven by premium champagne spend (4x Dom P\u00e9rignon, 2x Cristal). The PDR now contributes 22% of Thursday revenue on average \u2014 worth protecting capacity for high-value bookings rather than overflow seating.</p>
+<p>Labour efficiency is outstanding at 24%, a full 4 points below the 28% target. This is the result of the rota restructure implemented three weeks ago, which consolidated front-of-house headcount during early evening and deployed additional staff only from 21:00. The model is working and should be formalised as the standard operating rota.</p>
+<p>The one area requiring attention is premium whisky stock. Macallan 18yr is at 1 bottle with 2 known orders anticipated tonight. Hibiki 17yr is similarly low at 2 bottles. Both are high-margin products (\u00a328-35 per serve, 88-90% GP) and stock-outs have a disproportionate impact on member experience at this price point. Automated reorder triggers should be set at 2x par for premium spirits to avoid this recurring issue.</p>
+<p>The broader trend is decisively positive: average member spend has risen 17% month-on-month, from \u00a3195 to \u00a3228 per head. The new cocktail menu \u2014 particularly the \u00a332 Aged Negroni \u2014 is responsible for approximately \u00a34,200 in incremental weekly beverage revenue. This validates the investment in the cocktail programme refresh and suggests further scope to introduce seasonal limited-edition serves at the \u00a335-45 price point.</p>`,
+      anomalies: [
+        { type: "amber", title: "Premium Whisky Stock Critically Low", body: "Macallan 18yr at 1 bottle (par: 4). Hibiki 17yr at 2 bottles (par: 6). Both have known demand tonight from member reservations. This is the second time in 3 weeks that premium whisky has hit critical levels.", impact: "Risk of \u00a3400-600 in lost sales + member experience damage" },
+        { type: "green", title: "Member Spend Per Head Acceleration", body: "Average spend has risen from \u00a3195 to \u00a3228 per head over 4 weeks (+17%). This is not driven by price increases but by menu mix shift towards premium cocktails and wine pairings.", impact: "\u00a316,800/week incremental revenue vs last month" },
+        { type: "amber", title: "Veuve Clicquot Variance", body: "22 bottles used vs 18 theoretical. 22% variance. Check for unrecorded member comp bottles or events usage.", impact: "\u00a3128/week in unaccounted stock" }
+      ],
+      recommendations: [
+        { title: "Set Automated Reorder Triggers for Premium Spirits", body: "Configure 2x par as the reorder trigger for all spirits above \u00a380/bottle. This eliminates the stock-out risk that has occurred twice in 3 weeks.", impact: "Prevents \u00a3800-1,200/month in lost premium sales", type: "red" },
+        { title: "Expand Seasonal Cocktail Programme", body: "The \u00a332 Aged Negroni is generating ~\u00a34,200/week in new revenue. Introduce 2 additional seasonal serves at \u00a335-45 to capture the clear member appetite for premium cocktails.", impact: "Est. \u00a32,500-4,000/week additional revenue", type: "green" },
+        { title: "Formalise Rota Restructure", body: "The 3-week-old rota change (consolidated early evening, surge from 21:00) has reduced labour from 27.5% to 24.3%. Make this the permanent operating model.", impact: "\u00a33,200/week labour saving vs previous rota", type: "green" },
+        { title: "Increase PDR Minimum Spend", body: "PDR is averaging \u00a312,200/booking but has a \u00a38,000 minimum. Given demand, increase minimum to \u00a310,000 for Fri-Sat.", impact: "\u00a34,000-8,000/month additional guaranteed revenue", type: "blue" }
+      ],
+      trends: [
+        { title: "Champagne Revenue Surge", body: "Champagne revenue has increased 24% over 4 weeks. Dom P\u00e9rignon and Cristal are driving the growth, primarily from PDR bookings. Consider securing improved supplier terms given volume." },
+        { title: "Late-Night Revenue Growing", body: "Post-midnight revenue has grown from \u00a38,200/night to \u00a312,400/night over 6 weeks. This correlates with the extended bar programme and the new DJ residency. Late-night is now 29% of daily revenue, up from 21%." },
+        { title: "Labour Efficiency Best-in-Class", body: "At 24%, Annabel's labour percentage is significantly below the 28% industry target for premium venues. This efficiency is exceptional and should be documented as a case study for other Caprice Holdings venues." }
+      ]
+    }
+  },
+  {
+    name: "Dani Garcia Barcelona",
+    type: "Fine Dining",
+    capacity: 60,
+    hours: "13:00 - 16:00, 20:00 - 00:00",
+    currency: "\u20ac",
+    pnl: {
+      daily:   { revenue: 18600, target: 17000, yesterday: 16200, lastWeek: 17400, lastYear: 15200, covers: 52, coversTarget: 48, labourPct: 33, labourTarget: 28, gpPct: 75, gpTarget: 72 },
+      weekly:  { revenue: 108200, target: 102000, yesterday: 98600, lastWeek: 105000, lastYear: 92400, covers: 312, coversTarget: 300, labourPct: 30, labourTarget: 28, gpPct: 74, gpTarget: 72 },
+      monthly: { revenue: 445000, target: 430000, yesterday: 432000, lastWeek: 438000, lastYear: 386000, covers: 1280, coversTarget: 1250, labourPct: 29, labourTarget: 28, gpPct: 74.5, gpTarget: 72 }
+    },
+    revenueTrend: [16200, 14800, 18900, 19400, 22100, 24600, 18600],
+    daypart: { lunch: 5580, dinner: 11160, tasting: 1860 },
+    revPerCover: [310, 282, 362, 373, 368, 395, 358],
+    comp: {
+      lastWeek: { rev: 17400, covers: 50, avgSpend: 348 },
+      lastYear: { rev: 15200, covers: 44, avgSpend: 345.5 }
+    },
+    gp: { spirits: 82, wine: 74, beer: 62, food: 72 },
+    stock: [
+      { item: "Vega Sicilia \u00danico", par: 6, actual: 4, unit: "btl", cost: 220 },
+      { item: "Patr\u00f3n A\u00f1ejo", par: 4, actual: 3, unit: "btl", cost: 42 },
+      { item: "Ib\u00e9rico Jam\u00f3n (Bellota)", par: 3, actual: 1, unit: "leg", cost: 480 },
+      { item: "Alba White Truffle", par: 500, actual: 120, unit: "g", cost: 4.20 },
+      { item: "Priorat Reserva (House)", par: 18, actual: 14, unit: "btl", cost: 8.50 },
+      { item: "Ruinart Blanc de Blancs", par: 8, actual: 5, unit: "btl", cost: 45 },
+      { item: "Orujo Gallego", par: 4, actual: 4, unit: "btl", cost: 18 },
+      { item: "Estrella Damm (Draught)", par: 4, actual: 3, unit: "keg", cost: 85 },
+      { item: "Gin Mare", par: 6, actual: 2, unit: "btl", cost: 28 },
+      { item: "Olive Oil (Arbequina EVOO)", par: 10, actual: 4, unit: "ltr", cost: 12 }
+    ],
+    variance: [
+      { item: "Priorat Reserva", theoretical: 16, actual: 19, unit: "glasses", costPer: 2.13 },
+      { item: "Ib\u00e9rico Jam\u00f3n", theoretical: 1800, actual: 2200, unit: "grams", costPer: 0.12 },
+      { item: "Gin Mare", theoretical: 18, actual: 24, unit: "measures", costPer: 1.40 },
+      { item: "Estrella Damm", theoretical: 56, actual: 60, unit: "pints", costPer: 1.02 },
+      { item: "Alba Truffle", theoretical: 80, actual: 95, unit: "grams", costPer: 4.20 },
+      { item: "Olive Oil", theoretical: 3.2, actual: 3.8, unit: "litres", costPer: 12 }
+    ],
+    labour: {
+      dayPct: [30, 35, 28, 31, 27, 24, 26],
+      costPerCover: [28.40, 36.20, 24.80, 26.60, 22.40, 20.10, 21.80],
+      target: 28,
+      staff: [
+        { name: "Carlos M.", role: "Head Chef", shifts: ["10-23","10-23","10-23","OFF","10-23","10-23","OFF"], hours: 52, overtime: true },
+        { name: "Elena S.", role: "FOH Manager", shifts: ["12-00","OFF","12-00","12-00","12-00","12-00","OFF"], hours: 48, overtime: false },
+        { name: "Pedro L.", role: "Sommelier", shifts: ["OFF","12-00","12-00","12-00","OFF","19-00","19-00"], hours: 38, overtime: false },
+        { name: "Ana R.", role: "CDP", shifts: ["10-23","10-23","OFF","10-23","10-23","OFF","10-23"], hours: 50, overtime: false },
+        { name: "Marc V.", role: "Server", shifts: ["19-00","OFF","19-00","19-00","19-00","19-01","19-01"], hours: 30, overtime: false },
+        { name: "Lucia F.", role: "Pastry", shifts: ["7-15","7-15","7-15","OFF","7-15","7-15","OFF"], hours: 40, overtime: false }
+      ]
+    },
+    briefing: {
+      oneLiner: "Labour at 33% \u2014 5 points over target. The split-service model is inherently heavy. Consider whether Tuesday lunch is viable at current cover levels (avg 14 covers, 23% capacity).",
+      text: `Yesterday's service: <strong>52 covers</strong> across both sittings (18 lunch, 34 dinner). Revenue was <strong>\u20ac18,600</strong> \u2014 good for a Thursday but <span class="hl-amber">lunch continues to underperform</span> at only 30% of capacity. <span class="hl-red">Labour hit 33%</span> \u2014 5 points over target. The split service model is inherently labour-heavy; consider whether Tuesday lunch is viable at current cover levels.<br><br>Food GP is <span class="hl-green">72%, above your 70% target</span>, but the truffle menu is eroding margins. <strong>Alba truffle usage is 18.75% over theoretical</strong> \u2014 plating portions need recalibrating. Ib\u00e9rico jam\u00f3n variance is similarly high at 22%.<br><br><strong>Highlight:</strong> The 8-course tasting menu accounted for 64% of dinner revenue. Table 4 spent \u20ac1,240 (2 covers with Vega Sicilia pairing).`,
+      actions: [
+        "Urgent: Ib\u00e9rico Jam\u00f3n Bellota down to 1 leg \u2014 reorder 2 legs (3-day lead time from Salamanca)",
+        "Reorder: 4x Gin Mare, 6x Olive Oil Arbequina EVOO",
+        "Review: Tuesday lunch averaged 14 covers over 4 weeks (23% capacity). Consider closing or prix fixe only",
+        "Flag: Carlos M. is on double shifts 5 days this week. Labour law compliance risk \u2014 needs rest day"
+      ]
+    },
+    insights: {
+      report: `<p>Thursday 13 March at Dani Garcia Barcelona delivered \u20ac18,600 from 52 covers, exceeding the \u20ac17,000 target by 9.4%. Dinner service was strong with 34 covers generating \u20ac11,160 (60% of revenue), while the 8-course tasting menu continues to be the centrepiece of the operation, accounting for 64% of dinner revenue.</p>
+<p>The most significant operational concern remains the split-service model and its impact on labour. At 33%, labour percentage is a full 5 points above the 28% target. The fundamental issue is structural: running two full services (lunch 13:00-16:00 and dinner 20:00-00:00) with a 4-hour gap requires maintaining kitchen and FOH presence across a 14-hour window. With lunch averaging only 18 covers (30% capacity), the cost-to-revenue ratio for the midday service is unsustainable.</p>
+<p>Premium ingredient variance is the second area of concern. Alba white truffle usage at 18.75% over theoretical represents a direct GP erosion of approximately \u20ac63/day at current prices (\u20ac4.20/g). With truffle season approaching its end, this is less about systemic waste and more about portion discipline \u2014 but the same pattern appears in Ib\u00e9rico jam\u00f3n (22% over theoretical), which is a year-round product and therefore a training issue.</p>
+<p>On the positive side, the venue's average spend per cover has risen to \u20ac358, up from \u20ac332 a month ago. The wine programme is a key driver, with Pedro L.'s sommelier recommendations achieving a 72% upsell rate on dinner tables. The Vega Sicilia \u00danico pairing on Table 4 (\u20ac1,240 for 2 covers) exemplifies the potential when service, product, and guest are aligned.</p>
+<p>The immediate priority is a strategic review of the lunch service. Three options warrant modelling: (1) close Tuesday-Wednesday lunch entirely, (2) convert to a prix fixe-only lunch with reduced kitchen brigade, or (3) launch a business lunch proposition with event partnerships. Each has different labour and revenue implications that should be modelled before Q2.</p>`,
+      anomalies: [
+        { type: "red", title: "Carlos M. Working 52 Hours", body: "Head Chef is on 5 double shifts this week (10:00-23:00). This exceeds Spanish labour law maximums (40hrs/week standard, 48hrs absolute max including overtime). Compliance risk is significant.", impact: "Legal exposure + burnout risk" },
+        { type: "red", title: "Alba Truffle Stock Critical", body: "120g remaining against 500g par. At current usage rates (95g/day), stock will be exhausted by tomorrow lunch. Truffle season is ending \u2014 replacement supply may be limited.", impact: "\u20ac400-800 daily revenue at risk from truffle dishes" },
+        { type: "amber", title: "Lunch Service Utilisation Declining", body: "Tuesday-Thursday lunch covers have declined from 22 to 16 average over 6 weeks. This is a 27% decline during what should be the improving spring season.", impact: "Lunch now running at estimated \u20ac200/day loss after labour allocation" }
+      ],
+      recommendations: [
+        { title: "Model Lunch Service Options", body: "Prepare a 3-scenario analysis for Q2: (A) Close Tue-Wed lunch, saving ~\u20ac1,800/week in labour. (B) Prix fixe only with 2 kitchen staff, targeting \u20ac800/service. (C) Business lunch events with corporate partnerships.", impact: "A: \u20ac7,200/month saving. B: Neutral. C: Unknown upside.", type: "red" },
+        { title: "Standardise Ib\u00e9rico Portions", body: "Implement weighed portions for Ib\u00e9rico jam\u00f3n. Current 22% variance on a \u20ac480/leg product is \u20ac105/leg in lost margin. At 2 legs/week, this is \u20ac840/month.", impact: "Est. \u20ac10,000/year GP recovery", type: "green" },
+        { title: "Hire Part-Time CDP for Split Service", body: "Adding a part-time CDP (\u20ac1,200/month) for lunch-only would allow Carlos to work single shifts, resolving the compliance issue and reducing overtime.", impact: "Net cost \u20ac600/month after overtime elimination", type: "amber" }
+      ],
+      trends: [
+        { title: "Tasting Menu Revenue Share Increasing", body: "The 8-course tasting menu now represents 64% of dinner revenue, up from 52% two months ago. This concentration is positive for GP (higher margin) but creates operational fragility \u2014 the tasting menu is dependent on Carlos M. personally." },
+        { title: "Wine Programme Outperforming", body: "Sommelier-recommended wine pairings achieve a 72% acceptance rate, generating an additional \u20ac85/table on average. Pedro L.'s contribution to revenue is approximately \u20ac2,900/week in incremental wine sales." },
+        { title: "Lunch Covers in Structural Decline", body: "Midweek lunch has declined for 6 consecutive weeks. The Barcelona market is shifting towards later dining. Competitors (Lasarte, Disfrutar) have either closed lunch or moved to weekend-only lunch service." }
+      ]
+    }
+  }
+];
+
+const dayLabels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+let currentVenue = 0;
+let currentTab = "briefing";
+let currentRevPeriod = "daily";
+let charts = {};
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  updateHeaderDate();
+  setInterval(updateHeaderDate, 60000);
+  renderAll();
+}
+
+function updateHeaderDate() {
+  const now = new Date();
+  const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  document.getElementById('headerDate').textContent = now.toLocaleDateString('en-GB', opts);
+}
+
+function selectVenue(idx) {
+  currentVenue = idx;
+  document.querySelectorAll('.venue-chip').forEach((c, i) => c.classList.toggle('active', i === idx));
+  renderAll();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(tab === 'briefing' ? 'morning' : tab === 'stock' ? 'stock' : tab === 'insights' ? 'ai' : tab)));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
+  renderAll();
+}
+
+function setRevPeriod(p) {
+  currentRevPeriod = p;
+  document.querySelectorAll('#revPeriodPills .period-pill').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === p));
+  renderRevenueSummary();
+}
+
+function renderAll() {
+  const v = venues[currentVenue];
+  // Venue info
+  document.getElementById('venueInfo').innerHTML = `
+    <span><strong>Type:</strong> ${v.type}</span>
+    <span><strong>Capacity:</strong> ${v.capacity}</span>
+    <span><strong>Hours:</strong> ${v.hours}</span>
+  `;
+
+  switch(currentTab) {
+    case 'briefing': renderBriefingTab(); break;
+    case 'revenue': renderRevenueTab(); break;
+    case 'labour': renderLabourTab(); break;
+    case 'stock': renderStockTab(); break;
+    case 'insights': renderInsightsTab(); break;
+  }
+}
+
+// ============================================================
+// MORNING BRIEFING TAB
+// ============================================================
+function renderBriefingTab() {
+  const v = venues[currentVenue];
+  const d = v.pnl.daily;
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('briefingGreeting').textContent = `${greeting}, Operator.`;
+
+  const now = new Date();
+  const dateOpts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  document.getElementById('briefingDate').textContent = `${v.name} \u2014 ${now.toLocaleDateString('en-GB', dateOpts)}`;
+
+  // Traffic light logic
+  function tl(actual, target, lowerIsBetter) {
+    const diff = lowerIsBetter ? target - actual : actual - target;
+    if (diff >= 0) return 'tl-green';
+    if (diff >= -3) return 'tl-amber';
+    return 'tl-red';
+  }
+  function tlColor(cls) {
+    return cls === 'tl-green' ? 'var(--green)' : cls === 'tl-amber' ? 'var(--amber)' : 'var(--red)';
+  }
+  function deltaStr(actual, compare, currency) {
+    const pct = ((actual - compare) / compare * 100).toFixed(1);
+    const arrow = pct >= 0 ? '\u2191' : '\u2193';
+    const color = pct >= 0 ? 'var(--green)' : 'var(--red)';
+    return `<span style="color:${color}">${arrow} ${Math.abs(pct)}% vs yesterday</span>`;
+  }
+
+  const revTL = tl(d.revenue, d.target, false);
+  const labTL = tl(d.labourPct, d.labourTarget, true);
+  const gpTL = tl(d.gpPct, d.gpTarget, false);
+  const covTL = tl(d.covers, d.coversTarget, false);
+
+  const heroHTML = `
+    <div class="card kpi-hero">
+      <div class="traffic-indicator ${revTL}"></div>
+      <div class="kpi-icon" style="background:rgba(0,113,227,0.08)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div class="kpi-label">Revenue</div>
+      <div class="kpi-value" style="color:${tlColor(revTL)}">${v.currency}${d.revenue.toLocaleString()}</div>
+      <div class="kpi-comparison">${deltaStr(d.revenue, d.yesterday, v.currency)}</div>
+      <div class="kpi-target">Target: ${v.currency}${d.target.toLocaleString()}</div>
+    </div>
+    <div class="card kpi-hero">
+      <div class="traffic-indicator ${labTL}"></div>
+      <div class="kpi-icon" style="background:${d.labourPct > d.labourTarget ? 'var(--red-bg)' : 'var(--green-bg)'}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${d.labourPct > d.labourTarget ? 'var(--red)' : 'var(--green)'}" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div class="kpi-label">Labour %</div>
+      <div class="kpi-value" style="color:${tlColor(labTL)}">${d.labourPct}%</div>
+      <div class="kpi-comparison"><span style="color:${d.labourPct <= d.labourTarget ? 'var(--green)' : 'var(--red)'}">${d.labourPct <= d.labourTarget ? '\u2713 On target' : '\u2191 ' + (d.labourPct - d.labourTarget) + 'pts above target'}</span></div>
+      <div class="kpi-target">Target: ${d.labourTarget}%</div>
+    </div>
+    <div class="card kpi-hero">
+      <div class="traffic-indicator ${gpTL}"></div>
+      <div class="kpi-icon" style="background:${d.gpPct >= d.gpTarget ? 'var(--green-bg)' : 'var(--amber-bg)'}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${d.gpPct >= d.gpTarget ? 'var(--green)' : 'var(--amber)'}" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <div class="kpi-label">Gross Profit %</div>
+      <div class="kpi-value" style="color:${tlColor(gpTL)}">${d.gpPct}%</div>
+      <div class="kpi-comparison"><span style="color:${d.gpPct >= d.gpTarget ? 'var(--green)' : 'var(--amber)'}">${d.gpPct >= d.gpTarget ? '\u2713 Above target' : '\u2193 ' + (d.gpTarget - d.gpPct) + 'pts below target'}</span></div>
+      <div class="kpi-target">Target: ${d.gpTarget}%</div>
+    </div>
+    <div class="card kpi-hero">
+      <div class="traffic-indicator ${covTL}"></div>
+      <div class="kpi-icon" style="background:rgba(88,86,214,0.08)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5856D6" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div class="kpi-label">Covers</div>
+      <div class="kpi-value" style="color:${tlColor(covTL)}">${d.covers}</div>
+      <div class="kpi-comparison"><span style="color:var(--text-muted)">${(d.covers/v.capacity*100).toFixed(0)}% of capacity</span></div>
+      <div class="kpi-target">Forecast: ${d.coversTarget}</div>
+    </div>
+  `;
+  document.getElementById('heroKPIs').innerHTML = heroHTML;
+
+  // AI Briefing
+  const timeStr = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('aiBriefing').innerHTML = `
+    <div class="ai-briefing-header">
+      <div class="ai-dot"></div>
+      <div class="ai-briefing-title">AI Daily Briefing</div>
+      <div class="ai-briefing-time">Generated ${timeStr}</div>
+    </div>
+    <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;font-weight:500;color:var(--text-primary);line-height:1.5;border-left:3px solid var(--accent)">
+      ${v.briefing.oneLiner}
+    </div>
+    <div class="ai-briefing-body">${v.briefing.text}</div>
+    <div class="ai-actions">
+      <div class="ai-actions-title">Priority Actions</div>
+      <ul>${v.briefing.actions.map(a => `<li>${a}</li>`).join('')}</ul>
+    </div>
+  `;
+}
+
+// ============================================================
+// REVENUE TAB
+// ============================================================
+function renderRevenueTab() {
+  renderRevenueSummary();
+  renderRevTrendChart();
+  renderDaypartChart();
+  renderComparisons();
+  renderRevPerCoverChart();
+}
+
+function renderRevenueSummary() {
+  const v = venues[currentVenue];
+  const d = v.pnl[currentRevPeriod];
+  const periodLabel = currentRevPeriod.charAt(0).toUpperCase() + currentRevPeriod.slice(1);
+  const revDelta = ((d.revenue - d.target) / d.target * 100).toFixed(1);
+  const revColor = revDelta >= 0 ? 'var(--green)' : 'var(--red)';
+
+  document.getElementById('revSummaryCards').innerHTML = `
+    <div class="card" style="text-align:center">
+      <div class="kpi-label" style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px">${periodLabel} Revenue</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-1px">${v.currency}${d.revenue.toLocaleString()}</div>
+      <div style="font-size:12px;margin-top:6px;color:${revColor};font-weight:500">${revDelta >= 0 ? '+' : ''}${revDelta}% vs target</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="kpi-label" style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px">${periodLabel} Covers</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-1px">${d.covers.toLocaleString()}</div>
+      <div style="font-size:12px;margin-top:6px;color:var(--text-muted)">Target: ${d.coversTarget.toLocaleString()}</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="kpi-label" style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px">Avg Spend / Cover</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-1px">${v.currency}${(d.revenue / d.covers).toFixed(0)}</div>
+      <div style="font-size:12px;margin-top:6px;color:var(--text-muted)">${periodLabel}</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="kpi-label" style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px">GP%</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-1px;color:${d.gpPct >= d.gpTarget ? 'var(--green)' : 'var(--amber)'}">${d.gpPct}%</div>
+      <div style="font-size:12px;margin-top:6px;color:var(--text-muted)">Target: ${d.gpTarget}%</div>
+    </div>
+  `;
+}
+
+function renderRevTrendChart() {
+  destroyChart('revTrend');
+  const v = venues[currentVenue];
+  const ctx = document.getElementById('revTrendChart').getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 240);
+  gradient.addColorStop(0, 'rgba(0,113,227,0.12)');
+  gradient.addColorStop(1, 'rgba(0,113,227,0)');
+
+  charts.revTrend = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dayLabels,
+      datasets: [{
+        data: v.revenueTrend,
+        borderColor: '#0071E3',
+        backgroundColor: gradient,
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#0071E3',
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        borderWidth: 2.5,
+        pointBorderColor: 'white',
+        pointBorderWidth: 2
+      }]
+    },
+    options: chartOptions(v.currency, true)
+  });
+}
+
+function renderDaypartChart() {
+  destroyChart('daypart');
+  const v = venues[currentVenue];
+  const ctx = document.getElementById('daypartChart').getContext('2d');
+  const labels = Object.keys(v.daypart).map(k => k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()));
+  const data = Object.values(v.daypart);
+  const colors = ['#0071E3', '#5856D6', '#FF9500', '#34C759', '#FF3B30'];
+
+  charts.daypart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors.slice(0, data.length),
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#6E6E73', font: { size: 12, family: 'Inter' }, padding: 16, usePointStyle: true, pointStyleWidth: 10 } },
+        tooltip: {
+          backgroundColor: 'white',
+          titleColor: '#1D1D1F',
+          bodyColor: '#6E6E73',
+          borderColor: '#E5E5EA',
+          borderWidth: 1,
+          padding: 12,
+          titleFont: { size: 13, weight: 600, family: 'Inter' },
+          bodyFont: { size: 12, family: 'Inter' },
+          callbacks: { label: ctx2 => `${ctx2.label}: ${v.currency}${ctx2.raw.toLocaleString()} (${(ctx2.raw / data.reduce((a,b)=>a+b,0) * 100).toFixed(0)}%)` }
+        }
+      }
+    }
+  });
+}
+
+function renderComparisons() {
+  const v = venues[currentVenue];
+  const d = v.pnl.daily;
+
+  function compHTML(comp, label) {
+    const revDelta = ((d.revenue - comp.rev) / comp.rev * 100).toFixed(1);
+    const covDelta = ((d.covers - comp.covers) / comp.covers * 100).toFixed(1);
+    const avgNow = d.revenue / d.covers;
+    const avgDelta = ((avgNow - comp.avgSpend) / comp.avgSpend * 100).toFixed(1);
+    return `
+      <div class="compare-card">
+        <div class="compare-label">Revenue</div>
+        <div class="compare-value">${v.currency}${d.revenue.toLocaleString()}</div>
+        <div class="compare-delta" style="color:${revDelta>=0?'var(--green)':'var(--red)'}">${revDelta>=0?'+':''}${revDelta}%</div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-label">Covers</div>
+        <div class="compare-value">${d.covers}</div>
+        <div class="compare-delta" style="color:${covDelta>=0?'var(--green)':'var(--red)'}">${covDelta>=0?'+':''}${covDelta}%</div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-label">Avg Spend</div>
+        <div class="compare-value">${v.currency}${avgNow.toFixed(0)}</div>
+        <div class="compare-delta" style="color:${avgDelta>=0?'var(--green)':'var(--red)'}">${avgDelta>=0?'+':''}${avgDelta}%</div>
+      </div>
+    `;
+  }
+
+  document.getElementById('compLastWeek').innerHTML = compHTML(v.comp.lastWeek, 'Last Week');
+  document.getElementById('compLastYear').innerHTML = compHTML(v.comp.lastYear, 'Last Year');
+}
+
+function renderRevPerCoverChart() {
+  destroyChart('revPerCover');
+  const v = venues[currentVenue];
+  const ctx = document.getElementById('revPerCoverChart').getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+  gradient.addColorStop(0, 'rgba(88,86,214,0.12)');
+  gradient.addColorStop(1, 'rgba(88,86,214,0)');
+
+  charts.revPerCover = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: dayLabels,
+      datasets: [{
+        data: v.revPerCover,
+        backgroundColor: 'rgba(88,86,214,0.15)',
+        borderColor: '#5856D6',
+        borderWidth: 1.5,
+        borderRadius: 8,
+        barPercentage: 0.5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: tooltipStyle() },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' } } },
+        y: { grid: { color: '#F0F0F2' }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' }, callback: val => v.currency + val }, border: { display: false } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// LABOUR TAB
+// ============================================================
+function renderLabourTab() {
+  renderLabourPctChart();
+  renderLabourCPCChart();
+  renderSchedule();
+  renderLabourAlerts();
+}
+
+function renderLabourPctChart() {
+  destroyChart('labourPct');
+  const v = venues[currentVenue];
+  const ctx = document.getElementById('labourPctChart').getContext('2d');
+  const colors = v.labour.dayPct.map(p => {
+    if (p <= v.labour.target) return 'rgba(52,199,89,0.6)';
+    if (p <= v.labour.target + 2) return 'rgba(255,149,0,0.6)';
+    return 'rgba(255,59,48,0.6)';
+  });
+
+  charts.labourPct = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: dayLabels,
+      datasets: [{
+        label: 'Labour %',
+        data: v.labour.dayPct,
+        backgroundColor: colors,
+        borderRadius: 8,
+        barPercentage: 0.5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: tooltipStyle() },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' } } },
+        y: { grid: { color: '#F0F0F2' }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' }, callback: v2 => v2 + '%' }, min: 15, max: 40, border: { display: false } }
+      }
+    },
+    plugins: [{
+      id: 'targetLine',
+      afterDraw(chart) {
+        const yScale = chart.scales.y;
+        const y = yScale.getPixelForValue(v.labour.target);
+        const c = chart.ctx;
+        c.save();
+        c.beginPath();
+        c.setLineDash([6, 4]);
+        c.moveTo(chart.chartArea.left, y);
+        c.lineTo(chart.chartArea.right, y);
+        c.strokeStyle = '#FF3B30';
+        c.lineWidth = 1.5;
+        c.stroke();
+        c.fillStyle = '#FF3B30';
+        c.font = '600 10px Inter';
+        c.fillText('Target ' + v.labour.target + '%', chart.chartArea.right - 70, y - 6);
+        c.restore();
+      }
+    }]
+  });
+}
+
+function renderLabourCPCChart() {
+  destroyChart('labourCPC');
+  const v = venues[currentVenue];
+  const ctx = document.getElementById('labourCPCChart').getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 240);
+  gradient.addColorStop(0, 'rgba(255,149,0,0.15)');
+  gradient.addColorStop(1, 'rgba(255,149,0,0)');
+
+  charts.labourCPC = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dayLabels,
+      datasets: [{
+        data: v.labour.costPerCover,
+        borderColor: '#FF9500',
+        backgroundColor: gradient,
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#FF9500',
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        borderWidth: 2.5,
+        pointBorderColor: 'white',
+        pointBorderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: tooltipStyle() },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' } } },
+        y: { grid: { color: '#F0F0F2' }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' }, callback: val => v.currency + val.toFixed(0) }, border: { display: false } }
+      }
+    }
+  });
+}
+
+function renderSchedule() {
+  const v = venues[currentVenue];
+  let html = '<div class="schedule-grid">';
+  html += '<div class="sched-cell sched-head">Staff</div>';
+  dayLabels.forEach(d => html += `<div class="sched-cell sched-head">${d}</div>`);
+
+  v.labour.staff.forEach(s => {
+    html += `<div class="sched-cell sched-name">${s.name}<small>${s.role} \u2022 ${s.hours}h</small></div>`;
+    s.shifts.forEach(shift => {
+      const isOff = shift === 'OFF';
+      const isOT = s.overtime && !isOff;
+      html += `<div class="sched-cell ${isOff ? 'sched-off' : isOT ? 'sched-ot' : 'sched-on'}">${shift}</div>`;
+    });
+  });
+  html += '</div>';
+  document.getElementById('scheduleContainer').innerHTML = html;
+
+  // Overtime badges
+  const ot = v.labour.staff.filter(s => s.overtime);
+  document.getElementById('overtimeAlerts').innerHTML = ot.map(s =>
+    `<span class="badge badge-red">${s.name} ${s.hours}h</span>`
+  ).join(' ');
+}
+
+function renderLabourAlerts() {
+  const v = venues[currentVenue];
+  const alerts = v.labour.staff.filter(s => s.hours > 44);
+  let html = '';
+  alerts.forEach(s => {
+    const severity = s.hours > 48 ? 'insight-red' : 'insight-amber';
+    html += `<div class="insight-card ${severity}">
+      <div class="insight-title">${s.name} \u2014 ${s.hours} hours this week</div>
+      <div class="insight-body">${s.role}. ${s.hours > 48 ? 'Exceeds maximum working hours. Immediate action required.' : 'Approaching overtime threshold. Monitor closely.'} Current rota shows ${s.shifts.filter(sh => sh !== 'OFF').length} working days.</div>
+    </div>`;
+  });
+  if (alerts.length === 0) {
+    html = '<div class="insight-card insight-green"><div class="insight-title">All Clear</div><div class="insight-body">No staff members approaching overtime thresholds this week.</div></div>';
+  }
+  document.getElementById('labourAlertsList').innerHTML = html;
+}
+
+// ============================================================
+// STOCK & GP TAB
+// ============================================================
+function renderStockTab() {
+  renderGPCatChart();
+  renderStockLevelChart();
+  renderWastageAlerts();
+  renderParWarnings();
+  renderVarianceTable();
+}
+
+function renderGPCatChart() {
+  destroyChart('gpCat');
+  const v = venues[currentVenue];
+  const ctx = document.getElementById('gpCatChart').getContext('2d');
+  const labels = ['Spirits', 'Wine', 'Beer', 'Food'];
+  const data = [v.gp.spirits, v.gp.wine, v.gp.beer, v.gp.food];
+  const targets = [80, 70, 65, 70];
+  const colors = data.map((d, i) => d >= targets[i] ? 'rgba(52,199,89,0.6)' : d >= targets[i] - 3 ? 'rgba(255,149,0,0.6)' : 'rgba(255,59,48,0.6)');
+
+  charts.gpCat = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Actual GP%',
+          data: data,
+          backgroundColor: colors,
+          borderRadius: 8,
+          barPercentage: 0.5
+        },
+        {
+          label: 'Target',
+          data: targets,
+          backgroundColor: 'rgba(0,0,0,0.04)',
+          borderColor: 'rgba(0,0,0,0.12)',
+          borderWidth: 1.5,
+          borderRadius: 8,
+          barPercentage: 0.5,
+          borderDash: [4, 4]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, labels: { color: '#6E6E73', font: { size: 11, family: 'Inter' }, usePointStyle: true, pointStyleWidth: 10, padding: 16 } },
+        tooltip: tooltipStyle()
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' } } },
+        y: { grid: { color: '#F0F0F2' }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' }, callback: v2 => v2 + '%' }, min: 50, max: 90, border: { display: false } }
+      }
+    }
+  });
+}
+
+function renderStockLevelChart() {
+  destroyChart('stockLevel');
+  const v = venues[currentVenue];
+  const ctx = document.getElementById('stockLevelChart').getContext('2d');
+  const items = v.stock.slice(0, 8);
+  const labels = items.map(s => s.item);
+  const pars = items.map(s => s.par);
+  const actuals = items.map(s => s.actual);
+  const colors = items.map(s => {
+    const pct = s.actual / s.par;
+    if (pct <= 0.3) return 'rgba(255,59,48,0.6)';
+    if (pct <= 0.6) return 'rgba(255,149,0,0.6)';
+    return 'rgba(52,199,89,0.6)';
+  });
+
+  charts.stockLevel = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: 'Par Level', data: pars, backgroundColor: 'rgba(0,0,0,0.04)', borderColor: 'rgba(0,0,0,0.1)', borderWidth: 1, borderRadius: 6, barPercentage: 0.6 },
+        { label: 'Actual', data: actuals, backgroundColor: colors, borderRadius: 6, barPercentage: 0.6 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: {
+        legend: { display: true, labels: { color: '#6E6E73', font: { size: 11, family: 'Inter' }, usePointStyle: true, pointStyleWidth: 10, padding: 16 } },
+        tooltip: tooltipStyle()
+      },
+      scales: {
+        x: { grid: { color: '#F0F0F2' }, ticks: { color: '#AEAEB2', font: { size: 10, family: 'Inter' } }, border: { display: false } },
+        y: { grid: { display: false }, ticks: { color: '#6E6E73', font: { size: 11, family: 'Inter' } } }
+      }
+    }
+  });
+}
+
+function renderWastageAlerts() {
+  const v = venues[currentVenue];
+  let html = '';
+  const high = v.variance.filter(vi => ((vi.actual - vi.theoretical) / vi.theoretical * 100) > 15);
+
+  if (high.length === 0) {
+    html = '<div class="insight-card insight-green"><div class="insight-title">All Clear</div><div class="insight-body">No items above wastage threshold.</div></div>';
+  } else {
+    high.forEach(vi => {
+      const pct = ((vi.actual - vi.theoretical) / vi.theoretical * 100).toFixed(1);
+      const cost = ((vi.actual - vi.theoretical) * vi.costPer).toFixed(2);
+      html += `<div class="alert-row">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text-primary)">${vi.item}</div>
+          <div style="font-size:11px;color:var(--text-muted)">+${(vi.actual - vi.theoretical)} ${vi.unit} over theoretical</div>
+        </div>
+        <div style="text-align:right">
+          <span class="badge badge-red">+${pct}%</span>
+          <div style="font-size:11px;color:var(--red);margin-top:4px">${v.currency}${cost} lost</div>
+        </div>
+      </div>`;
+    });
+  }
+  document.getElementById('wastageAlerts').innerHTML = html;
+}
+
+function renderParWarnings() {
+  const v = venues[currentVenue];
+  let html = '';
+  const low = v.stock.filter(s => (s.actual / s.par) <= 0.5);
+
+  low.forEach(s => {
+    const need = s.par - s.actual;
+    const estCost = (need * s.cost).toFixed(0);
+    const urgency = (s.actual / s.par) <= 0.25 ? 'badge-red' : 'badge-amber';
+    html += `<div class="alert-row">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--text-primary)">${s.item}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${s.actual}/${s.par} ${s.unit} remaining</div>
+      </div>
+      <div style="text-align:right">
+        <span class="badge ${urgency}">Order +${need} ${s.unit}</span>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Est. ${v.currency}${estCost}</div>
+      </div>
+    </div>`;
+  });
+
+  if (low.length === 0) {
+    html = '<div class="insight-card insight-green"><div class="insight-title">Stock Healthy</div><div class="insight-body">All items above minimum par levels.</div></div>';
+  }
+  document.getElementById('parWarnings').innerHTML = html;
+}
+
+function renderVarianceTable() {
+  const v = venues[currentVenue];
+  let html = `<thead><tr><th>Item</th><th>Theoretical</th><th>Actual</th><th>Variance</th><th>% Over</th><th>Cost Impact</th><th>Status</th></tr></thead><tbody>`;
+  v.variance.forEach(vi => {
+    const diff = vi.actual - vi.theoretical;
+    const pct = ((diff / vi.theoretical) * 100).toFixed(1);
+    const cost = (diff * vi.costPer).toFixed(2);
+    const badge = pct > 20 ? 'badge-red' : pct > 10 ? 'badge-amber' : 'badge-green';
+    const label = pct > 20 ? 'Investigate' : pct > 10 ? 'Monitor' : 'Acceptable';
+    html += `<tr>
+      <td style="font-weight:500;color:var(--text-primary)">${vi.item}</td>
+      <td>${vi.theoretical} ${vi.unit}</td>
+      <td>${vi.actual} ${vi.unit}</td>
+      <td style="color:var(--red);font-weight:500">+${diff} ${vi.unit}</td>
+      <td style="color:${pct>15?'var(--red)':pct>10?'var(--amber)':'var(--text-secondary)'};font-weight:500">+${pct}%</td>
+      <td style="color:var(--red)">${v.currency}${cost}</td>
+      <td><span class="badge ${badge}">${label}</span></td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  document.getElementById('varianceTable').innerHTML = html;
+}
+
+// ============================================================
+// AI INSIGHTS TAB
+// ============================================================
+function renderInsightsTab() {
+  const v = venues[currentVenue];
+
+  // Daily report
+  document.getElementById('aiDailyReport').innerHTML = `
+    <div style="font-size:14px;line-height:1.8;color:var(--text-secondary)">${v.insights.report}</div>
+  `;
+
+  // Anomalies
+  let anomalyHTML = '';
+  v.insights.anomalies.forEach(a => {
+    const cls = a.type === 'red' ? 'insight-red' : a.type === 'amber' ? 'insight-amber' : 'insight-green';
+    anomalyHTML += `<div class="insight-card ${cls}">
+      <div class="insight-title">${a.title}</div>
+      <div class="insight-body">${a.body}</div>
+      <div class="insight-impact">Impact: ${a.impact}</div>
+    </div>`;
+  });
+  document.getElementById('anomalyAlerts').innerHTML = anomalyHTML;
+
+  // Recommendations
+  let recHTML = '';
+  v.insights.recommendations.forEach(r => {
+    const cls = r.type === 'red' ? 'insight-red' : r.type === 'amber' ? 'insight-amber' : r.type === 'green' ? 'insight-green' : 'insight-blue';
+    recHTML += `<div class="insight-card ${cls}">
+      <div class="insight-title">${r.title}</div>
+      <div class="insight-body">${r.body}</div>
+      <div class="insight-impact">Estimated Impact: ${r.impact}</div>
+    </div>`;
+  });
+  document.getElementById('aiRecommendations').innerHTML = recHTML;
+
+  // Trends
+  let trendHTML = '';
+  v.insights.trends.forEach(t => {
+    trendHTML += `<div class="insight-card insight-blue">
+      <div class="insight-title">${t.title}</div>
+      <div class="insight-body">${t.body}</div>
+    </div>`;
+  });
+  document.getElementById('trendAnalysis').innerHTML = trendHTML;
+}
+
+// ============================================================
+// CHART HELPERS
+// ============================================================
+function destroyChart(name) {
+  if (charts[name]) { charts[name].destroy(); charts[name] = null; }
+}
+
+function chartOptions(currency, isCurrency) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: tooltipStyle() },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#AEAEB2', font: { size: 11, family: 'Inter' } } },
+      y: {
+        grid: { color: '#F0F0F2' },
+        ticks: {
+          color: '#AEAEB2',
+          font: { size: 11, family: 'Inter' },
+          callback: isCurrency ? (v => currency + (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v)) : (v => v)
+        },
+        border: { display: false }
+      }
+    }
+  };
+}
+
+function tooltipStyle() {
+  return {
+    backgroundColor: 'white',
+    titleColor: '#1D1D1F',
+    bodyColor: '#6E6E73',
+    borderColor: '#E5E5EA',
+    borderWidth: 1,
+    padding: 12,
+    cornerRadius: 8,
+    titleFont: { size: 13, weight: 600, family: 'Inter' },
+    bodyFont: { size: 12, family: 'Inter' },
+    displayColors: false
+  };
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+init();
+</script>
+</body>
 </html>
