@@ -49,6 +49,64 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
+/* ===== FOCUS & A11Y ===== */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fadeInUp 0.4s ease-out both;
+}
+.animate-in-delay-1 { animation-delay: 0.05s; }
+.animate-in-delay-2 { animation-delay: 0.1s; }
+.animate-in-delay-3 { animation-delay: 0.15s; }
+.animate-in-delay-4 { animation-delay: 0.2s; }
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, #F0F0F2 25%, #E5E5EA 50%, #F0F0F2 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+.skeleton-text { height: 14px; margin-bottom: 8px; width: 80%; }
+.skeleton-value { height: 34px; margin-bottom: 8px; width: 50%; }
+.skeleton-block { height: 200px; width: 100%; }
+
 /* ===== HEADER ===== */
 .header {
   background: rgba(255,255,255,0.82);
@@ -72,6 +130,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   color: white; font-weight: 800; font-size: 15px;
   letter-spacing: -0.5px;
+  box-shadow: 0 2px 8px rgba(0,113,227,0.25);
 }
 .logo-text { font-size: 20px; font-weight: 800; letter-spacing: -0.8px; color: var(--text-primary); }
 .logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-left: 4px; letter-spacing: 0.3px; }
@@ -96,9 +155,28 @@ body {
   border-radius: 50%;
   animation: pulse 2s ease-in-out infinite;
 }
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
+/* Export & Print buttons in header */
+.header-actions { display: flex; gap: 8px; }
+.btn-export, .btn-print {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-export:hover, .btn-print:hover {
+  background: var(--bg-secondary);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ===== VENUE BAR ===== */
@@ -157,7 +235,7 @@ body {
 /* ===== MAIN ===== */
 .main { max-width: 1440px; margin: 0 auto; padding: 20px 24px 60px; }
 .tab-content { display: none; }
-.tab-content.active { display: block; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
 
 /* ===== CARDS ===== */
 .card {
@@ -166,7 +244,7 @@ body {
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, transform 0.25s;
 }
 .card:hover { box-shadow: var(--shadow-md); }
 .card-title {
@@ -215,6 +293,7 @@ body {
   font-weight: 800;
   letter-spacing: -1.8px;
   line-height: 1.1;
+  animation: countUp 0.5s ease-out both;
 }
 .kpi-hero .kpi-comparison {
   font-size: 12px;
@@ -282,7 +361,7 @@ body {
 .hl-red { color: var(--red); font-weight: 600; }
 .expandable { cursor: pointer; }
 .expandable-content { display: none; margin-top: 12px; }
-.expandable-content.open { display: block; }
+.expandable-content.open { display: block; animation: fadeIn 0.3s ease-out; }
 .expand-btn {
   background: none; border: none; color: var(--accent);
   font-size: 12px; font-weight: 600; cursor: pointer;
@@ -297,7 +376,9 @@ body {
   border-radius: var(--radius-sm);
   padding: 16px;
   border-left: 3px solid var(--accent);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
+.priority-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .priority-card.urgent { border-left-color: var(--red); }
 .priority-card.warning { border-left-color: var(--amber); }
 .priority-card.good { border-left-color: var(--green); }
@@ -322,6 +403,37 @@ body {
   color: var(--text-muted);
   margin-top: 6px;
 }
+
+/* ===== DAILY P&L TRAFFIC LIGHT ===== */
+.pnl-traffic {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+.pnl-day {
+  background: white;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 10px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+.pnl-day:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.pnl-day.today { border: 1.5px solid var(--accent); background: rgba(0,113,227,0.02); }
+.pnl-day-name { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px; }
+.pnl-day-date { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.pnl-light {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  margin: 10px auto 8px;
+}
+.pnl-rev { font-size: 14px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
+.pnl-gp { font-size: 11px; color: var(--text-secondary); }
+.pnl-lab { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.pnl-net-label { font-size: 10px; color: var(--text-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+.pnl-net { font-size: 13px; font-weight: 700; }
 
 /* ===== TABLES ===== */
 .data-table {
@@ -365,8 +477,10 @@ body {
   gap: 10px;
   font-size: 13px;
   line-height: 1.5;
+  transition: transform 0.2s;
 }
 .alert-card:last-child { margin-bottom: 0; }
+.alert-card:hover { transform: translateX(2px); }
 .alert-red { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
 .alert-amber { background: var(--amber-bg); border: 1px solid var(--amber-border); color: #B36800; }
 .alert-green { background: var(--green-bg); border: 1px solid var(--green-border); color: #1B8A35; }
@@ -426,8 +540,10 @@ body {
   border-radius: var(--radius-sm);
   padding: 20px;
   margin-bottom: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .insight-card:last-child { margin-bottom: 0; }
+.insight-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 .insight-badge {
   display: inline-block;
   padding: 3px 8px;
@@ -453,6 +569,39 @@ body {
   align-items: center;
   gap: 4px;
 }
+/* Confidence meter */
+.confidence-meter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.confidence-bar {
+  width: 60px; height: 4px;
+  background: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.confidence-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease-out;
+}
+/* Implementation steps */
+.impl-steps {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.impl-steps strong { color: var(--text-primary); }
+.impl-steps ol { padding-left: 16px; margin-top: 6px; }
+.impl-steps li { margin-bottom: 4px; }
 
 /* ===== SPARKLINE ===== */
 .sparkline-cell { width: 80px; height: 30px; }
@@ -515,11 +664,50 @@ body {
 .weather-icon { font-size: 20px; }
 .weather-temp { font-weight: 600; color: var(--text-primary); }
 
+/* ===== ANOMALY TIMELINE ===== */
+.anomaly-timeline {
+  position: relative;
+  padding-left: 24px;
+  margin-top: 12px;
+}
+.anomaly-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+  border-radius: 1px;
+}
+.anomaly-event {
+  position: relative;
+  padding: 10px 0 16px 16px;
+}
+.anomaly-event::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px var(--border);
+}
+.anomaly-event.critical::before { background: var(--red); }
+.anomaly-event.warning::before { background: var(--amber); }
+.anomaly-event.info::before { background: var(--accent); }
+.anomaly-event.resolved::before { background: var(--green); }
+.anomaly-event-time { font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.anomaly-event-text { font-size: 13px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .bento-4 { grid-template-columns: repeat(2, 1fr); }
   .bento-3 { grid-template-columns: repeat(2, 1fr); }
   .priority-grid { grid-template-columns: 1fr; }
+  .pnl-traffic { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 768px) {
   .header { padding: 0 16px; height: 52px; }
@@ -527,38 +715,72 @@ body {
   .bento-4, .bento-3, .bento-2, .bento-2-1, .bento-1-2 { grid-template-columns: 1fr; }
   .kpi-hero .kpi-value { font-size: 28px; }
   .venue-bar { padding: 10px 16px; flex-wrap: wrap; }
-  .venue-detail { margin-left: 0; }
+  .venue-detail { margin-left: 0; flex-wrap: wrap; gap: 8px; }
   .tab-btn { padding: 12px 14px; font-size: 12px; }
   .schedule-grid { grid-template-columns: 80px repeat(7, 1fr); font-size: 9px; }
   .priority-grid { grid-template-columns: 1fr; }
   .logo-sub { display: none; }
+  .pnl-traffic { grid-template-columns: repeat(2, 1fr); }
+  .header-actions { display: none; }
+  .card { padding: 16px; }
+  .outlet-table { font-size: 11px; }
+  .outlet-table td, .outlet-table th { padding: 8px; }
 }
 @media (max-width: 480px) {
   .header-date { display: none; }
   .logo-text { font-size: 17px; }
+  .pnl-traffic { grid-template-columns: 1fr 1fr; }
+  .tab-nav { padding: 0 12px; }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .header { position: static; backdrop-filter: none; border-bottom: 1px solid #ccc; }
+  .tab-nav, .header-actions, .btn-export, .btn-print { display: none !important; }
+  .tab-content { display: block !important; page-break-inside: avoid; margin-bottom: 24px; }
+  .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+  .kpi-hero:hover, .card:hover, .priority-card:hover, .insight-card:hover, .alert-card:hover { transform: none; box-shadow: none; }
+  .main { max-width: 100%; padding: 16px; }
+  canvas { max-height: 200px; }
+  .pnl-day:hover { transform: none; }
+  @page { margin: 1cm; }
 }
 </style>
 </head>
 <body>
 
+<!-- SKIP NAV (A11y) -->
+<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:0;z-index:9999;padding:8px 16px;background:var(--accent);color:white;font-weight:600;" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to main content</a>
+
 <!-- HEADER -->
-<div class="header">
+<header class="header" role="banner">
   <div class="logo-area">
-    <div class="logo-mark">P</div>
+    <div class="logo-mark" aria-hidden="true">P</div>
     <span class="logo-text">Proof</span>
     <span class="logo-sub">AI Operations Intelligence</span>
   </div>
   <div class="header-meta">
     <span class="header-date" id="headerDate"></span>
-    <div class="header-badge header-live">
-      <span class="live-dot"></span>
+    <div class="header-actions">
+      <button class="btn-export" onclick="exportCSV()" aria-label="Export data as CSV">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Export CSV
+      </button>
+      <button class="btn-print" onclick="window.print()" aria-label="Print report">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print
+      </button>
+    </div>
+    <div class="header-badge header-live" role="status" aria-label="System is live">
+      <span class="live-dot" aria-hidden="true"></span>
       LIVE
     </div>
   </div>
-</div>
+</header>
 
 <!-- VENUE BAR -->
-<div class="venue-bar">
+<div class="venue-bar" role="complementary" aria-label="Venue information">
   <span class="venue-name">Annabel's Mayfair</span>
   <div class="venue-detail">
     <span><strong>7</strong> bars</span>
@@ -569,35 +791,45 @@ body {
 </div>
 
 <!-- TAB NAV -->
-<div class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('briefing')">Morning Briefing</button>
-  <button class="tab-btn" onclick="switchTab('revenue')">Revenue</button>
-  <button class="tab-btn" onclick="switchTab('labour')">Labour</button>
-  <button class="tab-btn" onclick="switchTab('stock')">Stock & GP</button>
-  <button class="tab-btn" onclick="switchTab('insights')">AI Insights</button>
-  <button class="tab-btn" onclick="switchTab('outlets')">Outlet Performance</button>
-</div>
+<nav class="tab-nav" role="tablist" aria-label="Dashboard sections">
+  <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-briefing" onclick="switchTab('briefing', this)">Morning Briefing</button>
+  <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-revenue" onclick="switchTab('revenue', this)">Revenue</button>
+  <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-labour" onclick="switchTab('labour', this)">Labour</button>
+  <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-stock" onclick="switchTab('stock', this)">Stock &amp; GP</button>
+  <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-insights" onclick="switchTab('insights', this)">AI Insights</button>
+  <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-outlets" onclick="switchTab('outlets', this)">Outlet Performance</button>
+</nav>
 
 <!-- MAIN -->
-<div class="main">
+<div class="main" id="main-content" role="main">
 
 <!-- ============================================================== -->
 <!-- TAB 1: MORNING BRIEFING -->
 <!-- ============================================================== -->
-<div class="tab-content active" id="tab-briefing">
+<div class="tab-content active" id="tab-briefing" role="tabpanel" aria-labelledby="tab-briefing">
 
   <!-- Weather -->
-  <div class="weather-strip">
-    <span class="weather-icon">&#9925;</span>
-    <span class="weather-temp">11°C</span>
+  <div class="weather-strip" role="status" aria-label="Weather forecast">
+    <span class="weather-icon" aria-hidden="true">&#9925;</span>
+    <span class="weather-temp">11&deg;C</span>
     <span>Partly cloudy, light rain after 9pm &mdash; Garden Bar may see reduced late traffic</span>
   </div>
 
   <!-- KPI Cards -->
-  <div class="bento-4" id="briefing-kpis"></div>
+  <div class="bento-4" id="briefing-kpis" aria-label="Key performance indicators">
+    <div class="card kpi-hero"><div class="skeleton skeleton-value"></div><div class="skeleton skeleton-text"></div></div>
+    <div class="card kpi-hero"><div class="skeleton skeleton-value"></div><div class="skeleton skeleton-text"></div></div>
+    <div class="card kpi-hero"><div class="skeleton skeleton-value"></div><div class="skeleton skeleton-text"></div></div>
+    <div class="card kpi-hero"><div class="skeleton skeleton-value"></div><div class="skeleton skeleton-text"></div></div>
+  </div>
 
   <!-- AI Briefing -->
-  <div class="ai-briefing mt-20" id="aiBriefing"></div>
+  <div class="ai-briefing mt-20" id="aiBriefing">
+    <div class="skeleton skeleton-text" style="width:40%;"></div>
+    <div class="skeleton skeleton-text" style="width:90%;margin-top:16px;"></div>
+    <div class="skeleton skeleton-text" style="width:85%;"></div>
+    <div class="skeleton skeleton-text" style="width:70%;"></div>
+  </div>
 
   <!-- Priority Actions -->
   <div class="mt-20">
@@ -605,19 +837,27 @@ body {
     <div class="priority-grid" id="priorityActions"></div>
   </div>
 
+  <!-- Daily P&L Traffic Light -->
+  <div class="mt-20">
+    <div class="card-title" style="padding-left:4px;">Daily P&amp;L &mdash; Traffic Light Summary</div>
+    <div class="pnl-traffic" id="pnlTraffic" aria-label="Daily profit and loss traffic light system"></div>
+  </div>
+
   <!-- Quick Bar Summary -->
   <div class="card mt-20">
     <div class="card-title">Last Night &mdash; Bar-by-Bar</div>
-    <table class="data-table" id="briefingBarTable">
+    <table class="data-table" id="briefingBarTable" aria-label="Bar performance summary">
       <thead>
         <tr>
-          <th>Bar</th>
-          <th>Floor</th>
-          <th>Revenue</th>
-          <th>vs Target</th>
-          <th>GP%</th>
-          <th>Labour %</th>
-          <th>Status</th>
+          <th scope="col">Bar</th>
+          <th scope="col">Floor</th>
+          <th scope="col">Revenue</th>
+          <th scope="col">vs Target</th>
+          <th scope="col">GP%</th>
+          <th scope="col">Labour %</th>
+          <th scope="col">Covers</th>
+          <th scope="col">Rev/Cover</th>
+          <th scope="col">Status</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -628,7 +868,7 @@ body {
 <!-- ============================================================== -->
 <!-- TAB 2: REVENUE -->
 <!-- ============================================================== -->
-<div class="tab-content" id="tab-revenue">
+<div class="tab-content" id="tab-revenue" role="tabpanel">
 
   <!-- Revenue KPIs -->
   <div class="bento-4" id="revenue-kpis"></div>
@@ -636,15 +876,15 @@ body {
   <!-- 30-day trend -->
   <div class="bento-2 mt-20">
     <div class="card">
-      <div class="card-title">Daily Revenue — Last 30 Days</div>
+      <div class="card-title">Daily Revenue &mdash; Last 30 Days</div>
       <div class="chart-container" style="height:300px;">
-        <canvas id="revenueTrendChart"></canvas>
+        <canvas id="revenueTrendChart" aria-label="Revenue trend chart for last 30 days"></canvas>
       </div>
     </div>
     <div class="card">
       <div class="card-title">Revenue by Bar</div>
       <div class="chart-container" style="height:300px;">
-        <canvas id="revenueByBarChart"></canvas>
+        <canvas id="revenueByBarChart" aria-label="Revenue breakdown by bar"></canvas>
       </div>
     </div>
   </div>
@@ -652,16 +892,16 @@ body {
   <!-- Daypart + WoW -->
   <div class="bento-2 mt-16">
     <div class="card">
-      <div class="card-title">Revenue by Daypart — Yesterday</div>
+      <div class="card-title">Revenue by Daypart &mdash; Yesterday</div>
       <div class="chart-container" style="height:280px;">
-        <canvas id="daypartChart"></canvas>
+        <canvas id="daypartChart" aria-label="Revenue by time of day"></canvas>
       </div>
     </div>
     <div class="card">
       <div class="card-title">Week-on-Week Comparison</div>
-      <table class="data-table" id="wowTable">
+      <table class="data-table" id="wowTable" aria-label="Week over week revenue comparison">
         <thead>
-          <tr><th>Day</th><th>This Week</th><th>Last Week</th><th>Change</th></tr>
+          <tr><th scope="col">Day</th><th scope="col">This Week</th><th scope="col">Last Week</th><th scope="col">Change</th></tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -670,9 +910,9 @@ body {
 
   <!-- Revenue per cover -->
   <div class="card mt-16">
-    <div class="card-title">Revenue per Cover — 30 Day Trend</div>
+    <div class="card-title">Revenue per Cover &mdash; 30 Day Trend</div>
     <div class="chart-container" style="height:220px;">
-      <canvas id="revenuePerCoverChart"></canvas>
+      <canvas id="revenuePerCoverChart" aria-label="Revenue per cover trend"></canvas>
     </div>
   </div>
 </div>
@@ -680,7 +920,7 @@ body {
 <!-- ============================================================== -->
 <!-- TAB 3: LABOUR -->
 <!-- ============================================================== -->
-<div class="tab-content" id="tab-labour">
+<div class="tab-content" id="tab-labour" role="tabpanel">
 
   <!-- Labour KPIs -->
   <div class="bento-4" id="labour-kpis"></div>
@@ -688,15 +928,15 @@ body {
   <!-- Labour % trend + by bar -->
   <div class="bento-2 mt-20">
     <div class="card">
-      <div class="card-title">Labour % — Last 14 Days</div>
+      <div class="card-title">Labour % &mdash; Last 14 Days</div>
       <div class="chart-container" style="height:280px;">
-        <canvas id="labourTrendChart"></canvas>
+        <canvas id="labourTrendChart" aria-label="Labour percentage trend"></canvas>
       </div>
     </div>
     <div class="card">
       <div class="card-title">Labour % by Bar</div>
       <div class="chart-container" style="height:280px;">
-        <canvas id="labourByBarChart"></canvas>
+        <canvas id="labourByBarChart" aria-label="Labour percentage by bar"></canvas>
       </div>
     </div>
   </div>
@@ -706,7 +946,7 @@ body {
     <div class="card">
       <div class="card-title">Cost per Cover by Bar</div>
       <div class="chart-container" style="height:260px;">
-        <canvas id="costPerCoverChart"></canvas>
+        <canvas id="costPerCoverChart" aria-label="Labour cost per cover by bar"></canvas>
       </div>
     </div>
     <div class="card">
@@ -717,15 +957,15 @@ body {
 
   <!-- Schedule Grid -->
   <div class="card mt-16">
-    <div class="card-title">Staff Schedule — This Week</div>
-    <div class="schedule-grid" id="scheduleGrid"></div>
+    <div class="card-title">Staff Schedule &mdash; This Week</div>
+    <div class="schedule-grid" id="scheduleGrid" role="grid" aria-label="Weekly staff schedule"></div>
   </div>
 </div>
 
 <!-- ============================================================== -->
 <!-- TAB 4: STOCK & GP -->
 <!-- ============================================================== -->
-<div class="tab-content" id="tab-stock">
+<div class="tab-content" id="tab-stock" role="tabpanel">
 
   <!-- GP KPIs -->
   <div class="bento-4" id="stock-kpis"></div>
@@ -735,13 +975,13 @@ body {
     <div class="card">
       <div class="card-title">GP% by Category</div>
       <div class="chart-container" style="height:280px;">
-        <canvas id="gpCategoryChart"></canvas>
+        <canvas id="gpCategoryChart" aria-label="Gross profit percentage by category"></canvas>
       </div>
     </div>
     <div class="card">
       <div class="card-title">GP% by Bar</div>
       <div class="chart-container" style="height:280px;">
-        <canvas id="gpByBarChart"></canvas>
+        <canvas id="gpByBarChart" aria-label="Gross profit percentage by bar"></canvas>
       </div>
     </div>
   </div>
@@ -761,9 +1001,9 @@ body {
   <!-- Suggested Orders -->
   <div class="card mt-16">
     <div class="card-title">Suggested Orders</div>
-    <table class="data-table" id="suggestedOrders">
+    <table class="data-table" id="suggestedOrders" aria-label="AI-generated order suggestions">
       <thead>
-        <tr><th>Item</th><th>Current Stock</th><th>Par Level</th><th>Order Qty</th><th>Est. Cost</th><th>Priority</th></tr>
+        <tr><th scope="col">Item</th><th scope="col">Current Stock</th><th scope="col">Par Level</th><th scope="col">Order Qty</th><th scope="col">Est. Cost</th><th scope="col">Priority</th></tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -771,10 +1011,10 @@ body {
 
   <!-- Variance Table -->
   <div class="card mt-16">
-    <div class="card-title">Stock Variance — This Week</div>
-    <table class="data-table" id="varianceTable">
+    <div class="card-title">Stock Variance &mdash; This Week</div>
+    <table class="data-table" id="varianceTable" aria-label="Stock variance report">
       <thead>
-        <tr><th>Item</th><th>Expected</th><th>Actual</th><th>Variance</th><th>Est. Loss</th><th>Status</th></tr>
+        <tr><th scope="col">Item</th><th scope="col">Expected</th><th scope="col">Actual</th><th scope="col">Variance</th><th scope="col">Est. Loss</th><th scope="col">Status</th></tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -784,12 +1024,18 @@ body {
 <!-- ============================================================== -->
 <!-- TAB 5: AI INSIGHTS -->
 <!-- ============================================================== -->
-<div class="tab-content" id="tab-insights">
+<div class="tab-content" id="tab-insights" role="tabpanel">
 
   <!-- Intelligence Report -->
   <div class="card">
     <div class="card-title">Daily Intelligence Report</div>
     <div id="intelligenceReport" style="font-size:14px; line-height:1.8; color:var(--text-secondary);"></div>
+  </div>
+
+  <!-- Anomaly Timeline -->
+  <div class="card mt-20">
+    <div class="card-title">Anomaly Timeline &mdash; Last 48 Hours</div>
+    <div id="anomalyTimeline" class="anomaly-timeline"></div>
   </div>
 
   <!-- Anomalies -->
@@ -800,7 +1046,7 @@ body {
 
   <!-- Recommendations -->
   <div class="mt-20">
-    <div class="card-title" style="padding-left:4px;">Recommendations</div>
+    <div class="card-title" style="padding-left:4px;">Actionable Recommendations</div>
     <div id="recommendationCards"></div>
   </div>
 
@@ -814,28 +1060,28 @@ body {
 <!-- ============================================================== -->
 <!-- TAB 6: OUTLET PERFORMANCE -->
 <!-- ============================================================== -->
-<div class="tab-content" id="tab-outlets">
+<div class="tab-content" id="tab-outlets" role="tabpanel">
 
   <!-- Best/Worst callout -->
   <div class="bento-2" id="outletCallouts"></div>
 
   <!-- 7-bar comparison table -->
   <div class="card mt-20">
-    <div class="card-title">Outlet Comparison — All 7 Bars</div>
+    <div class="card-title">Outlet Comparison &mdash; All 7 Bars</div>
     <div style="overflow-x:auto;">
-      <table class="outlet-table" id="outletTable">
+      <table class="outlet-table" id="outletTable" aria-label="Outlet performance comparison">
         <thead>
           <tr>
-            <th>Bar</th>
-            <th>Floor</th>
-            <th>Last Night Rev</th>
-            <th>7-Day Avg</th>
-            <th>GP%</th>
-            <th>Labour %</th>
-            <th>Covers</th>
-            <th>Rev/Cover</th>
-            <th>7-Day Trend</th>
-            <th>Status</th>
+            <th scope="col">Bar</th>
+            <th scope="col">Floor</th>
+            <th scope="col">Last Night Rev</th>
+            <th scope="col">7-Day Avg</th>
+            <th scope="col">GP%</th>
+            <th scope="col">Labour %</th>
+            <th scope="col">Covers</th>
+            <th scope="col">Rev/Cover</th>
+            <th scope="col">7-Day Trend</th>
+            <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -846,15 +1092,15 @@ body {
   <!-- Revenue mix chart -->
   <div class="bento-2 mt-16">
     <div class="card">
-      <div class="card-title">Revenue Mix — Share by Bar</div>
+      <div class="card-title">Revenue Mix &mdash; Share by Bar</div>
       <div class="chart-container" style="height:300px;">
-        <canvas id="outletMixChart"></canvas>
+        <canvas id="outletMixChart" aria-label="Revenue share by bar"></canvas>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">Efficiency Matrix — GP% vs Labour %</div>
+      <div class="card-title">Efficiency Matrix &mdash; GP% vs Labour %</div>
       <div class="chart-container" style="height:300px;">
-        <canvas id="efficiencyChart"></canvas>
+        <canvas id="efficiencyChart" aria-label="Efficiency matrix scatter plot"></canvas>
       </div>
     </div>
   </div>
@@ -868,13 +1114,13 @@ body {
 // ============================================================
 
 const BARS = [
-  { name: 'Main Bar', floor: 'Ground', baseRev: 4200, gp: 32, labour: 24, type: 'Cocktail-focused', coversBase: 45 },
-  { name: 'Nightclub Bar', floor: 'Basement', baseRev: 6800, gp: 38, labour: 18, type: 'Premium bottles', coversBase: 55 },
-  { name: 'Garden Bar', floor: 'Ground', baseRev: 2100, gp: 35, labour: 28, type: 'Seasonal', coversBase: 20 },
-  { name: 'Cigar Bar', floor: '1st Floor', baseRev: 1400, gp: 45, labour: 30, type: 'Spirits & cigars', coversBase: 12 },
-  { name: 'Private Dining Bar', floor: '1st Floor', baseRev: 1800, gp: 40, labour: 22, type: 'Wine-heavy', coversBase: 18 },
-  { name: 'Lounge Bar', floor: '2nd Floor', baseRev: 3200, gp: 34, labour: 26, type: 'All-day service', coversBase: 28 },
-  { name: 'Cocktail Bar', floor: 'Ground', baseRev: 3500, gp: 36, labour: 25, type: 'Signature cocktails', coversBase: 32 }
+  { name: 'Main Bar', floor: 'Ground', baseRev: 4200, gp: 32, labour: 24, type: 'Cocktail-focused', coversBase: 45, signature: 'Annabel\'s Negroni', avgSpend: 94, seating: 42 },
+  { name: 'Nightclub Bar', floor: 'Basement', baseRev: 6800, gp: 38, labour: 18, type: 'Premium bottles', coversBase: 55, signature: 'Dom P\u00e9rignon Service', avgSpend: 124, seating: 80 },
+  { name: 'Garden Bar', floor: 'Ground', baseRev: 2100, gp: 35, labour: 28, type: 'Seasonal', coversBase: 20, signature: 'English Garden Spritz', avgSpend: 78, seating: 35 },
+  { name: 'Cigar Bar', floor: '1st Floor', baseRev: 1400, gp: 45, labour: 30, type: 'Spirits & cigars', coversBase: 12, signature: 'Macallan Flight', avgSpend: 142, seating: 16 },
+  { name: 'Private Dining Bar', floor: '1st Floor', baseRev: 1800, gp: 40, labour: 22, type: 'Wine-heavy', coversBase: 18, signature: 'Sommelier\'s Selection', avgSpend: 186, seating: 24 },
+  { name: 'Lounge Bar', floor: '2nd Floor', baseRev: 3200, gp: 34, labour: 26, type: 'All-day service', coversBase: 28, signature: 'Espresso Martini', avgSpend: 88, seating: 48 },
+  { name: 'Cocktail Bar', floor: 'Ground', baseRev: 3500, gp: 36, labour: 25, type: 'Signature cocktails', coversBase: 32, signature: 'Spring Blossom Sour', avgSpend: 96, seating: 38 }
 ];
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -913,11 +1159,17 @@ for (let i = 29; i >= 0; i--) {
     if (bar.name === 'Nightclub Bar' && i === 1) rev *= 1.35;
     // Anomaly: Main Bar POS issue on day 10
     if (bar.name === 'Main Bar' && i === 19) rev *= 0.55;
+    // Additional data point: Cocktail Bar spring menu boost last week
+    if (bar.name === 'Cocktail Bar' && i <= 6) rev *= 1.12;
+    // Lounge Bar slight uplift on weekdays (lunch trade)
+    if (bar.name === 'Lounge Bar' && dow >= 1 && dow <= 5) rev *= 1.05;
 
     let gp = jitter(bar.gp, 0.06);
     let lab = jitter(bar.labour, 0.08);
     // Cigar Bar consistently overstaffed
     if (bar.name === 'Cigar Bar') lab = jitter(30, 0.05);
+    // Nightclub efficiency on big nights
+    if (bar.name === 'Nightclub Bar' && (dow === 5 || dow === 6)) lab *= 0.88;
     let covers = Math.round(jitter(bar.coversBase * mult, 0.15));
     if (bar.name === 'Garden Bar') covers = Math.round(covers * 0.65);
 
@@ -928,7 +1180,10 @@ for (let i = 29; i >= 0; i--) {
       revenue: Math.round(rev),
       gp: +gp.toFixed(1),
       labour: +lab.toFixed(1),
-      covers: Math.max(covers, 2)
+      covers: Math.max(covers, 2),
+      signature: bar.signature,
+      avgSpend: bar.avgSpend,
+      seating: bar.seating
     };
   });
 
@@ -936,6 +1191,12 @@ for (let i = 29; i >= 0; i--) {
   const totalCovers = barData.reduce((s,b) => s + b.covers, 0);
   const avgGP = +(barData.reduce((s,b) => s + b.gp * b.revenue, 0) / totalRev).toFixed(1);
   const avgLabour = +(barData.reduce((s,b) => s + b.labour * b.revenue, 0) / totalRev).toFixed(1);
+
+  // Calculate estimated COGS, labour cost, overheads, net
+  const cogsEst = Math.round(totalRev * (1 - avgGP / 100));
+  const labourCost = Math.round(totalRev * avgLabour / 100);
+  const overheads = Math.round(totalRev * 0.18); // ~18% fixed overheads for Annabel's
+  const netProfit = totalRev - cogsEst - labourCost - overheads;
 
   days30.push({
     date: d,
@@ -951,7 +1212,11 @@ for (let i = 29; i >= 0; i--) {
     revenueTarget: Math.round(23000 * mult),
     labourTarget: 25.0,
     gpTarget: 34.0,
-    coversTarget: Math.round(200 * mult)
+    coversTarget: Math.round(200 * mult),
+    cogs: cogsEst,
+    labourCost,
+    overheads,
+    netProfit
   });
 }
 
@@ -970,7 +1235,7 @@ const dayparts = [
 // UTILITY
 // ============================================================
 
-function fmt(n) { return '£' + n.toLocaleString('en-GB'); }
+function fmt(n) { return '\u00a3' + n.toLocaleString('en-GB'); }
 function fmtPct(n) { return n.toFixed(1) + '%'; }
 function pctChange(curr, prev) {
   const pct = ((curr - prev) / prev * 100);
@@ -989,15 +1254,29 @@ function statusColor(val, target, lowerBetter) {
   }
 }
 
+// P&L traffic light: green = net profit > 10% of rev, amber = 5-10%, red = <5%
+function pnlLight(netProfit, revenue) {
+  const margin = netProfit / revenue;
+  if (margin >= 0.10) return 'green';
+  if (margin >= 0.05) return 'amber';
+  return 'red';
+}
+
 // ============================================================
 // TAB SWITCHING
 // ============================================================
 
-function switchTab(tab) {
+function switchTab(tab, btn) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
   document.getElementById('tab-' + tab).classList.add('active');
-  event.target.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+  }
 
   // Lazy render charts
   if (tab === 'revenue' && !window._revenueRendered) { renderRevenue(); window._revenueRendered = true; }
@@ -1006,6 +1285,56 @@ function switchTab(tab) {
   if (tab === 'insights' && !window._insightsRendered) { renderInsights(); window._insightsRendered = true; }
   if (tab === 'outlets' && !window._outletsRendered) { renderOutlets(); window._outletsRendered = true; }
 }
+
+// Keyboard nav for tabs
+document.addEventListener('keydown', function(e) {
+  if (e.target.classList.contains('tab-btn')) {
+    const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+    const idx = tabs.indexOf(e.target);
+    if (e.key === 'ArrowRight' && idx < tabs.length - 1) { tabs[idx + 1].focus(); tabs[idx + 1].click(); }
+    if (e.key === 'ArrowLeft' && idx > 0) { tabs[idx - 1].focus(); tabs[idx - 1].click(); }
+  }
+});
+
+// ============================================================
+// EXPORT CSV
+// ============================================================
+
+function exportCSV() {
+  let csv = 'Date,Day,Total Revenue,Revenue Target,GP%,GP Target,Labour%,Labour Target,Covers,Cover Target,COGS,Labour Cost,Overheads,Net Profit\n';
+  days30.forEach(d => {
+    csv += `${d.dateStr},${d.dayName},${d.totalRevenue},${d.revenueTarget},${d.avgGP},${d.gpTarget},${d.avgLabour},${d.labourTarget},${d.totalCovers},${d.coversTarget},${d.cogs},${d.labourCost},${d.overheads},${d.netProfit}\n`;
+  });
+
+  csv += '\nBar Detail - Yesterday\n';
+  csv += 'Bar,Floor,Revenue,GP%,Labour%,Covers\n';
+  yesterday.bars.forEach(b => {
+    csv += `${b.name},${b.floor},${b.revenue},${b.gp},${b.labour},${b.covers}\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `proof-annabels-${yesterday.dateStr.replace(' ','-')}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+// ============================================================
+// CHART.JS DEFAULTS
+// ============================================================
+
+Chart.defaults.font.family = 'Inter';
+Chart.defaults.plugins.tooltip.backgroundColor = 'white';
+Chart.defaults.plugins.tooltip.titleColor = '#1D1D1F';
+Chart.defaults.plugins.tooltip.bodyColor = '#6E6E73';
+Chart.defaults.plugins.tooltip.borderColor = '#E5E5EA';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.cornerRadius = 10;
+Chart.defaults.plugins.tooltip.padding = 14;
+Chart.defaults.plugins.tooltip.titleFont = { family: 'Inter', weight: '600', size: 13 };
+Chart.defaults.plugins.tooltip.bodyFont = { family: 'Inter', size: 12 };
+Chart.defaults.plugins.tooltip.boxPadding = 4;
 
 // ============================================================
 // RENDER: MORNING BRIEFING
@@ -1054,10 +1383,10 @@ function renderBriefing() {
     }
   ];
 
-  document.getElementById('briefing-kpis').innerHTML = kpis.map(k => `
-    <div class="card kpi-hero">
-      <div class="traffic-indicator tl-${k.status}"></div>
-      <div class="kpi-icon" style="background:${k.iconBg}; color:${k.iconColor};">${k.icon}</div>
+  document.getElementById('briefing-kpis').innerHTML = kpis.map((k, i) => `
+    <div class="card kpi-hero animate-in animate-in-delay-${i + 1}">
+      <div class="traffic-indicator tl-${k.status}" title="${k.status === 'green' ? 'On target' : k.status === 'amber' ? 'Monitor' : 'Below target'}" aria-label="${k.label}: ${k.status}"></div>
+      <div class="kpi-icon" style="background:${k.iconBg}; color:${k.iconColor};" aria-hidden="true">${k.icon}</div>
       <div class="kpi-label">${k.label}</div>
       <div class="kpi-value">${k.value}</div>
       <div class="kpi-comparison" style="color:var(--${k.status === 'green' ? 'green' : k.status === 'amber' ? 'amber' : 'red'});">
@@ -1072,45 +1401,70 @@ function renderBriefing() {
   const cigarLabour = yesterday.bars.find(b => b.name === 'Cigar Bar').labour;
   const gardenRev = yesterday.bars.find(b => b.name === 'Garden Bar').revenue;
   const nightclubAvg = Math.round(days30.slice(-14).reduce((s,d) => s + d.bars.find(b => b.name === 'Nightclub Bar').revenue, 0) / 14);
+  const cocktailRev = yesterday.bars.find(b => b.name === 'Cocktail Bar').revenue;
+  const loungeRev = yesterday.bars.find(b => b.name === 'Lounge Bar').revenue;
+  const privateDiningRev = yesterday.bars.find(b => b.name === 'Private Dining Bar').revenue;
 
   document.getElementById('aiBriefing').innerHTML = `
     <div class="ai-briefing-header">
-      <span class="ai-dot"></span>
+      <span class="ai-dot" aria-hidden="true"></span>
       <span class="ai-briefing-title">Proof AI Daily Briefing</span>
       <span class="ai-briefing-time">Generated 06:00 GMT</span>
     </div>
     <div class="ai-oneliner">
-      Strong night. Nightclub drove ${fmt(nightclubRev)} &mdash; ${Math.round((nightclubRev/nightclubAvg - 1) * 100)}% above 14-day average. Cigar Bar labour at ${fmtPct(cigarLabour)} &mdash; 5 points over target. Consider reducing Tuesday afternoon shift.
+      Strong night. Nightclub drove ${fmt(nightclubRev)} &mdash; ${Math.round((nightclubRev/nightclubAvg - 1) * 100)}% above 14-day average. Cigar Bar labour at ${fmtPct(cigarLabour)} &mdash; 5 points over target. Cocktail Bar spring menu continues +12% uplift. Net profit: ${fmt(yesterday.netProfit)} (${(yesterday.netProfit/yesterday.totalRevenue*100).toFixed(1)}% margin).
     </div>
     <div class="ai-briefing-body">
-      <strong>Revenue:</strong> Total venue revenue came in at <span class="hl-green">${fmt(yesterday.totalRevenue)}</span>, ${yesterday.totalRevenue > yesterday.revenueTarget ? 'exceeding' : 'below'} the ${fmt(yesterday.revenueTarget)} ${yesterday.dayFull} target. The Nightclub Bar was the standout performer at ${fmt(nightclubRev)}, driven by a private members' event that kept bottle service running until 1:45am. The Cocktail Bar maintained strong form at ${fmt(yesterday.bars.find(b => b.name === 'Cocktail Bar').revenue)}, with the new spring menu continuing to draw interest.
+      <strong>Revenue:</strong> Total venue revenue came in at <span class="hl-green">${fmt(yesterday.totalRevenue)}</span>, ${yesterday.totalRevenue > yesterday.revenueTarget ? 'exceeding' : 'below'} the ${fmt(yesterday.revenueTarget)} ${yesterday.dayFull} target. The Nightclub Bar was the standout performer at ${fmt(nightclubRev)}, driven by a private members' event (Henderson party, 35 guests, bottle service until 1:45am). The Cocktail Bar maintained strong form at ${fmt(cocktailRev)}, with the new spring menu now in its second week of consistent uplift. The Lounge Bar contributed ${fmt(loungeRev)} with solid weekday lunch trade, while Private Dining came in at ${fmt(privateDiningRev)} with two corporate events.
       <br><br>
-      <strong>Labour:</strong> Overall labour came in at <span class="${yesterday.avgLabour <= 25 ? 'hl-green' : 'hl-amber'}">${fmtPct(yesterday.avgLabour)}</span> against a 25.0% target. Most bars operated within tolerance. However, the <span class="hl-red">Cigar Bar remains the outlier at ${fmtPct(cigarLabour)}</span> &mdash; this is now the third consecutive week it has exceeded its labour target. The bar's revenue of ${fmt(yesterday.bars.find(b => b.name === 'Cigar Bar').revenue)} cannot sustain its current staffing level. Recommendation: reduce from 3 to 2 staff on Tuesday-Thursday evenings.
+      <strong>Labour:</strong> Overall labour came in at <span class="${yesterday.avgLabour <= 25 ? 'hl-green' : 'hl-amber'}">${fmtPct(yesterday.avgLabour)}</span> against a 25.0% target. Most bars operated within tolerance. The Nightclub Bar was particularly efficient at ${fmtPct(yesterday.bars.find(b => b.name === 'Nightclub Bar').labour)} &mdash; strong revenue dilutes the fixed staffing cost. However, the <span class="hl-red">Cigar Bar remains the outlier at ${fmtPct(cigarLabour)}</span> &mdash; this is now the third consecutive week it has exceeded its labour target. The bar's revenue of ${fmt(yesterday.bars.find(b => b.name === 'Cigar Bar').revenue)} cannot sustain its current staffing level.
       <br><br>
-      <strong>Garden Bar:</strong> Seasonal suppression continues. Revenue of ${fmt(gardenRev)} is typical for mid-March with outdoor seating largely unused. April bookings are trending 40% above March &mdash; expect a step-change when temperatures rise. No action required; current reduced staffing model is appropriate.
+      <strong>Garden Bar:</strong> Seasonal suppression continues. Revenue of ${fmt(gardenRev)} is typical for mid-March with outdoor seating largely unused. April bookings are trending 40% above March &mdash; expect a step-change when temperatures rise. Current reduced staffing model (2 staff) is appropriate. The English Garden Spritz launch is scheduled for 1 April, which should drive initial footfall.
       <br><br>
-      <strong>Stock:</strong> 5 bottles of Dom P&eacute;rignon were unaccounted for in the Nightclub Bar following last night's event. Estimated loss: &pound;450. CCTV review recommended. Grey Goose is below par across 3 bars &mdash; order placed automatically via suggested orders.
+      <strong>Stock:</strong> 5 bottles of Dom P&eacute;rignon were unaccounted for in the Nightclub Bar following last night's event. Estimated loss: &pound;450. CCTV review recommended. Grey Goose is below par across 3 bars &mdash; order placed automatically. Cristal inventory is critical (1 bottle remaining, 2 member reservations tonight). Angostura Bitters at 1 bottle across the venue &mdash; Cocktail Bar impact imminent.
+      <br><br>
+      <strong>Net P&amp;L:</strong> Yesterday's estimated net profit was <span class="${yesterday.netProfit > yesterday.totalRevenue * 0.10 ? 'hl-green' : 'hl-amber'}">${fmt(yesterday.netProfit)}</span> (${(yesterday.netProfit/yesterday.totalRevenue*100).toFixed(1)}% net margin). COGS at ${fmt(yesterday.cogs)}, labour at ${fmt(yesterday.labourCost)}, overheads at ${fmt(yesterday.overheads)}. Week-to-date net profit is tracking at ${fmt(days30.slice(-7).reduce((s,d) => s + d.netProfit, 0))}.
     </div>
   `;
 
   // Priority Actions
   document.getElementById('priorityActions').innerHTML = `
-    <div class="priority-card urgent">
+    <div class="priority-card urgent animate-in animate-in-delay-1">
       <div class="priority-label">Urgent</div>
       <div class="priority-text">Cigar Bar: Reduce Tue-Thu evening staff from 3 to 2. Labour at ${fmtPct(cigarLabour)} vs 25% target.</div>
       <div class="priority-impact">Est. saving: &pound;840/week (&pound;43,680/year)</div>
     </div>
-    <div class="priority-card warning">
+    <div class="priority-card warning animate-in animate-in-delay-2">
       <div class="priority-label">Investigate</div>
       <div class="priority-text">Nightclub Bar: 5 bottles Dom P&eacute;rignon unaccounted for. Review CCTV from 23:30-01:00.</div>
       <div class="priority-impact">Est. loss: &pound;450 (single incident)</div>
     </div>
-    <div class="priority-card good">
+    <div class="priority-card good animate-in animate-in-delay-3">
       <div class="priority-label">Opportunity</div>
       <div class="priority-text">Cocktail Bar spring menu driving +12% rev uplift. Consider cross-promoting to Lounge Bar members.</div>
       <div class="priority-impact">Est. opportunity: &pound;1,200/week additional revenue</div>
     </div>
   `;
+
+  // Daily P&L Traffic Light
+  const last7 = days30.slice(-7);
+  document.getElementById('pnlTraffic').innerHTML = last7.map((day, i) => {
+    const light = pnlLight(day.netProfit, day.totalRevenue);
+    const isToday = i === last7.length - 1;
+    const netMargin = (day.netProfit / day.totalRevenue * 100).toFixed(1);
+    return `
+      <div class="pnl-day ${isToday ? 'today' : ''} animate-in animate-in-delay-${Math.min(i+1, 4)}" title="${day.dayFull}: ${fmt(day.totalRevenue)} rev, ${netMargin}% net margin">
+        <div class="pnl-day-name">${day.dayName}</div>
+        <div class="pnl-day-date">${day.dateStr}</div>
+        <div class="pnl-light tl-${light}" aria-label="P&L status: ${light}"></div>
+        <div class="pnl-rev">${fmt(day.totalRevenue)}</div>
+        <div class="pnl-gp">GP ${fmtPct(day.avgGP)}</div>
+        <div class="pnl-lab">Lab ${fmtPct(day.avgLabour)}</div>
+        <div class="pnl-net-label">Net Profit</div>
+        <div class="pnl-net" style="color: var(--${light});">${fmt(day.netProfit)}</div>
+      </div>
+    `;
+  }).join('');
 
   // Bar table
   const tbody = document.querySelector('#briefingBarTable tbody');
@@ -1120,6 +1474,7 @@ function renderBriefing() {
     const revCol = b.revenue >= target ? 'var(--green)' : 'var(--red)';
     const labCol = b.labour <= 25 ? 'var(--green)' : b.labour <= 28 ? 'var(--amber)' : 'var(--red)';
     const overall = (b.revenue >= target * 0.95 && b.labour <= 28) ? 'green' : b.labour > 30 ? 'red' : 'amber';
+    const revPerCover = Math.round(b.revenue / Math.max(b.covers, 1));
     return `<tr>
       <td style="font-weight:600; color:var(--text-primary);">${b.name}</td>
       <td>${b.floor}</td>
@@ -1127,7 +1482,9 @@ function renderBriefing() {
       <td class="num" style="color:${revCol};">${vTarget >= 0 ? '+' : ''}${vTarget}%</td>
       <td class="num">${fmtPct(b.gp)}</td>
       <td class="num" style="color:${labCol};">${fmtPct(b.labour)}</td>
-      <td><span class="status-dot tl-${overall}"></span>${overall === 'green' ? 'On Track' : overall === 'amber' ? 'Monitor' : 'Alert'}</td>
+      <td class="num">${b.covers}</td>
+      <td class="num">${fmt(revPerCover)}</td>
+      <td><span class="status-dot tl-${overall}" aria-hidden="true"></span>${overall === 'green' ? 'On Track' : overall === 'amber' ? 'Monitor' : 'Alert'}</td>
     </tr>`;
   }).join('');
 }
@@ -1144,32 +1501,37 @@ function renderRevenue() {
   const prevWeekRev = prev7.reduce((s,d) => s + d.totalRevenue, 0);
   const avgRevPerCover = Math.round(yesterday.totalRevenue / yesterday.totalCovers);
   const monthRev = days30.reduce((s,d) => s + d.totalRevenue, 0);
+  const weekNetProfit = last7.reduce((s,d) => s + d.netProfit, 0);
 
   document.getElementById('revenue-kpis').innerHTML = `
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-1">
       <div class="kpi-label">Yesterday</div>
       <div class="kpi-value">${fmt(yesterday.totalRevenue)}</div>
       <div class="kpi-comparison" style="color:var(--green);">&#10003; ${pctChange(yesterday.totalRevenue, yesterday.revenueTarget)} vs target</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-2">
       <div class="kpi-label">This Week</div>
       <div class="kpi-value">${fmt(weekRev)}</div>
       <div class="kpi-comparison" style="color:${weekRev >= prevWeekRev ? 'var(--green)' : 'var(--red)'};">${pctChange(weekRev, prevWeekRev)} vs last week</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-3">
       <div class="kpi-label">30-Day Total</div>
       <div class="kpi-value">${fmt(monthRev)}</div>
       <div class="kpi-comparison" style="color:var(--text-muted);">${fmt(Math.round(monthRev/30))}/day avg</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-4">
       <div class="kpi-label">Rev per Cover</div>
       <div class="kpi-value">${fmt(avgRevPerCover)}</div>
       <div class="kpi-comparison" style="color:var(--text-muted);">${yesterday.totalCovers} covers yesterday</div>
     </div>
   `;
 
-  // 30-day trend
+  // 30-day trend with gradient
   const ctx1 = document.getElementById('revenueTrendChart').getContext('2d');
+  const gradient1 = ctx1.createLinearGradient(0, 0, 0, 300);
+  gradient1.addColorStop(0, 'rgba(0,113,227,0.12)');
+  gradient1.addColorStop(1, 'rgba(0,113,227,0)');
+
   new Chart(ctx1, {
     type: 'line',
     data: {
@@ -1179,12 +1541,16 @@ function renderRevenue() {
           label: 'Revenue',
           data: days30.map(d => d.totalRevenue),
           borderColor: '#0071E3',
-          backgroundColor: 'rgba(0,113,227,0.06)',
+          backgroundColor: gradient1,
           fill: true,
           tension: 0.35,
           borderWidth: 2.5,
           pointRadius: 0,
-          pointHitRadius: 10
+          pointHitRadius: 10,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#0071E3',
+          pointHoverBorderColor: 'white',
+          pointHoverBorderWidth: 2
         },
         {
           label: 'Target',
@@ -1200,29 +1566,19 @@ function renderRevenue() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: true, position: 'top', labels: { usePointStyle: true, padding: 16, font: { family: 'Inter', size: 11 } } },
-        tooltip: {
-          backgroundColor: 'white',
-          titleColor: '#1D1D1F',
-          bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA',
-          borderWidth: 1,
-          cornerRadius: 8,
-          padding: 12,
-          titleFont: { family: 'Inter', weight: '600' },
-          bodyFont: { family: 'Inter' },
-          callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) }
-        }
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10 }, maxTicksLimit: 10, color: '#AEAEB2' } },
-        y: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '£' + (v/1000).toFixed(0) + 'k' }, beginAtZero: false }
+        y: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '\u00a3' + (v/1000).toFixed(0) + 'k' }, beginAtZero: false }
       }
     }
   });
 
-  // Revenue by bar
+  // Revenue by bar - horizontal with gradient bars
   const ctx2 = document.getElementById('revenueByBarChart').getContext('2d');
   const barColors = ['#0071E3','#5856D6','#34C759','#FF9500','#FF3B30','#AF52DE','#00C7BE'];
   new Chart(ctx2, {
@@ -1243,15 +1599,10 @@ function renderRevenue() {
       indexAxis: 'y',
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
-          titleFont: { family: 'Inter', weight: '600' }, bodyFont: { family: 'Inter' },
-          callbacks: { label: ctx => fmt(ctx.raw) }
-        }
+        tooltip: { callbacks: { label: ctx => fmt(ctx.raw) + ' (' + fmtPct(yesterday.bars[ctx.dataIndex].gp) + ' GP)' } }
       },
       scales: {
-        x: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '£' + (v/1000).toFixed(1) + 'k' } },
+        x: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '\u00a3' + (v/1000).toFixed(1) + 'k' } },
         y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11, weight: '500' }, color: '#1D1D1F' } }
       }
     }
@@ -1267,7 +1618,7 @@ function renderRevenue() {
         data: dayparts.map(d => d.revenue),
         backgroundColor: ['#0071E3','#5856D6','#34C759','#AF52DE'],
         borderWidth: 0,
-        hoverOffset: 6
+        hoverOffset: 8
       }]
     },
     options: {
@@ -1277,8 +1628,6 @@ function renderRevenue() {
       plugins: {
         legend: { position: 'bottom', labels: { usePointStyle: true, padding: 14, font: { family: 'Inter', size: 11 } } },
         tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
           callbacks: { label: ctx => ctx.label + ': ' + fmt(ctx.raw) + ' (' + Math.round(ctx.raw / yesterday.totalRevenue * 100) + '%)' }
         }
       }
@@ -1301,8 +1650,11 @@ function renderRevenue() {
     </tr>`;
   }).join('');
 
-  // Revenue per cover
+  // Revenue per cover with gradient
   const ctx4 = document.getElementById('revenuePerCoverChart').getContext('2d');
+  const gradient4 = ctx4.createLinearGradient(0, 0, 0, 220);
+  gradient4.addColorStop(0, 'rgba(88,86,214,0.12)');
+  gradient4.addColorStop(1, 'rgba(88,86,214,0)');
   new Chart(ctx4, {
     type: 'line',
     data: {
@@ -1311,12 +1663,14 @@ function renderRevenue() {
         label: 'Rev/Cover',
         data: days30.map(d => Math.round(d.totalRevenue / d.totalCovers)),
         borderColor: '#5856D6',
-        backgroundColor: 'rgba(88,86,214,0.06)',
+        backgroundColor: gradient4,
         fill: true,
         tension: 0.35,
         borderWidth: 2,
         pointRadius: 0,
-        pointHitRadius: 10
+        pointHitRadius: 10,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: '#5856D6'
       }]
     },
     options: {
@@ -1324,15 +1678,11 @@ function renderRevenue() {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
-          callbacks: { label: ctx => fmt(ctx.raw) + '/cover' }
-        }
+        tooltip: { callbacks: { label: ctx => fmt(ctx.raw) + '/cover' } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10 }, maxTicksLimit: 10, color: '#AEAEB2' } },
-        y: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '£' + v } }
+        y: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '\u00a3' + v } }
       }
     }
   });
@@ -1348,23 +1698,23 @@ function renderLabour() {
   const costPerCover = Math.round(totalLabourCost / yesterday.totalCovers);
 
   document.getElementById('labour-kpis').innerHTML = `
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-1">
       <div class="traffic-indicator tl-${yesterday.avgLabour <= 25 ? 'green' : yesterday.avgLabour <= 27 ? 'amber' : 'red'}"></div>
       <div class="kpi-label">Labour % Yesterday</div>
       <div class="kpi-value">${fmtPct(yesterday.avgLabour)}</div>
       <div class="kpi-target">Target: 25.0%</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-2">
       <div class="kpi-label">Labour Cost</div>
       <div class="kpi-value">${fmt(totalLabourCost)}</div>
       <div class="kpi-target">${yesterday.totalCovers} covers served</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-3">
       <div class="kpi-label">Cost per Cover</div>
       <div class="kpi-value">${fmt(costPerCover)}</div>
       <div class="kpi-target">Across all bars</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-4">
       <div class="kpi-label">Staff on Shift</div>
       <div class="kpi-value">34</div>
       <div class="kpi-target">of ~150 total</div>
@@ -1401,13 +1751,10 @@ function renderLabour() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: true, position: 'top', labels: { usePointStyle: true, padding: 16, font: { family: 'Inter', size: 11 } } },
-        tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
-          callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw.toFixed(1) + '%' }
-        }
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (typeof ctx.raw === 'number' ? ctx.raw.toFixed(1) : ctx.raw) + '%' } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 9 }, color: '#AEAEB2', maxRotation: 45 } },
@@ -1445,11 +1792,7 @@ function renderLabour() {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
-          callbacks: { label: ctx => ctx.raw.toFixed(1) + '%' }
-        }
+        tooltip: { callbacks: { label: ctx => (typeof ctx.raw === 'number' ? ctx.raw.toFixed(1) : ctx.raw) + '%' } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10 }, color: '#1D1D1F' } },
@@ -1478,15 +1821,11 @@ function renderLabour() {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
-          callbacks: { label: ctx => fmt(ctx.raw) + '/cover' }
-        }
+        tooltip: { callbacks: { label: ctx => fmt(ctx.raw) + '/cover' } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10 }, color: '#1D1D1F' } },
-        y: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '£' + v } }
+        y: { grid: { color: '#F0F0F2' }, ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => '\u00a3' + v } }
       }
     }
   });
@@ -1494,20 +1833,24 @@ function renderLabour() {
   // Overtime alerts
   document.getElementById('overtimeAlerts').innerHTML = `
     <div class="alert-card alert-red">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Sofia R. (Sommelier)</strong> &mdash; 52 hours this week. Mandatory rest day required by Sunday. Currently rostered Sat PM Nightclub Bar.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Sofia R. (Sommelier)</strong> &mdash; 52 hours this week. Mandatory rest day required by Sunday. Currently rostered Sat PM Nightclub Bar. <em style="color:var(--red);">WTD breach risk.</em></div>
     </div>
     <div class="alert-card alert-amber">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Marcus T. (Head Bartender)</strong> &mdash; 46 hours. Approaching 48-hour limit. Shift swap available with Daniel K. for Friday PM.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Marcus T. (Head Bartender)</strong> &mdash; 46 hours. Approaching 48-hour limit. Shift swap available with Daniel K. for Friday PM. Cost-neutral exchange.</div>
     </div>
     <div class="alert-card alert-amber">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Priya N. (Cigar Bar)</strong> &mdash; 44 hours. On track for 50+ if Saturday shift is not reassigned.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Priya N. (Cigar Bar)</strong> &mdash; 44 hours. On track for 50+ if Saturday shift is not reassigned. Recommend cross-deploying to Lounge Bar Sunday brunch instead.</div>
+    </div>
+    <div class="alert-card alert-blue">
+      <span class="alert-icon" aria-hidden="true">&#8505;</span>
+      <div class="alert-text"><strong>Agency staff:</strong> 3 agency staff booked for Friday (2 bar, 1 floor). Total agency spend this week: &pound;1,240. Below &pound;1,500 weekly cap.</div>
     </div>
     <div class="alert-card alert-green">
-      <span class="alert-icon">&#10003;</span>
-      <div class="alert-text"><strong>All other staff</strong> &mdash; within 48-hour weekly limit. 12 staff below 30 hours (available for additional shifts).</div>
+      <span class="alert-icon" aria-hidden="true">&#10003;</span>
+      <div class="alert-text"><strong>All other staff</strong> &mdash; within 48-hour weekly limit. 12 staff below 30 hours (available for additional shifts if needed).</div>
     </div>
   `;
 
@@ -1522,13 +1865,13 @@ function renderLabour() {
     [3,3,3,4,4,5,3],
     [3,3,4,4,5,6,4]
   ];
-  let gridHtml = '<div class="schedule-cell schedule-header"></div>';
-  weekDays.forEach(d => { gridHtml += `<div class="schedule-cell schedule-header">${d}</div>`; });
+  let gridHtml = '<div class="schedule-cell schedule-header" role="columnheader"></div>';
+  weekDays.forEach(d => { gridHtml += `<div class="schedule-cell schedule-header" role="columnheader">${d}</div>`; });
   BARS.forEach((bar, bi) => {
-    gridHtml += `<div class="schedule-cell schedule-bar-name">${bar.name}</div>`;
+    gridHtml += `<div class="schedule-cell schedule-bar-name" role="rowheader">${bar.name}</div>`;
     staffCounts[bi].forEach((count, di) => {
       const shift = di >= 4 ? 'full' : 'pm';
-      gridHtml += `<div class="schedule-cell"><span class="shift-tag shift-${shift}">${count} staff</span></div>`;
+      gridHtml += `<div class="schedule-cell" role="gridcell"><span class="shift-tag shift-${shift}">${count} staff</span></div>`;
     });
   });
   document.getElementById('scheduleGrid').innerHTML = gridHtml;
@@ -1540,37 +1883,35 @@ function renderLabour() {
 
 function renderStock() {
   const gpCategories = [
-    { name: 'Spirits', gp: 38.2, target: 36 },
-    { name: 'Wine', gp: 31.8, target: 30 },
-    { name: 'Champagne', gp: 28.5, target: 28 },
-    { name: 'Beer', gp: 45.1, target: 44 },
-    { name: 'Cocktails', gp: 42.3, target: 40 },
-    { name: 'Food', gp: 27.8, target: 28 },
-    { name: 'Soft Drinks', gp: 68.4, target: 65 }
+    { name: 'Spirits', gp: 38.2, target: 36, trend: '+0.4' },
+    { name: 'Wine', gp: 31.8, target: 30, trend: '+0.6' },
+    { name: 'Champagne', gp: 28.5, target: 28, trend: '-0.2' },
+    { name: 'Beer', gp: 45.1, target: 44, trend: '+0.8' },
+    { name: 'Cocktails', gp: 42.3, target: 40, trend: '+1.1' },
+    { name: 'Food', gp: 27.8, target: 28, trend: '-0.5' },
+    { name: 'Soft Drinks', gp: 68.4, target: 65, trend: '+0.3' }
   ];
 
-  const avgGP = +(gpCategories.reduce((s,c) => s + c.gp, 0) / gpCategories.length).toFixed(1);
-
   document.getElementById('stock-kpis').innerHTML = `
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-1">
       <div class="traffic-indicator tl-green"></div>
       <div class="kpi-label">Overall GP%</div>
       <div class="kpi-value">${fmtPct(yesterday.avgGP)}</div>
       <div class="kpi-target">Target: 34.0%</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-2">
       <div class="traffic-indicator tl-red"></div>
       <div class="kpi-label">Wastage This Week</div>
       <div class="kpi-value">&pound;1,280</div>
       <div class="kpi-target">&pound;450 Dom P&eacute;rignon incident</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-3">
       <div class="traffic-indicator tl-amber"></div>
       <div class="kpi-label">Items Below Par</div>
       <div class="kpi-value">6</div>
       <div class="kpi-target">3 critical, 3 warning</div>
     </div>
-    <div class="card kpi-hero">
+    <div class="card kpi-hero animate-in animate-in-delay-4">
       <div class="kpi-label">Suggested Order Value</div>
       <div class="kpi-value">&pound;4,720</div>
       <div class="kpi-target">12 line items</div>
@@ -1608,13 +1949,10 @@ function renderStock() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: true, position: 'top', labels: { usePointStyle: true, padding: 16, font: { family: 'Inter', size: 11 } } },
-        tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
-          callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' }
-        }
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10 }, color: '#1D1D1F' } },
@@ -1652,11 +1990,7 @@ function renderStock() {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
-          callbacks: { label: ctx => ctx.raw + '%' }
-        }
+        tooltip: { callbacks: { label: ctx => (typeof ctx.raw === 'number' ? ctx.raw.toFixed(1) : ctx.raw) + '%' } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10 }, color: '#1D1D1F' } },
@@ -1668,48 +2002,48 @@ function renderStock() {
   // Wastage alerts
   document.getElementById('wastageAlerts').innerHTML = `
     <div class="alert-card alert-red">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Dom P&eacute;rignon 2015:</strong> 5 bottles unaccounted for (Nightclub Bar). Expected: 18, Actual: 13. Est. loss: <strong>&pound;450</strong>. CCTV review required.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Dom P&eacute;rignon 2015:</strong> 5 bottles unaccounted for (Nightclub Bar). Expected: 18, Actual: 13. Est. loss: <strong>&pound;450</strong>. CCTV review required. Event: Henderson party 23:00-01:45.</div>
     </div>
     <div class="alert-card alert-amber">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Hendrick's Gin:</strong> 2.3 bottle variance across Main Bar + Cocktail Bar. Likely over-pouring on Cucumber Collins. Est. loss: <strong>&pound;68</strong>.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Hendrick's Gin:</strong> 2.3 bottle variance across Main Bar + Cocktail Bar. Likely over-pouring on Cucumber Collins. Est. loss: <strong>&pound;68</strong>. Jigger spec: 50ml, suspected 60ml+ pours.</div>
     </div>
     <div class="alert-card alert-amber">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Macallan 18yr:</strong> 0.8 bottle variance (Cigar Bar). Single high-value item. Est. loss: <strong>&pound;142</strong>. Check staff pour standards.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Macallan 18yr:</strong> 0.8 bottle variance (Cigar Bar). Single high-value item. Est. loss: <strong>&pound;142</strong>. Check staff pour standards &mdash; 25ml measure, suspected free-pouring.</div>
     </div>
     <div class="alert-card alert-green">
-      <span class="alert-icon">&#10003;</span>
-      <div class="alert-text"><strong>Wine programme:</strong> Variance within 1.5% tolerance across all bars. Sommelier stock control is excellent.</div>
+      <span class="alert-icon" aria-hidden="true">&#10003;</span>
+      <div class="alert-text"><strong>Wine programme:</strong> Variance within 1.5% tolerance across all bars. Sommelier stock control is excellent. Coravin usage up 18% &mdash; reducing BTG waste.</div>
     </div>
   `;
 
   // Par level warnings
   document.getElementById('parAlerts').innerHTML = `
     <div class="alert-card alert-red">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Grey Goose 1L:</strong> 4 bottles remaining, par level is 18. Critical &mdash; Friday/Saturday demand will be unmet.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Grey Goose 1L:</strong> 4 bottles remaining, par level is 18. Critical &mdash; Friday/Saturday demand will be unmet. Nightclub Bar alone uses 6/night on Fri/Sat.</div>
     </div>
     <div class="alert-card alert-red">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Cristal 2014:</strong> 1 bottle remaining, par level is 4. Two member reservations tonight typically order Cristal.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Cristal 2014:</strong> 1 bottle remaining, par level is 4. Two member reservations tonight typically order Cristal. Supplier lead time: same-day if ordered before 11am.</div>
     </div>
     <div class="alert-card alert-red">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Fever-Tree Tonic 200ml:</strong> 1 case (24) remaining, par level is 6 cases. High velocity mixer &mdash; order urgently.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Fever-Tree Tonic 200ml:</strong> 1 case (24) remaining, par level is 6 cases. High velocity mixer &mdash; 8 cases/week consumption. Order urgently.</div>
     </div>
     <div class="alert-card alert-amber">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Clase Azul Reposado:</strong> 2 bottles remaining, par level is 5. Cigar Bar primary. 3-day lead time from supplier.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Clase Azul Reposado:</strong> 2 bottles remaining, par level is 5. Cigar Bar primary. 3-day lead time from supplier. Current weekly run rate: 2.5 bottles.</div>
     </div>
     <div class="alert-card alert-amber">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Perrier-Jou&euml;t Belle Epoque:</strong> 3 bottles, par level is 6. Private Dining has 2 events booked this weekend.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Perrier-Jou&euml;t Belle Epoque:</strong> 3 bottles, par level is 6. Private Dining has 2 events booked this weekend. Events typically consume 2 bottles each.</div>
     </div>
     <div class="alert-card alert-amber">
-      <span class="alert-icon">&#9888;</span>
-      <div class="alert-text"><strong>Angostura Bitters:</strong> 1 bottle, par level is 4. Cocktail Bar core ingredient. Re-order immediately.</div>
+      <span class="alert-icon" aria-hidden="true">&#9888;</span>
+      <div class="alert-text"><strong>Angostura Bitters:</strong> 1 bottle, par level is 4. Cocktail Bar core ingredient (Old Fashioned, Manhattan). Re-order immediately &mdash; 2-day lead time.</div>
     </div>
   `;
 
@@ -1731,9 +2065,10 @@ function renderStock() {
 
   document.querySelector('#suggestedOrders tbody').innerHTML = orders.map(o => {
     const pCol = o.priority === 'Critical' ? 'var(--red)' : o.priority === 'High' ? 'var(--amber)' : 'var(--text-muted)';
+    const stockPct = (o.stock / o.par * 100).toFixed(0);
     return `<tr>
       <td style="font-weight:500; color:var(--text-primary);">${o.item}</td>
-      <td class="num">${o.stock}</td>
+      <td class="num">${o.stock} <span style="font-size:10px;color:var(--text-muted);">(${stockPct}%)</span></td>
       <td class="num">${o.par}</td>
       <td class="num" style="font-weight:600;">${o.order}</td>
       <td class="num">${fmt(o.cost)}</td>
@@ -1758,7 +2093,7 @@ function renderStock() {
       <td class="num">${v.actual}</td>
       <td class="num" style="color:var(--${v.status}); font-weight:600;">${v.variance}</td>
       <td class="num" style="color:var(--${v.status});">${fmt(v.loss)}</td>
-      <td><span class="status-dot tl-${v.status}"></span>${v.status === 'green' ? 'Within tolerance' : v.status === 'amber' ? 'Investigate' : 'Critical'}</td>
+      <td><span class="status-dot tl-${v.status}" aria-hidden="true"></span>${v.status === 'green' ? 'Within tolerance' : v.status === 'amber' ? 'Investigate' : 'Critical'}</td>
     </tr>`;
   }).join('');
 }
@@ -1772,25 +2107,54 @@ function renderInsights() {
   const nightclubRev = yesterday.bars.find(b => b.name === 'Nightclub Bar').revenue;
   const nightclubAvg = Math.round(days30.slice(-14).reduce((s,d) => s + d.bars.find(b => b.name === 'Nightclub Bar').revenue, 0) / 14);
   const cigarLabour = yesterday.bars.find(b => b.name === 'Cigar Bar').labour;
+  const cocktailRev = yesterday.bars.find(b => b.name === 'Cocktail Bar').revenue;
+  const cocktailAvg = Math.round(days30.slice(-14).reduce((s,d) => s + d.bars.find(b => b.name === 'Cocktail Bar').revenue, 0) / 14);
 
   document.getElementById('intelligenceReport').innerHTML = `
     <p style="margin-bottom:16px;">
-      <strong>Overview.</strong> Annabel's continues to perform above target on revenue while maintaining labour within acceptable bounds at the aggregate level. Last night's total of ${fmt(yesterday.totalRevenue)} exceeded the ${yesterday.dayFull} benchmark by ${((yesterday.totalRevenue / yesterday.revenueTarget - 1) * 100).toFixed(1)}%. The 7-day rolling average sits at ${fmt(Math.round(days30.slice(-7).reduce((s,d) => s + d.totalRevenue, 0) / 7))}, which is consistent with the seasonal pattern for mid-March. There are no macro-level concerns about the revenue trajectory.
+      <strong>Overview.</strong> Annabel's continues to perform above target on revenue while maintaining labour within acceptable bounds at the aggregate level. Last night's total of ${fmt(yesterday.totalRevenue)} exceeded the ${yesterday.dayFull} benchmark by ${((yesterday.totalRevenue / yesterday.revenueTarget - 1) * 100).toFixed(1)}%. The 7-day rolling average sits at ${fmt(Math.round(days30.slice(-7).reduce((s,d) => s + d.totalRevenue, 0) / 7))}, consistent with the seasonal pattern for mid-March. Net profit margin of ${(yesterday.netProfit/yesterday.totalRevenue*100).toFixed(1)}% is healthy. No macro-level concerns about the revenue trajectory.
     </p>
     <p style="margin-bottom:16px;">
-      <strong>Nightclub Bar Outperformance.</strong> The Nightclub Bar delivered ${fmt(nightclubRev)} last night, which is ${Math.round((nightclubRev/nightclubAvg - 1) * 100)}% above its 14-day average of ${fmt(nightclubAvg)}. This was driven by a private members' event (the Henderson party, 35 guests, pre-booked bottle service). This is a data point, not a trend &mdash; but it raises an important question: how frequently are private events driving Nightclub Bar revenue above baseline, and should we be actively selling more of them? The margin on bottle service events is significantly higher than walk-in trade, and the Nightclub has capacity for 2-3 mid-week private events without displacing regular members.
+      <strong>Nightclub Bar Outperformance.</strong> The Nightclub Bar delivered ${fmt(nightclubRev)} last night, which is ${Math.round((nightclubRev/nightclubAvg - 1) * 100)}% above its 14-day average of ${fmt(nightclubAvg)}. This was driven by the Henderson party (35 guests, pre-booked bottle service). Key question: how frequently are private events driving Nightclub Bar revenue above baseline, and should we be actively selling more of them? The margin on bottle service events is significantly higher than walk-in trade. The Nightclub has capacity for 2-3 mid-week private events without displacing regular members. Average bottle service spend: &pound;185/head vs &pound;124/head walk-in.
     </p>
     <p style="margin-bottom:16px;">
-      <strong>Cigar Bar Labour Concern.</strong> The Cigar Bar's labour percentage came in at <span class="hl-red">${fmtPct(cigarLabour)}</span> &mdash; the highest of any bar and 5+ points above the 25% target. This is not a one-night anomaly. Over the last 21 days, the Cigar Bar has exceeded 28% labour on 18 of them. The bar generates ${fmt(yesterday.bars.find(b => b.name === 'Cigar Bar').revenue)}/night on average, which cannot support its current 3-person evening staffing model. Reducing to 2 staff Tuesday through Thursday would save approximately &pound;840/week (&pound;43,680/year) with minimal service impact &mdash; the bar averaged just ${yesterday.bars.find(b => b.name === 'Cigar Bar').covers} covers on those nights.
+      <strong>Cocktail Bar Spring Menu Success.</strong> The Cocktail Bar has now delivered ${fmt(cocktailRev)} (${Math.round((cocktailRev/cocktailAvg - 1) * 100)}% above 14-day average) for the second consecutive week since launching the spring menu. The Spring Blossom Sour is the standout item at 23% of all Cocktail Bar orders. GP on the new menu is 38.4% vs 36.1% on the previous menu &mdash; a 2.3-point improvement driven by lower-cost seasonal ingredients (elderflower, rhubarb, yuzu). This is a genuine uplift, not noise. Consider: (1) extending to the Lounge Bar, (2) social media push on the hero serves, (3) training Main Bar staff on the top 3 recipes.
+    </p>
+    <p style="margin-bottom:16px;">
+      <strong>Cigar Bar Labour Concern.</strong> The Cigar Bar's labour percentage came in at <span class="hl-red">${fmtPct(cigarLabour)}</span> &mdash; the highest of any bar and 5+ points above the 25% target. Over the last 21 days, the Cigar Bar has exceeded 28% labour on 18 of them. The bar generates ${fmt(yesterday.bars.find(b => b.name === 'Cigar Bar').revenue)}/night on average, which cannot support 3-person evening staffing. Reducing to 2 staff Tuesday through Thursday saves &pound;840/week (&pound;43,680/year) with minimal service impact &mdash; the bar averaged just ${yesterday.bars.find(b => b.name === 'Cigar Bar').covers} covers on those nights.
     </p>
     <p>
-      <strong>Stock Integrity.</strong> The 5-bottle Dom P&eacute;rignon discrepancy in the Nightclub Bar is the most significant stock event this week. At &pound;90/bottle, the &pound;450 loss is material. It is likely linked to the private event &mdash; high-volume, fast-paced service environments are where stock control breaks down. Recommendation: implement a bottle-count checkpoint at the start and end of every private event, signed off by the bar supervisor. This takes 5 minutes and would have caught the variance in real time. Separately, Hendrick's Gin over-pouring in the Cocktail Bar and Main Bar suggests the Cucumber Collins recipe jigger spec needs reinforcing at pre-shift briefings.
+      <strong>Stock Integrity.</strong> The 5-bottle Dom P&eacute;rignon discrepancy is the most significant stock event this week (&pound;450 loss). It is likely linked to the private event &mdash; high-volume, fast-paced service environments are where stock control breaks down. Recommendation: mandatory bottle-count checkpoint at the start and end of every private event, signed off by the bar supervisor. This takes 5 minutes and would have caught the variance in real time. The Hendrick's over-pouring issue (Cocktail Bar + Main Bar) suggests the Cucumber Collins recipe jigger spec (50ml) needs reinforcing at pre-shift briefings. Macallan 18yr variance in Cigar Bar (0.8 bottles, &pound;142) points to free-pouring &mdash; install measured optics.
     </p>
   `;
 
-  // Anomaly cards
+  // Anomaly Timeline
+  document.getElementById('anomalyTimeline').innerHTML = `
+    <div class="anomaly-event critical">
+      <div class="anomaly-event-time">Today, 06:00</div>
+      <div class="anomaly-event-text"><strong>Stock variance detected:</strong> 5x Dom P&eacute;rignon 2015 unaccounted for in Nightclub Bar. Automated CCTV review request sent to security team. Estimated loss: &pound;450.</div>
+    </div>
+    <div class="anomaly-event warning">
+      <div class="anomaly-event-time">Yesterday, 23:45</div>
+      <div class="anomaly-event-text"><strong>Revenue spike:</strong> Nightclub Bar hit &pound;${Math.round(nightclubRev/100)*100} &mdash; ${Math.round((nightclubRev/nightclubAvg - 1) * 100)}% above baseline. Correlated with Henderson party private event (35 pax, bottle service).</div>
+    </div>
+    <div class="anomaly-event info">
+      <div class="anomaly-event-time">Yesterday, 21:30</div>
+      <div class="anomaly-event-text"><strong>Cocktail Bar record hour:</strong> &pound;${Math.round(cocktailRev * 0.18)} revenue between 21:00-22:00. Spring Blossom Sour accounted for 31% of orders in that window.</div>
+    </div>
+    <div class="anomaly-event warning">
+      <div class="anomaly-event-time">Yesterday, 14:00</div>
+      <div class="anomaly-event-text"><strong>Cigar Bar overstaffing:</strong> 3 staff scheduled for a 12-cover afternoon. Labour % at 34% for the 14:00-18:00 period. Pattern consistent for 18 of last 21 days.</div>
+    </div>
+    <div class="anomaly-event resolved">
+      <div class="anomaly-event-time">2 days ago, 19:30</div>
+      <div class="anomaly-event-text"><strong>Resolved:</strong> Main Bar POS terminal intermittent issue. IT confirmed firmware update applied. No revenue loss detected &mdash; staff used Cocktail Bar terminal as backup.</div>
+    </div>
+  `;
+
+  // Anomaly cards with confidence meters
   document.getElementById('anomalyCards').innerHTML = `
-    <div class="insight-card">
+    <div class="insight-card animate-in">
       <span class="insight-badge anomaly">Anomaly</span>
       <div class="insight-title">Nightclub Bar Revenue Spike: +${Math.round((nightclubRev/nightclubAvg - 1) * 100)}% vs 14-Day Average</div>
       <div class="insight-body">
@@ -1798,8 +2162,14 @@ function renderInsights() {
         <strong>Probable cause:</strong> Private members' event (Henderson party, 35 pax, bottle service).
         <strong>Action:</strong> Verify with events team. If confirmed, model revenue uplift from increasing mid-week private bookings.
       </div>
+      <div class="confidence-meter">
+        <span>Confidence:</span>
+        <div class="confidence-bar"><div class="confidence-fill" style="width:92%; background:var(--green);"></div></div>
+        <span style="font-weight:600; color:var(--green);">92%</span>
+        <span>&mdash; Event booking confirmed in system</span>
+      </div>
     </div>
-    <div class="insight-card">
+    <div class="insight-card animate-in animate-in-delay-1">
       <span class="insight-badge anomaly">Anomaly</span>
       <div class="insight-title">Main Bar Revenue Dip on 27 Feb: -45% Below Baseline</div>
       <div class="insight-body">
@@ -1807,8 +2177,14 @@ function renderInsights() {
         <strong>Probable cause:</strong> POS terminal offline from 19:30-22:15 (per system logs). Revenue was likely routed through Cocktail Bar terminal.
         <strong>Action:</strong> IT to review POS failover procedures. Consider backup terminal deployment for Main Bar.
       </div>
+      <div class="confidence-meter">
+        <span>Confidence:</span>
+        <div class="confidence-bar"><div class="confidence-fill" style="width:78%; background:var(--amber);"></div></div>
+        <span style="font-weight:600; color:var(--amber);">78%</span>
+        <span>&mdash; System logs confirm POS downtime, awaiting IT verification</span>
+      </div>
     </div>
-    <div class="insight-card">
+    <div class="insight-card animate-in animate-in-delay-2">
       <span class="insight-badge alert">Alert</span>
       <div class="insight-title">Cigar Bar Labour: 18 of Last 21 Days Above 28%</div>
       <div class="insight-body">
@@ -1816,34 +2192,102 @@ function renderInsights() {
         The bar's low revenue base (${fmt(yesterday.bars.find(b => b.name === 'Cigar Bar').revenue)}/night avg) cannot absorb 3-person staffing on quiet nights.
         <strong>Action:</strong> Reduce to 2 staff Tue-Thu. Monitor member feedback for 2 weeks. Estimated annual saving: &pound;43,680.
       </div>
+      <div class="confidence-meter">
+        <span>Confidence:</span>
+        <div class="confidence-bar"><div class="confidence-fill" style="width:96%; background:var(--green);"></div></div>
+        <span style="font-weight:600; color:var(--green);">96%</span>
+        <span>&mdash; 21-day data confirms structural pattern</span>
+      </div>
+    </div>
+    <div class="insight-card animate-in animate-in-delay-3">
+      <span class="insight-badge trend">Trend</span>
+      <div class="insight-title">Cocktail Bar Spring Menu: Sustained +12% Revenue Uplift</div>
+      <div class="insight-body">
+        The Cocktail Bar has outperformed its 30-day average by 12% for 7 consecutive days since the spring menu launch. The Spring Blossom Sour accounts for 23% of all Cocktail Bar orders with a GP of 41.2% &mdash; 5 points above the bar average. This is statistically significant (p < 0.05) and represents a genuine menu-driven uplift, not random variation.
+        <strong>Action:</strong> Roll out top 3 spring cocktails to Lounge Bar. Brief all bar staff at Monday pre-shift.
+      </div>
+      <div class="confidence-meter">
+        <span>Confidence:</span>
+        <div class="confidence-bar"><div class="confidence-fill" style="width:88%; background:var(--green);"></div></div>
+        <span style="font-weight:600; color:var(--green);">88%</span>
+        <span>&mdash; 7-day consistent trend, menu change confirmed</span>
+      </div>
     </div>
   `;
 
-  // Recommendations
+  // Recommendations with implementation steps
   document.getElementById('recommendationCards').innerHTML = `
-    <div class="insight-card">
+    <div class="insight-card animate-in">
       <span class="insight-badge recommendation">Recommendation</span>
       <div class="insight-title">Increase Mid-Week Private Events in Nightclub Bar</div>
       <div class="insight-body">
-        Private events deliver 35% higher revenue per head than walk-in trade in the Nightclub Bar. The space can accommodate 2-3 additional mid-week events without displacing regular members. Events team should proactively market Tue/Wed/Thu availability to members' PA networks.
+        Private events deliver 35% higher revenue per head (&pound;185 vs &pound;124) than walk-in trade in the Nightclub Bar. The space can accommodate 2-3 additional mid-week events without displacing regular members. Events team should proactively market Tue/Wed/Thu availability to members' PA networks and corporate concierge services.
       </div>
       <div class="insight-impact">&#10148; Estimated impact: +&pound;8,500/week (&pound;442,000/year)</div>
+      <div class="impl-steps">
+        <strong>Implementation Plan:</strong>
+        <ol>
+          <li>Events team to email top 50 members' PAs with mid-week availability (by Friday)</li>
+          <li>Create a "Private Evening" package: minimum spend &pound;5,000, dedicated bar supervisor, personalised menu</li>
+          <li>Partner with 3 corporate concierge services (Quintessentially, Ten Group, Velocity Black)</li>
+          <li>Track weekly: number of enquiries, conversion rate, average spend per event</li>
+          <li>Review after 4 weeks &mdash; target: 2 additional mid-week events per week</li>
+        </ol>
+      </div>
     </div>
-    <div class="insight-card">
+    <div class="insight-card animate-in animate-in-delay-1">
       <span class="insight-badge recommendation">Recommendation</span>
       <div class="insight-title">Cigar Bar Staffing Restructure</div>
       <div class="insight-body">
-        Move from 3 to 2 evening staff on Tuesday, Wednesday, and Thursday. The bar averages 12 covers on these nights &mdash; well within 2-person service capacity. Redeploy the freed shift to the Cocktail Bar, which is approaching capacity on the same nights.
+        Move from 3 to 2 evening staff on Tuesday, Wednesday, and Thursday. The bar averages 12 covers on these nights &mdash; well within 2-person service capacity. Redeploy the freed shift to the Cocktail Bar, which is approaching capacity on the same nights following the spring menu success.
       </div>
       <div class="insight-impact">&#10148; Estimated impact: &pound;840/week saving (&pound;43,680/year)</div>
+      <div class="impl-steps">
+        <strong>Implementation Plan:</strong>
+        <ol>
+          <li>Update rota for next week: 2 staff Tue/Wed/Thu evenings in Cigar Bar</li>
+          <li>Reassign freed shifts to Cocktail Bar (same nights, same hours)</li>
+          <li>Brief Cigar Bar team &mdash; position as efficiency improvement, not a cut</li>
+          <li>Monitor member feedback via duty manager log for 2 weeks</li>
+          <li>If no service complaints after 14 days, make permanent. ROI: &pound;43,680/year</li>
+        </ol>
+      </div>
     </div>
-    <div class="insight-card">
+    <div class="insight-card animate-in animate-in-delay-2">
       <span class="insight-badge recommendation">Recommendation</span>
       <div class="insight-title">Implement Event Stock Checkpoint Protocol</div>
       <div class="insight-body">
-        After the Dom P&eacute;rignon discrepancy, introduce a mandatory bottle-count at the start and end of every private event. Bar supervisor signs off. Takes 5 minutes, prevents &pound;400+ losses per incident. At current event frequency (3-4/week), this could prevent &pound;20,000-30,000/year in stock leakage.
+        After the Dom P&eacute;rignon discrepancy, introduce a mandatory bottle-count at the start and end of every private event. Bar supervisor signs off on a standardised form. Takes 5 minutes, prevents &pound;400+ losses per incident. At current event frequency (3-4/week), this could prevent &pound;20,000-30,000/year in stock leakage.
       </div>
       <div class="insight-impact">&#10148; Estimated impact: &pound;20,000-30,000/year prevented loss</div>
+      <div class="impl-steps">
+        <strong>Implementation Plan:</strong>
+        <ol>
+          <li>Create standardised "Event Stock Count" form (item, opening count, closing count, variance)</li>
+          <li>Bar supervisor completes form at T-15 before event starts and T+15 after last guest leaves</li>
+          <li>Photographed and uploaded to shared drive within 1 hour of event close</li>
+          <li>Any variance > 1 bottle triggers automatic CCTV review request</li>
+          <li>Weekly review of all event stock counts at ops meeting (Monday AM)</li>
+        </ol>
+      </div>
+    </div>
+    <div class="insight-card animate-in animate-in-delay-3">
+      <span class="insight-badge recommendation">Recommendation</span>
+      <div class="insight-title">Roll Out Spring Cocktails to Lounge Bar</div>
+      <div class="insight-body">
+        The Cocktail Bar's spring menu has driven a 12% revenue uplift with improved GP. The top 3 recipes (Spring Blossom Sour, Rhubarb Negroni, Elderflower Collins) should be cross-trained to Lounge Bar staff and added to the Lounge Bar menu. The Lounge Bar has 48 seats and a similar demographic. Even a 5% uplift would add significant weekly revenue.
+      </div>
+      <div class="insight-impact">&#10148; Estimated impact: +&pound;480/week (&pound;24,960/year)</div>
+      <div class="impl-steps">
+        <strong>Implementation Plan:</strong>
+        <ol>
+          <li>Cocktail Bar head bartender to run 30-minute training session for Lounge Bar team (Monday pre-shift)</li>
+          <li>Add 3 spring cocktails to Lounge Bar menu with "New" badge</li>
+          <li>Table talkers / menu inserts highlighting new serves</li>
+          <li>Track Lounge Bar spring cocktail sales daily for 2 weeks</li>
+          <li>Target: 15% of Lounge Bar cocktail orders from spring menu within 2 weeks</li>
+        </ol>
+      </div>
     </div>
   `;
 
@@ -1855,19 +2299,24 @@ function renderInsights() {
 
   const revW1 = Math.round(days30.slice(0, 7).reduce((s,d) => s + d.totalRevenue, 0));
   const revW4 = Math.round(days30.slice(-7).reduce((s,d) => s + d.totalRevenue, 0));
+  const netW1 = Math.round(days30.slice(0, 7).reduce((s,d) => s + d.netProfit, 0));
+  const netW4 = Math.round(days30.slice(-7).reduce((s,d) => s + d.netProfit, 0));
 
   document.getElementById('trendAnalysis').innerHTML = `
     <p style="margin-bottom:14px;">
-      <strong>Revenue Trend:</strong> Weekly revenue has moved from ${fmt(revW1)} (Week 1) to ${fmt(revW4)} (current week). This represents a ${pctChange(revW4, revW1)} shift over the 4-week period. The underlying trajectory is flat to slightly positive, consistent with the pre-spring seasonal pattern. No intervention required &mdash; expect a meaningful uplift in April as Garden Bar comes into season and outdoor events resume.
+      <strong>Revenue Trend:</strong> Weekly revenue has moved from ${fmt(revW1)} (Week 1) to ${fmt(revW4)} (current week). This represents a ${pctChange(revW4, revW1)} shift over the 4-week period. The underlying trajectory is flat to slightly positive, consistent with the pre-spring seasonal pattern. No intervention required &mdash; expect a meaningful uplift in April as Garden Bar comes into season and outdoor events resume. The Cocktail Bar spring menu is an additional upside catalyst.
     </p>
     <p style="margin-bottom:14px;">
-      <strong>Labour Trend:</strong> <span class="hl-amber">Labour % is trending upward.</span> Week 1 averaged ${fmtPct(week1Avg)}, Week 2 was ${fmtPct(week2Avg)}, Week 3 was ${fmtPct(week3Avg)}, and the current week is ${fmtPct(weekLatestAvg)}. This 0.3-0.5%/week drift is small individually but compounds: if unchecked, it will add 2-3 percentage points over the next quarter. The primary driver is the Cigar Bar (structural overstaffing) and increasing overtime hours in the Nightclub Bar team. Both have specific recommendations above.
+      <strong>Net Profit Trend:</strong> Weekly net profit has moved from ${fmt(netW1)} (Week 1) to ${fmt(netW4)} (current week), a ${pctChange(netW4, netW1)} change. Net margin has held steady at ${(netW4/revW4*100).toFixed(1)}%, which is within the 8-12% target range for a venue of this size and positioning. The Cigar Bar labour issue is the primary drag on margin improvement.
     </p>
     <p style="margin-bottom:14px;">
-      <strong>GP% Trend:</strong> Gross profit has remained stable at ${fmtPct(yesterday.avgGP)} &plusmn; 1.2 points over the 4-week period. Wine GP improved slightly (sommelier stock controls are excellent). Spirits GP dipped 0.3 points, driven by the Hendrick's over-pouring issue in weeks 3-4. Overall, GP is healthy and above target.
+      <strong>Labour Trend:</strong> <span class="hl-amber">Labour % is trending upward.</span> Week 1 averaged ${fmtPct(week1Avg)}, Week 2 was ${fmtPct(week2Avg)}, Week 3 was ${fmtPct(week3Avg)}, and the current week is ${fmtPct(weekLatestAvg)}. This 0.3-0.5%/week drift is small individually but compounds: if unchecked, it will add 2-3 percentage points over the next quarter, equating to approximately &pound;3,500/week in additional cost. The primary drivers: Cigar Bar structural overstaffing and increasing overtime hours in the Nightclub Bar team. Both have specific recommendations above.
+    </p>
+    <p style="margin-bottom:14px;">
+      <strong>GP% Trend:</strong> Gross profit has remained stable at ${fmtPct(yesterday.avgGP)} &plusmn; 1.2 points over the 4-week period. Wine GP improved slightly (sommelier stock controls are excellent, Coravin usage reducing BTG waste). Spirits GP dipped 0.3 points, driven by the Hendrick's over-pouring issue in weeks 3-4. Cocktails GP improved 2.3 points with the spring menu. Overall, GP is healthy and above target.
     </p>
     <p>
-      <strong>Covers Trend:</strong> Average daily covers have held steady at ~${Math.round(days30.reduce((s,d) => s + d.totalCovers, 0) / 30)} across the period. Friday and Saturday are consistently at or near capacity. Mid-week (Tue-Wed) shows the most headroom &mdash; an additional 15-20 covers/night is achievable without operational strain, and would add approximately &pound;1,500-2,000/night in revenue.
+      <strong>Covers Trend:</strong> Average daily covers have held steady at ~${Math.round(days30.reduce((s,d) => s + d.totalCovers, 0) / 30)} across the period. Friday and Saturday are consistently at or near capacity (Nightclub: ${BARS[1].seating} seats, regularly 95%+ occupied). Mid-week (Tue-Wed) shows the most headroom &mdash; an additional 15-20 covers/night is achievable without operational strain, and would add approximately &pound;1,500-2,000/night in revenue. Private events are the most efficient way to fill this capacity.
     </p>
   `;
 }
@@ -1880,29 +2329,23 @@ function renderOutlets() {
   // Best/Worst callouts
   const sorted = [...yesterday.bars].sort((a,b) => b.revenue - a.revenue);
   const best = sorted[0];
-  const worst = sorted[sorted.length - 1];
-
-  // Calculate efficiency score (revenue * gp / labour)
-  const effSorted = [...yesterday.bars].sort((a,b) => (b.revenue * b.gp / b.labour) - (a.revenue * a.gp / a.labour));
-  const mostEfficient = effSorted[0];
-  const leastEfficient = effSorted[effSorted.length - 1];
 
   document.getElementById('outletCallouts').innerHTML = `
-    <div class="card" style="border-left: 4px solid var(--green);">
+    <div class="card animate-in animate-in-delay-1" style="border-left: 4px solid var(--green);">
       <div class="card-title" style="color: var(--green);">Top Performer</div>
       <div style="font-size: 22px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 4px;">${best.name}</div>
       <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">${best.floor} &mdash; ${fmt(best.revenue)} revenue, ${fmtPct(best.gp)} GP, ${fmtPct(best.labour)} labour</div>
-      <div style="font-size: 13px; color: var(--green); font-weight: 500;">Highest revenue bar. Most efficient labour-to-revenue ratio in the venue.</div>
+      <div style="font-size: 13px; color: var(--green); font-weight: 500;">Highest revenue bar. ${best.covers} covers at ${fmt(Math.round(best.revenue / best.covers))}/cover. Signature: ${best.signature}.</div>
     </div>
-    <div class="card" style="border-left: 4px solid var(--red);">
+    <div class="card animate-in animate-in-delay-2" style="border-left: 4px solid var(--red);">
       <div class="card-title" style="color: var(--red);">Needs Attention</div>
       <div style="font-size: 22px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 4px;">Cigar Bar</div>
       <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">1st Floor &mdash; ${fmt(yesterday.bars.find(b => b.name === 'Cigar Bar').revenue)} revenue, ${fmtPct(yesterday.bars.find(b => b.name === 'Cigar Bar').gp)} GP, <span class="hl-red">${fmtPct(yesterday.bars.find(b => b.name === 'Cigar Bar').labour)} labour</span></div>
-      <div style="font-size: 13px; color: var(--red); font-weight: 500;">Labour 5+ points above target for 18 of last 21 days. Staffing restructure recommended.</div>
+      <div style="font-size: 13px; color: var(--red); font-weight: 500;">Labour 5+ points above target for 18 of last 21 days. ${yesterday.bars.find(b => b.name === 'Cigar Bar').covers} covers served. Staffing restructure recommended &mdash; &pound;43,680/year saving.</div>
     </div>
   `;
 
-  // Outlet table
+  // Outlet table with more data points
   const tbody = document.querySelector('#outletTable tbody');
   tbody.innerHTML = yesterday.bars.map((b, i) => {
     const avg7 = Math.round(days30.slice(-7).reduce((s,d) => s + d.bars[i].revenue, 0) / 7);
@@ -1921,8 +2364,8 @@ function renderOutlets() {
       <td class="num" style="color:${b.labour <= 25 ? 'var(--green)' : b.labour <= 28 ? 'var(--amber)' : 'var(--red)'}; font-weight:600;">${fmtPct(b.labour)}</td>
       <td class="num">${b.covers}</td>
       <td class="num">${fmt(revPerCover)}</td>
-      <td><canvas id="spark-${i}" width="80" height="30" class="sparkline-cell"></canvas></td>
-      <td><span class="status-dot tl-${overallStatus}"></span>${overallStatus === 'green' ? 'On Track' : overallStatus === 'amber' ? 'Monitor' : 'Alert'}</td>
+      <td><canvas id="spark-${i}" width="80" height="30" class="sparkline-cell" aria-label="${b.name} 7-day revenue trend"></canvas></td>
+      <td><span class="status-dot tl-${overallStatus}" aria-hidden="true"></span>${overallStatus === 'green' ? 'On Track' : overallStatus === 'amber' ? 'Monitor' : 'Alert'}</td>
     </tr>`;
   }).join('');
 
@@ -1941,6 +2384,26 @@ function renderOutlets() {
       canvas.style.width = w + 'px';
       canvas.style.height = h + 'px';
       sparkCtx.scale(2, 2);
+
+      // Gradient fill under sparkline
+      const grad = sparkCtx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(0,113,227,0.15)');
+      grad.addColorStop(1, 'rgba(0,113,227,0)');
+
+      // Fill area
+      sparkCtx.beginPath();
+      data.forEach((v, j) => {
+        const x = (j / (data.length - 1)) * w;
+        const y = h - ((v - min) / (max - min)) * h;
+        j === 0 ? sparkCtx.moveTo(x, y) : sparkCtx.lineTo(x, y);
+      });
+      sparkCtx.lineTo(w, h);
+      sparkCtx.lineTo(0, h);
+      sparkCtx.closePath();
+      sparkCtx.fillStyle = grad;
+      sparkCtx.fill();
+
+      // Line
       sparkCtx.strokeStyle = '#0071E3';
       sparkCtx.lineWidth = 1.5;
       sparkCtx.beginPath();
@@ -1950,6 +2413,14 @@ function renderOutlets() {
         j === 0 ? sparkCtx.moveTo(x, y) : sparkCtx.lineTo(x, y);
       });
       sparkCtx.stroke();
+
+      // End dot
+      const lastX = w;
+      const lastY = h - ((data[data.length-1] - min) / (max - min)) * h;
+      sparkCtx.beginPath();
+      sparkCtx.arc(lastX, lastY, 2.5, 0, Math.PI * 2);
+      sparkCtx.fillStyle = '#0071E3';
+      sparkCtx.fill();
     });
   }, 100);
 
@@ -1963,7 +2434,7 @@ function renderOutlets() {
         data: yesterday.bars.map(b => b.revenue),
         backgroundColor: ['#0071E3','#5856D6','#34C759','#FF9500','#FF3B30','#AF52DE','#00C7BE'],
         borderWidth: 0,
-        hoverOffset: 6
+        hoverOffset: 8
       }]
     },
     options: {
@@ -1973,8 +2444,6 @@ function renderOutlets() {
       plugins: {
         legend: { position: 'right', labels: { usePointStyle: true, padding: 10, font: { family: 'Inter', size: 11 } } },
         tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
           callbacks: {
             label: ctx => {
               const total = ctx.dataset.data.reduce((a,b) => a + b, 0);
@@ -2003,21 +2472,19 @@ function renderOutlets() {
       plugins: {
         legend: { display: true, position: 'top', labels: { usePointStyle: true, padding: 10, font: { family: 'Inter', size: 10 } } },
         tooltip: {
-          backgroundColor: 'white', titleColor: '#1D1D1F', bodyColor: '#6E6E73',
-          borderColor: '#E5E5EA', borderWidth: 1, cornerRadius: 8, padding: 12,
           callbacks: {
-            label: ctx => ctx.dataset.label + ': GP ' + ctx.raw.y + '%, Labour ' + ctx.raw.x + '%'
+            label: ctx => ctx.dataset.label + ': GP ' + ctx.raw.y + '%, Labour ' + ctx.raw.x + '%, Rev ' + fmt(yesterday.bars[ctx.datasetIndex].revenue)
           }
         }
       },
       scales: {
         x: {
-          title: { display: true, text: 'Labour %', font: { family: 'Inter', size: 11 }, color: '#6E6E73' },
+          title: { display: true, text: 'Labour % (lower is better)', font: { family: 'Inter', size: 11 }, color: '#6E6E73' },
           grid: { color: '#F0F0F2' },
           ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => v + '%' }
         },
         y: {
-          title: { display: true, text: 'GP%', font: { family: 'Inter', size: 11 }, color: '#6E6E73' },
+          title: { display: true, text: 'GP% (higher is better)', font: { family: 'Inter', size: 11 }, color: '#6E6E73' },
           grid: { color: '#F0F0F2' },
           ticks: { font: { family: 'Inter', size: 10 }, color: '#AEAEB2', callback: v => v + '%' }
         }
@@ -2030,7 +2497,10 @@ function renderOutlets() {
 // INIT
 // ============================================================
 
-renderBriefing();
+// Simulate loading state then render
+setTimeout(() => {
+  renderBriefing();
+}, 300);
 
 </script>
 </body>
