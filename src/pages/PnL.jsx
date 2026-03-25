@@ -55,9 +55,9 @@ export default function PnL({ C }) {
 
       {/* Summary KPIs */}
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14, marginBottom: 20,
+        gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: 20,
         background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '20px 24px',
-      }}>
+      }} className="grid-kpi">
         <Metric label="Revenue" value={current.revenue} vs={prev.revenue} C={C} />
         <Metric label="COGS" value={current.cogs} vs={prev.cogs} C={C} />
         <Metric label="Labour" value={current.labour} vs={prev.labour} C={C} />
@@ -69,7 +69,7 @@ export default function PnL({ C }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="grid-2col" style={{ marginBottom: 16 }}>
         {/* Monthly Revenue Breakdown */}
         <Card title="Monthly Revenue & Costs" C={C}>
           <ResponsiveContainer width="100%" height={240}>

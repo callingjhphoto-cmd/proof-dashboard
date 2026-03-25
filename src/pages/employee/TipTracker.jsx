@@ -48,7 +48,7 @@ export default function TipTracker() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 20 }}>
+      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20 }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>This Week</div>
           <div style={{ fontSize: 26, fontWeight: 700, color: C.blue }}>{'\u00a3'}42</div>
@@ -86,7 +86,7 @@ export default function TipTracker() {
         </ResponsiveContainer>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="grid-2col">
         {/* Daily Breakdown */}
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 14 }}>This Week&apos;s Shifts</div>

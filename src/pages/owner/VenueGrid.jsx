@@ -85,7 +85,7 @@ export default function VenueGrid() {
       </div>
 
       {/* Portfolio KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14, marginBottom: 20 }}>
+      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: 20 }}>
         <KPI label="Portfolio Revenue" value={`\u00A3${(totalRevenue / 1000).toFixed(0)}k`} subtext="This month" color={C.ink} />
         <KPI label="Total EBITDA" value={`\u00A3${(totalEbitda / 1000).toFixed(0)}k`} subtext={`${(totalEbitda / totalRevenue * 100).toFixed(1)}% margin`} color={C.amber} />
         <KPI label="Avg Labour %" value={`${avgLabour}%`} subtext={parseFloat(avgLabour) > 30 ? 'Above target' : 'On target'} color={parseFloat(avgLabour) > 30 ? C.orange : C.green} />

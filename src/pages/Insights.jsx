@@ -98,7 +98,7 @@ export default function Insights({ C }) {
         </div>
       </Card>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="grid-2col" style={{ marginBottom: 16 }}>
         {/* Menu Engineering Matrix */}
         <Card title="Menu Engineering Matrix" icon={Target} C={C}>
           {Object.entries(menuMatrix).map(([type, items]) => {

@@ -93,7 +93,7 @@ export default function Expansion() {
       </div>
 
       {/* Scenario Selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 24 }}>
+      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: 24 }}>
         {scenarios.map((s, i) => (
           <div
             key={i}
@@ -125,7 +125,7 @@ export default function Expansion() {
       </div>
 
       {/* Detailed View */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="grid-2col" style={{ marginBottom: 16 }}>
         {/* Projection Chart */}
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>12-Month Revenue vs Costs Projection</div>

@@ -72,7 +72,7 @@ export default function Rota() {
       )}
 
       {/* Day selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8, marginBottom: 20 }}>
+      <div className="grid-7day" style={{ marginBottom: 20 }}>
         {days.map((day, i) => {
           const isToday = i === 1
           const isSelected = selectedDay === i

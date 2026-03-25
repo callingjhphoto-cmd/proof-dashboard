@@ -53,7 +53,7 @@ export default function CashFlow() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 20 }}>
+      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20 }}>
         {[
           { label: 'Current Balance', value: `\u00a3${(currentBalance / 1000).toFixed(0)}k`, color: C.ink },
           { label: 'Projected Month-End', value: `\u00a3${(projectedEnd / 1000).toFixed(0)}k`, color: C.green },
@@ -93,7 +93,7 @@ export default function CashFlow() {
         </ResponsiveContainer>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="grid-2col">
         {/* Monthly Cash Flow */}
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Monthly Cash Flow</div>

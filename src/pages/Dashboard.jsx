@@ -56,14 +56,14 @@ function KPI({ icon: Icon, label, value, change, changeDir, C }) {
 export default function Dashboard({ C }) {
   return (
     <div className="animate-in">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 20 }}>
+      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20 }}>
         <KPI icon={PoundSterling} label="Today's Revenue" value="\u00A37,140" change="+12%" changeDir="up" C={C} />
         <KPI icon={Percent} label="Labour %" value="34%" change="+4pts" changeDir="down" C={C} />
         <KPI icon={UtensilsCrossed} label="Gross Profit %" value="68.2%" change="+1.7pts" changeDir="up" C={C} />
         <KPI icon={Users} label="Covers Today" value="98" change="+8%" changeDir="up" C={C} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 16 }}>
+      <div className="grid-2col" style={{ gridTemplateColumns: '1fr 340px' }}>
         {/* Revenue Chart */}
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Revenue: This Week vs Last</div>
@@ -108,7 +108,7 @@ export default function Dashboard({ C }) {
       {/* Shift Summary */}
       <div style={{ marginTop: 16, background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Current Shift</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 10 }}>
+        <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
           {shift.map((s, i) => (
             <div key={i} style={{
               padding: '12px 14px', borderRadius: 8, background: C.bg, border: `1px solid ${C.border}`,

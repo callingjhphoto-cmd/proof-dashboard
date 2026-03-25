@@ -97,7 +97,7 @@ export default function TodaysSpecials() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="grid-2col">
         {/* Menu Changes */}
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>

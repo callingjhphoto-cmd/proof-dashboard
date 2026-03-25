@@ -58,8 +58,8 @@ export default function Stock({ C }) {
       </div>
 
       {/* Summary */}
-      <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 20,
+      <div className="grid-kpi" style={{
+        gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20,
       }}>
         {[
           { label: 'Stock Value', value: '\u00A314,280', icon: Package, color: C.ink },
@@ -75,7 +75,7 @@ export default function Stock({ C }) {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="grid-2col" style={{ marginBottom: 16 }}>
         {/* Low Stock Alerts */}
         <Card title="Below Par Level" icon={AlertTriangle} C={C}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

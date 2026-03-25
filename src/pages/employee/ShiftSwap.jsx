@@ -52,7 +52,7 @@ export default function ShiftSwap() {
       {/* Select shift to swap */}
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 14 }}>Select a shift to swap</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+        <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
           {myUpcoming.map(shift => {
             const isSelected = selectedShift === shift.id
             return (

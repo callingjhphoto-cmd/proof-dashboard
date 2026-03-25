@@ -71,7 +71,7 @@ export default function MyShifts() {
       )}
 
       {/* Summary */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 20 }}>
+      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20 }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>This Week</div>
           <div style={{ fontSize: 24, fontWeight: 700, color: C.ink }}>{totalHoursThisWeek}h</div>
@@ -97,7 +97,7 @@ export default function MyShifts() {
       {/* This Week Calendar */}
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 14 }}>This Week</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}>
+        <div className="grid-7day">
           {thisWeek.map((d, i) => {
             const sc = statusConfig[d.status]
             const isOff = d.status === 'off'
@@ -133,7 +133,7 @@ export default function MyShifts() {
       {/* Next Week */}
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 14 }}>Next Week</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}>
+        <div className="grid-7day">
           {nextWeek.map((d, i) => {
             const isOff = d.status === 'off'
             return (

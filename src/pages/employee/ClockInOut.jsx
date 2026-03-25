@@ -141,8 +141,8 @@ export default function ClockInOut() {
       </div>
 
       {/* This Week Summary */}
-      <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 20,
+      <div className="grid-kpi" style={{
+        gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: 20,
       }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Hours This Week</div>
