@@ -1,8 +1,12 @@
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { useState, useEffect, createContext, useContext } from 'react'
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { RoleProvider, ROLES, useRole } from './context/RoleContext'
 import RoleSelector from './components/RoleSelector'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
+
+const MobileContext = createContext({ sidebarOpen: false, setSidebarOpen: () => {} })
+export function useMobile() { return useContext(MobileContext) }
 
 // Owner pages
 import VenueGrid from './pages/owner/VenueGrid'
@@ -84,23 +88,39 @@ function EmployeeRoutes() {
 
 function AppContent() {
   const { role, setRole } = useRole()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const location = useLocation()
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false)
+  }, [location.pathname])
 
   if (!role) {
     return <RoleSelector onSelect={setRole} />
   }
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar />
-      <div style={{ flex: 1, marginLeft: 220, minHeight: '100vh' }}>
-        <Header />
-        <main style={{ padding: 24 }}>
-          {role === ROLES.OWNER && <OwnerRoutes />}
-          {role === ROLES.GM && <GMRoutes />}
-          {role === ROLES.EMPLOYEE && <EmployeeRoutes />}
-        </main>
+    <MobileContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
+      <div className="app-layout">
+        {/* Mobile overlay */}
+        {sidebarOpen && (
+          <div
+            className="sidebar-overlay"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+        <Sidebar open={sidebarOpen} />
+        <div className="main-content">
+          <Header onMenuClick={() => setSidebarOpen(prev => !prev)} />
+          <main style={{ padding: 24 }}>
+            {role === ROLES.OWNER && <OwnerRoutes />}
+            {role === ROLES.GM && <GMRoutes />}
+            {role === ROLES.EMPLOYEE && <EmployeeRoutes />}
+          </main>
+        </div>
       </div>
-    </div>
+    </MobileContext.Provider>
   )
 }
 

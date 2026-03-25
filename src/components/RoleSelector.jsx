@@ -56,7 +56,7 @@ export default function RoleSelector({ onSelect }) {
       </p>
 
       {/* Role Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, maxWidth: 900, width: '100%' }}>
+      <div className="role-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, maxWidth: 900, width: '100%' }}>
         {Object.values(ROLES).map((role) => {
           const meta = ROLE_META[role]
           const Icon = roleIcons[role]

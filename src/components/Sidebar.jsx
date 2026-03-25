@@ -46,7 +46,7 @@ const NAV_BY_ROLE = {
   ],
 }
 
-export default function Sidebar() {
+export default function Sidebar({ open }) {
   const { role, setRole, notifications } = useRole()
   const meta = ROLE_META[role]
   const nav = NAV_BY_ROLE[role] || []
@@ -55,9 +55,10 @@ export default function Sidebar() {
   const notifCount = notifications[role] || 0
 
   return (
-    <aside style={{
+    <aside className={open ? 'sidebar-open' : ''} style={{
       width: 220, minHeight: '100vh', background: C.bg, borderRight: `1px solid ${C.border}`,
       display: 'flex', flexDirection: 'column', padding: '20px 0', position: 'fixed', left: 0, top: 0, zIndex: 100,
+      transition: 'transform 0.3s ease',
     }}>
       {/* Logo */}
       <div style={{ padding: '0 20px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>

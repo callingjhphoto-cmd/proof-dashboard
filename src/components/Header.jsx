@@ -1,4 +1,4 @@
-import { Bell, ChevronDown } from 'lucide-react'
+import { Bell, ChevronDown, Menu } from 'lucide-react'
 import { ROLES, ROLE_META, useRole } from '../context/RoleContext'
 
 const C = {
@@ -9,7 +9,7 @@ const C = {
 
 const VENUES = ['The Ivy Chelsea Garden', 'The Ivy Soho', 'The Ivy City Garden', 'The Ivy Tower Bridge', 'The Ivy Kensington']
 
-export default function Header() {
+export default function Header({ onMenuClick }) {
   const { role, notifications } = useRole()
   const meta = ROLE_META[role]
   const notifCount = notifications[role] || 0
@@ -24,6 +24,16 @@ export default function Header() {
       justifyContent: 'space-between', padding: '0 24px', background: C.bg,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: C.textMuted }}>
+        <button
+          className="mobile-menu-btn"
+          onClick={onMenuClick}
+          style={{
+            background: 'transparent', border: 'none', color: C.textMuted, cursor: 'pointer',
+            padding: 4, display: 'none', alignItems: 'center',
+          }}
+        >
+          <Menu size={20} />
+        </button>
         {venueName && (
           <>
             <span style={{ color: C.ink, fontWeight: 600 }}>{venueName}</span>

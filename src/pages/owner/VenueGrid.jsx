@@ -94,7 +94,7 @@ export default function VenueGrid() {
       </div>
 
       {/* Venue Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340, 1fr))', gap: 16, marginBottom: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 16, marginBottom: 20 }}>
         {venues.map((venue, i) => {
           const sc = statusConfig[venue.status]
           const StatusIcon = sc.icon
