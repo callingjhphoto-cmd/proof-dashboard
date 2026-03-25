@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import { RoleProvider, ROLES, useRole } from './context/RoleContext'
 import RoleSelector from './components/RoleSelector'
 import Sidebar from './components/Sidebar'
@@ -106,11 +106,11 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <RoleProvider>
         <AppContent />
       </RoleProvider>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
