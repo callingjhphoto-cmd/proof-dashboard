@@ -17,6 +17,9 @@ import Expansion from './pages/owner/Expansion'
 import Reports from './pages/owner/Reports'
 import Stock from './pages/Stock'
 
+// Shared pages
+import StaffProfile from './pages/StaffProfile'
+
 // GM pages
 import Dashboard from './pages/Dashboard'
 import LiveTrading from './pages/gm/LiveTrading'
@@ -56,6 +59,7 @@ function OwnerRoutes() {
       <Route path="/insights" element={<Insights C={C} />} />
       <Route path="/expansion" element={<Expansion />} />
       <Route path="/reports" element={<Reports />} />
+      <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
 }
@@ -70,6 +74,7 @@ function GMRoutes() {
       <Route path="/checklist" element={<DailyChecklist />} />
       <Route path="/team" element={<Team C={C} />} />
       <Route path="/insights" element={<Insights C={C} />} />
+      <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
 }
@@ -84,6 +89,7 @@ function EmployeeRoutes() {
       <Route path="/tips" element={<TipTracker />} />
       <Route path="/training" element={<Training />} />
       <Route path="/announcements" element={<Announcements />} />
+      <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
 }

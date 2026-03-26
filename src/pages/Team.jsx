@@ -1,15 +1,17 @@
+import { useNavigate } from 'react-router-dom'
 import { Users, Clock, AlertCircle, PoundSterling } from 'lucide-react'
+import { STAFF_DB } from './StaffProfile'
 
-const team = [
-  { name: 'Sarah Mitchell', role: 'Bar Lead', rate: 16.50, scheduledHrs: 40, workedHrs: 38, status: 'on-shift', shift: '14:00-23:00' },
-  { name: 'Marcus Taylor', role: 'Bartender', rate: 13.50, scheduledHrs: 35, workedHrs: 33, status: 'on-shift', shift: '16:00-23:00' },
-  { name: 'Lily Chen', role: 'Floor Manager', rate: 15.00, scheduledHrs: 42, workedHrs: 41, status: 'ending', shift: '11:00-20:00' },
-  { name: 'Tom Robinson', role: 'Server', rate: 12.00, scheduledHrs: 30, workedHrs: 28, status: 'upcoming', shift: '17:00-23:00' },
-  { name: 'Anya Kowalski', role: 'Server', rate: 12.00, scheduledHrs: 25, workedHrs: 22, status: 'upcoming', shift: '17:00-23:00' },
-  { name: 'Ben Hughes', role: 'Bartender', rate: 13.50, scheduledHrs: 32, workedHrs: 30, status: 'off', shift: 'Off today' },
-  { name: 'Priya Patel', role: 'Server', rate: 12.00, scheduledHrs: 28, workedHrs: 26, status: 'off', shift: 'Off today' },
-  { name: 'Jake Williams', role: 'Kitchen Porter', rate: 11.50, scheduledHrs: 38, workedHrs: 36, status: 'off', shift: 'Off today' },
-]
+const team = STAFF_DB.map(s => ({
+  id: s.id,
+  name: s.name,
+  role: s.role,
+  rate: s.rate,
+  scheduledHrs: s.contractedHrs,
+  workedHrs: s.weeklyHours,
+  status: s.status,
+  shift: s.shift,
+}))
 
 const rota = [
   { day: 'Mon', staff: ['Sarah', 'Marcus', 'Lily', 'Tom', 'Anya'], covers: 85, labourCost: 892 },
@@ -34,6 +36,7 @@ function Card({ title, children, C, style }) {
 }
 
 export default function Team({ C }) {
+  const navigate = useNavigate()
   const totalScheduled = team.reduce((s, t) => s + t.scheduledHrs, 0)
   const totalWorked = team.reduce((s, t) => s + t.workedHrs, 0)
   const totalLabourCost = team.reduce((s, t) => s + t.workedHrs * t.rate, 0)
@@ -65,10 +68,13 @@ export default function Team({ C }) {
       <Card title="Team Status" C={C} style={{ marginBottom: 16 }}>
         <div className="grid-kpi-4">
           {team.map((t, i) => (
-            <div key={i} style={{
+            <div key={i} onClick={() => navigate(`/staff/${t.id}`)} style={{
               padding: '14px 16px', borderRadius: 10, background: C.bg, border: `1px solid ${C.border}`,
-              borderLeft: `3px solid ${statusColor[t.status]}`,
-            }}>
+              borderLeft: `3px solid ${statusColor[t.status]}`, cursor: 'pointer', transition: 'border-color 0.15s',
+            }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#444'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
+            >
               <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{t.name}</div>
               <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{t.role} {'\u2022'} £{t.rate.toFixed(2)}/hr</div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 11 }}>

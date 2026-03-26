@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { TrendingUp, TrendingDown, Users, UtensilsCrossed, AlertTriangle, Clock, Percent, PoundSterling } from 'lucide-react'
 
@@ -19,11 +20,11 @@ const alerts = [
 ]
 
 const shift = [
-  { name: 'Sarah M.', role: 'Bar Lead', hours: '14:00\u201323:00', status: 'on' },
-  { name: 'Marcus T.', role: 'Bartender', hours: '16:00\u201323:00', status: 'on' },
-  { name: 'Lily C.', role: 'Floor Mgr', hours: '11:00\u201320:00', status: 'ending' },
-  { name: 'Tom R.', role: 'Server', hours: '17:00\u201323:00', status: 'upcoming' },
-  { name: 'Anya K.', role: 'Server', hours: '17:00\u201323:00', status: 'upcoming' },
+  { name: 'Sarah M.', role: 'Bar Lead', hours: '14:00\u201323:00', status: 'on', staffId: 'sarah-mitchell' },
+  { name: 'Marcus T.', role: 'Bartender', hours: '16:00\u201323:00', status: 'on', staffId: 'marcus-taylor' },
+  { name: 'Lily C.', role: 'Floor Mgr', hours: '11:00\u201320:00', status: 'ending', staffId: 'lily-chen' },
+  { name: 'Tom R.', role: 'Server', hours: '17:00\u201323:00', status: 'upcoming', staffId: 'tom-robinson' },
+  { name: 'Anya K.', role: 'Server', hours: '17:00\u201323:00', status: 'upcoming', staffId: 'anya-kowalski' },
 ]
 
 const sevColors = { critical: '#EF4444', warning: '#F97316', info: '#3B82F6', success: '#22C55E' }
@@ -58,6 +59,7 @@ function KPI({ icon: Icon, label, value, change, changeDir, goodDir, period, C }
 }
 
 export default function Dashboard({ C }) {
+  const navigate = useNavigate()
   return (
     <div className="animate-in">
       <div className="grid-kpi-4" style={{ marginBottom: 20 }}>
@@ -114,9 +116,13 @@ export default function Dashboard({ C }) {
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Current Shift</div>
         <div className="grid-kpi-5">
           {shift.map((s, i) => (
-            <div key={i} style={{
+            <div key={i} onClick={() => navigate(`/staff/${s.staffId}`)} style={{
               padding: '12px 14px', borderRadius: 8, background: C.bg, border: `1px solid ${C.border}`,
-            }}>
+              cursor: 'pointer', transition: 'border-color 0.15s',
+            }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#444'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                 <div style={{ width: 6, height: 6, borderRadius: '50%', background: statusColors[s.status] }} />
                 <span style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{s.name}</span>
