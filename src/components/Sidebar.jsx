@@ -163,7 +163,7 @@ export default function Sidebar({ open }) {
       </div>
 
       <div style={{ padding: '8px 20px 0', fontSize: 10, color: C.textDim }}>
-        v0.3.0 &mdash; Demo Ready
+        v0.4.0 &mdash; Full Suite
       </div>
     </aside>
   )

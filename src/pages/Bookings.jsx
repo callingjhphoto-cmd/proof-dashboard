@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Calendar, Clock, Users, Plus, X, ChevronLeft, ChevronRight, Search,
   UserCheck, UserX, Gift, Wine, Phone, Mail, AlertTriangle, CheckCircle,
@@ -66,6 +67,7 @@ function getWeekDates(baseDate) {
 }
 
 export default function Bookings() {
+  const navigate = useNavigate()
   const [view, setView] = useState('week')
   const [baseDate, setBaseDate] = useState('2026-03-26')
   const [bookings, setBookings] = useState(SAMPLE_BOOKINGS)
