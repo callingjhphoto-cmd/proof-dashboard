@@ -12,10 +12,10 @@ const C = {
 
 const febSummary = {
   highlights: [
-    { label: 'Portfolio Revenue', value: '£742k', change: '+3.8%', up: true },
-    { label: 'Net Profit', value: '£74k', change: '+12.1%', up: true },
-    { label: 'Avg Labour %', value: '31.4%', change: '+1.2pts', up: false },
-    { label: 'Avg GP %', value: '67.2%', change: '+0.8pts', up: true },
+    { label: 'Portfolio Revenue', value: '£742k', change: '+3.8%', dir: 'up', good: true },
+    { label: 'Net Profit', value: '£74k', change: '+12.1%', dir: 'up', good: true },
+    { label: 'Avg Labour %', value: '31.4%', change: '+1.2pts', dir: 'up', good: false },
+    { label: 'Avg GP %', value: '67.2%', change: '+0.8pts', dir: 'up', good: true },
   ],
   topVenue: 'The Ivy Soho Brasserie',
   topVenueDetail: '22.0% EBITDA margin, highest in portfolio',
@@ -120,8 +120,8 @@ export default function Reports() {
             <div key={i} style={{ padding: '12px 16px', borderRadius: 8, background: C.bg, border: `1px solid ${C.border}` }}>
               <div style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>{h.label}</div>
               <div style={{ fontSize: 22, fontWeight: 700, color: C.ink }}>{h.value}</div>
-              <div style={{ fontSize: 11, color: h.up ? C.green : C.red, marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
-                {h.up ? <TrendingUp size={10} /> : <TrendingDown size={10} />} {h.change} vs Jan
+              <div style={{ fontSize: 11, color: h.good ? C.green : C.red, marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
+                {h.dir === 'up' ? <TrendingUp size={10} /> : <TrendingDown size={10} />} {h.change} vs Jan
               </div>
             </div>
           ))}

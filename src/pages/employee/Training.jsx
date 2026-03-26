@@ -96,11 +96,13 @@ export default function Training() {
             const sc = statusConfig[mod.status]
             const StatusIcon = sc.icon
             return (
-              <div key={mod.id} style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                padding: '14px 16px', borderRadius: 10, background: C.bg, border: `1px solid ${C.border}`,
-                cursor: 'pointer', transition: 'border-color 0.15s',
-              }}
+              <div key={mod.id}
+                onClick={() => alert(`Opening "${mod.title}"...\n\n${mod.description}\n\nIn production, this opens the full training module.`)}
+                style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '14px 16px', borderRadius: 10, background: C.bg, border: `1px solid ${C.border}`,
+                  cursor: 'pointer', transition: 'border-color 0.15s',
+                }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = '#444'}
                 onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
               >
