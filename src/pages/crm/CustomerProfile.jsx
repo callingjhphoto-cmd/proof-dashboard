@@ -119,7 +119,7 @@ export default function CustomerProfile() {
           }}>
             <div style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>Lifetime Value</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: C.amber, fontFamily: "'JetBrains Mono', monospace" }}>
-              {'\u00a3'}{customer.totalSpend.toLocaleString()}
+              {'£'}{customer.totalSpend.toLocaleString()}
             </div>
             <div style={{ fontSize: 11, color: C.textMuted, marginTop: 4 }}>{customer.totalVisits} visits</div>
           </div>
@@ -155,10 +155,10 @@ export default function CustomerProfile() {
             <LineChart data={customer.monthlySpend}>
               <CartesianGrid stroke={C.border} strokeDasharray="3 3" />
               <XAxis dataKey="month" tick={{ fill: C.textDim, fontSize: 11 }} axisLine={{ stroke: C.border }} />
-              <YAxis tick={{ fill: C.textDim, fontSize: 11 }} axisLine={{ stroke: C.border }} tickFormatter={v => `\u00a3${v}`} />
+              <YAxis tick={{ fill: C.textDim, fontSize: 11 }} axisLine={{ stroke: C.border }} tickFormatter={v => `£${v}`} />
               <Tooltip
                 contentStyle={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 12, color: C.ink }}
-                formatter={v => [`\u00a3${v}`, 'Spend']}
+                formatter={v => [`£${v}`, 'Spend']}
               />
               <defs>
                 <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
@@ -251,7 +251,7 @@ export default function CustomerProfile() {
                   <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
                     <td style={{ padding: '10px 12px', fontSize: 13, color: C.text }}>{v.date}</td>
                     <td style={{ padding: '10px 12px', fontSize: 13, color: C.textMuted }}>{v.time}</td>
-                    <td style={{ padding: '10px 12px', fontSize: 13, color: C.ink, fontFamily: "'JetBrains Mono', monospace" }}>{'\u00a3'}{v.spend.toFixed(2)}</td>
+                    <td style={{ padding: '10px 12px', fontSize: 13, color: C.ink, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{v.spend.toFixed(2)}</td>
                     <td style={{ padding: '10px 12px', fontSize: 12, color: C.textMuted }}>{v.items.join(', ')}</td>
                   </tr>
                 ))}

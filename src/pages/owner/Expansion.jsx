@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { MapPin, PoundSterling, TrendingUp, Building2, Calculator, Filter, ChevronDown, ChevronUp, Star, AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
+import { useState, useMemo, useRef, useEffect } from 'react'
+import { MapPin, PoundSterling, TrendingUp, Building2, Calculator, Filter, ChevronDown, ChevronUp, Star, AlertTriangle, CheckCircle, XCircle, Users, ExternalLink } from 'lucide-react'
 import { AreaChart, Area, LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend, Cell } from 'recharts'
 
 const C = {
@@ -50,7 +50,7 @@ const scenarios = [
 const londonAreas = [
   {
     name: 'City of London', postcode: 'EC1-EC4',
-    bestFor: ['Restaurant', 'Wine Bar', 'All-day Caf\u00e9'],
+    bestFor: ['Restaurant', 'Wine Bar', 'All-day Café'],
     rents: { 2021: 72, 2022: 78, 2023: 88, 2024: 95, 2025: 100 },
     vacancy: { 2021: 12.5, 2022: 9.8, 2023: 7.2, 2024: 5.8, 2025: 5.1 },
     leaseYears: 10, keyMoney: 150000, businessRates: 45000,
@@ -58,7 +58,7 @@ const londonAreas = [
   },
   {
     name: 'Shoreditch', postcode: 'E1/EC2A',
-    bestFor: ['Cocktail Bar', 'Late-Night Venue', 'Caf\u00e9'],
+    bestFor: ['Cocktail Bar', 'Late-Night Venue', 'Café'],
     rents: { 2021: 42, 2022: 48, 2023: 55, 2024: 62, 2025: 68 },
     vacancy: { 2021: 8.2, 2022: 6.1, 2023: 4.5, 2024: 3.8, 2025: 3.2 },
     leaseYears: 5, keyMoney: 80000, businessRates: 28000,
@@ -90,7 +90,7 @@ const londonAreas = [
   },
   {
     name: 'Marylebone', postcode: 'W1U',
-    bestFor: ['Restaurant', 'Wine Bar', 'Caf\u00e9'],
+    bestFor: ['Restaurant', 'Wine Bar', 'Café'],
     rents: { 2021: 65, 2022: 72, 2023: 80, 2024: 88, 2025: 92 },
     vacancy: { 2021: 9.0, 2022: 7.2, 2023: 5.8, 2024: 4.5, 2025: 4.0 },
     leaseYears: 10, keyMoney: 120000, businessRates: 38000,
@@ -98,7 +98,7 @@ const londonAreas = [
   },
   {
     name: 'Fitzrovia', postcode: 'W1T',
-    bestFor: ['Restaurant', 'Cocktail Bar', 'All-day Caf\u00e9'],
+    bestFor: ['Restaurant', 'Cocktail Bar', 'All-day Café'],
     rents: { 2021: 58, 2022: 65, 2023: 74, 2024: 82, 2025: 88 },
     vacancy: { 2021: 10.5, 2022: 8.0, 2023: 6.0, 2024: 4.8, 2025: 4.2 },
     leaseYears: 10, keyMoney: 100000, businessRates: 35000,
@@ -106,7 +106,7 @@ const londonAreas = [
   },
   {
     name: "King's Cross", postcode: 'N1C',
-    bestFor: ['Restaurant', 'All-day Caf\u00e9', 'Pub'],
+    bestFor: ['Restaurant', 'All-day Café', 'Pub'],
     rents: { 2021: 48, 2022: 55, 2023: 65, 2024: 72, 2025: 78 },
     vacancy: { 2021: 7.5, 2022: 5.5, 2023: 4.0, 2024: 3.2, 2025: 2.8 },
     leaseYears: 10, keyMoney: 90000, businessRates: 32000,
@@ -138,7 +138,7 @@ const londonAreas = [
   },
   {
     name: 'Hackney', postcode: 'E8/E9',
-    bestFor: ['Caf\u00e9', 'Cocktail Bar', 'Pub'],
+    bestFor: ['Café', 'Cocktail Bar', 'Pub'],
     rents: { 2021: 32, 2022: 38, 2023: 44, 2024: 50, 2025: 55 },
     vacancy: { 2021: 7.5, 2022: 5.8, 2023: 4.2, 2024: 3.5, 2025: 3.0 },
     leaseYears: 5, keyMoney: 50000, businessRates: 20000,
@@ -154,7 +154,7 @@ const londonAreas = [
   },
   {
     name: 'Peckham', postcode: 'SE15',
-    bestFor: ['Rooftop Bar', 'Caf\u00e9', 'Street Food'],
+    bestFor: ['Rooftop Bar', 'Café', 'Street Food'],
     rents: { 2021: 22, 2022: 26, 2023: 32, 2024: 38, 2025: 42 },
     vacancy: { 2021: 10.0, 2022: 7.5, 2023: 5.5, 2024: 4.0, 2025: 3.5 },
     leaseYears: 5, keyMoney: 25000, businessRates: 14000,
@@ -170,7 +170,7 @@ const londonAreas = [
   },
   {
     name: 'Battersea', postcode: 'SW11',
-    bestFor: ['Restaurant', 'All-day Caf\u00e9', 'Wine Bar'],
+    bestFor: ['Restaurant', 'All-day Café', 'Wine Bar'],
     rents: { 2021: 35, 2022: 40, 2023: 48, 2024: 55, 2025: 60 },
     vacancy: { 2021: 8.0, 2022: 6.0, 2023: 4.5, 2024: 3.5, 2025: 3.0 },
     leaseYears: 10, keyMoney: 70000, businessRates: 24000,
@@ -202,7 +202,7 @@ const londonAreas = [
   },
   {
     name: 'Canary Wharf', postcode: 'E14',
-    bestFor: ['Restaurant', 'Wine Bar', 'All-day Caf\u00e9'],
+    bestFor: ['Restaurant', 'Wine Bar', 'All-day Café'],
     rents: { 2021: 55, 2022: 50, 2023: 45, 2024: 42, 2025: 44 },
     vacancy: { 2021: 18.0, 2022: 15.5, 2023: 13.0, 2024: 11.5, 2025: 10.0 },
     leaseYears: 15, keyMoney: 60000, businessRates: 32000,
@@ -210,7 +210,7 @@ const londonAreas = [
   },
   {
     name: 'Stratford', postcode: 'E15/E20',
-    bestFor: ['Restaurant', 'Pub', 'All-day Caf\u00e9'],
+    bestFor: ['Restaurant', 'Pub', 'All-day Café'],
     rents: { 2021: 30, 2022: 34, 2023: 38, 2024: 42, 2025: 45 },
     vacancy: { 2021: 12.0, 2022: 9.5, 2023: 7.5, 2024: 6.0, 2025: 5.0 },
     leaseYears: 10, keyMoney: 40000, businessRates: 18000,
@@ -218,7 +218,7 @@ const londonAreas = [
   },
   {
     name: 'Whitechapel', postcode: 'E1',
-    bestFor: ['Caf\u00e9', 'Restaurant', 'Bar'],
+    bestFor: ['Café', 'Restaurant', 'Bar'],
     rents: { 2021: 28, 2022: 32, 2023: 38, 2024: 44, 2025: 50 },
     vacancy: { 2021: 10.5, 2022: 8.0, 2023: 6.0, 2024: 4.5, 2025: 3.8 },
     leaseYears: 5, keyMoney: 35000, businessRates: 16000,
@@ -226,7 +226,7 @@ const londonAreas = [
   },
   {
     name: 'Borough / London Bridge', postcode: 'SE1',
-    bestFor: ['Restaurant', 'Wine Bar', 'All-day Caf\u00e9'],
+    bestFor: ['Restaurant', 'Wine Bar', 'All-day Café'],
     rents: { 2021: 55, 2022: 62, 2023: 72, 2024: 80, 2025: 88 },
     vacancy: { 2021: 11.0, 2022: 8.5, 2023: 6.0, 2024: 4.5, 2025: 3.8 },
     leaseYears: 10, keyMoney: 110000, businessRates: 36000,
@@ -234,7 +234,7 @@ const londonAreas = [
   },
   {
     name: 'Victoria', postcode: 'SW1',
-    bestFor: ['Restaurant', 'All-day Caf\u00e9', 'Pub'],
+    bestFor: ['Restaurant', 'All-day Café', 'Pub'],
     rents: { 2021: 70, 2022: 78, 2023: 86, 2024: 92, 2025: 95 },
     vacancy: { 2021: 13.0, 2022: 10.0, 2023: 7.5, 2024: 5.5, 2025: 4.5 },
     leaseYears: 10, keyMoney: 130000, businessRates: 42000,
@@ -274,7 +274,7 @@ const londonAreas = [
   },
   {
     name: 'Tooting', postcode: 'SW17',
-    bestFor: ['Caf\u00e9', 'Street Food', 'Pub'],
+    bestFor: ['Café', 'Street Food', 'Pub'],
     rents: { 2021: 22, 2022: 26, 2023: 30, 2024: 34, 2025: 38 },
     vacancy: { 2021: 7.5, 2022: 6.0, 2023: 5.0, 2024: 4.2, 2025: 3.8 },
     leaseYears: 5, keyMoney: 20000, businessRates: 12000,
@@ -282,7 +282,7 @@ const londonAreas = [
   },
   {
     name: 'Elephant & Castle', postcode: 'SE1/SE17',
-    bestFor: ['Caf\u00e9', 'Restaurant', 'Bar'],
+    bestFor: ['Café', 'Restaurant', 'Bar'],
     rents: { 2021: 25, 2022: 30, 2023: 36, 2024: 42, 2025: 48 },
     vacancy: { 2021: 14.0, 2022: 11.0, 2023: 8.0, 2024: 6.0, 2025: 4.5 },
     leaseYears: 10, keyMoney: 30000, businessRates: 15000,
@@ -302,7 +302,7 @@ const competitorData = {
     totalVenues: 180, bars: 70, restaurants: 75, cafes: 35,
     avgRating: 4.0, saturation: 'competitive',
     notable: ['Lyle\'s', 'Brat', 'Callooh Callay', 'Happiness Forgets', 'The Clove Club'],
-    gaps: ['Lots of pubs but few premium wine bars', 'No high-end Japanese omakase', 'Craft cocktail heavy \u2014 opportunity for natural wine / low-intervention focus'],
+    gaps: ['Lots of pubs but few premium wine bars', 'No high-end Japanese omakase', 'Craft cocktail heavy — opportunity for natural wine / low-intervention focus'],
   },
   'Soho': {
     totalVenues: 310, bars: 120, restaurants: 150, cafes: 40,
@@ -314,13 +314,13 @@ const competitorData = {
     totalVenues: 250, bars: 80, restaurants: 130, cafes: 40,
     avgRating: 4.0, saturation: 'oversaturated',
     notable: ['Frenchie', 'Clos Maggiore', 'Balthazar', 'Rules', 'Sager + Wilde'],
-    gaps: ['Tourist-heavy \u2014 opportunity for locals-focused concept', 'No mezcal-focused bar', 'Growing residential but underserved commercially after theatre hours'],
+    gaps: ['Tourist-heavy — opportunity for locals-focused concept', 'No mezcal-focused bar', 'Growing residential but underserved commercially after theatre hours'],
   },
   'Mayfair': {
     totalVenues: 120, bars: 35, restaurants: 65, cafes: 20,
     avgRating: 4.3, saturation: 'competitive',
     notable: ['Connaught Bar', 'Scott\'s', 'Sexy Fish', 'The Wolseley', 'Claridge\'s Bar'],
-    gaps: ['No high-end cocktail bar below \u00a320 per drink', 'No natural wine bar in the area', 'High barrier to entry \u2014 premium only viable'],
+    gaps: ['No high-end cocktail bar below £20 per drink', 'No natural wine bar in the area', 'High barrier to entry — premium only viable'],
   },
   'Marylebone': {
     totalVenues: 95, bars: 25, restaurants: 50, cafes: 20,
@@ -331,7 +331,7 @@ const competitorData = {
   'Fitzrovia': {
     totalVenues: 110, bars: 35, restaurants: 55, cafes: 20,
     avgRating: 4.1, saturation: 'competitive',
-    notable: ['The Fitzroy', 'Purl', 'Hakkasan', 'Roka', 'Riding House Caf\u00e9'],
+    notable: ['The Fitzroy', 'Purl', 'Hakkasan', 'Roka', 'Riding House Café'],
     gaps: ['No brunch spot with full bar licence', 'Gap for a premium spirits-forward bar', 'Growing residential but underserved after 10pm'],
   },
   "King's Cross": {
@@ -349,14 +349,14 @@ const competitorData = {
   'Bermondsey': {
     totalVenues: 65, bars: 20, restaurants: 30, cafes: 15,
     avgRating: 4.2, saturation: 'opportunity',
-    notable: ['Jos\u00e9 Tapas Bar', 'Bermondsey Arts Club', 'The Garrison', '40 Maltby Street', 'Antico'],
-    gaps: ['No high-end cocktail bar', 'Wine bars concentrated on Bermondsey Street \u2014 gap on south side', 'Growing residential from Bermondsey Spa developments'],
+    notable: ['José Tapas Bar', 'Bermondsey Arts Club', 'The Garrison', '40 Maltby Street', 'Antico'],
+    gaps: ['No high-end cocktail bar', 'Wine bars concentrated on Bermondsey Street — gap on south side', 'Growing residential from Bermondsey Spa developments'],
   },
   'Brixton': {
     totalVenues: 70, bars: 25, restaurants: 30, cafes: 15,
     avgRating: 4.0, saturation: 'competitive',
     notable: ['Shrub & Shutter', 'Casa Morita', 'Salon Brixton', 'Franco Manca', 'Brixton Village venues'],
-    gaps: ['Lots of pubs but no craft cocktail offering', 'Street food dominant \u2014 gap for sit-down fine dining', 'No premium wine bar'],
+    gaps: ['Lots of pubs but no craft cocktail offering', 'Street food dominant — gap for sit-down fine dining', 'No premium wine bar'],
   },
   'Hackney': {
     totalVenues: 130, bars: 45, restaurants: 55, cafes: 30,
@@ -373,13 +373,13 @@ const competitorData = {
   'Peckham': {
     totalVenues: 60, bars: 20, restaurants: 25, cafes: 15,
     avgRating: 4.2, saturation: 'opportunity',
-    notable: ['Forza Wine', 'Mr Bao', 'Coal Rooms', 'Frank\'s Caf\u00e9', 'Peckham Bazaar'],
+    notable: ['Forza Wine', 'Mr Bao', 'Coal Rooms', 'Frank\'s Café', 'Peckham Bazaar'],
     gaps: ['No high-end cocktail bar', 'No natural wine bar despite creative demographic', 'Growing residential but underserved commercially for quality dining'],
   },
   'Clapham': {
     totalVenues: 110, bars: 40, restaurants: 45, cafes: 25,
     avgRating: 4.0, saturation: 'competitive',
-    notable: ['The Dairy (closed \u2014 gap)', 'Aqua Shard pop-up', 'The Abbeville', 'Venn Street Records', 'Bistro Union'],
+    notable: ['The Dairy (closed — gap)', 'Aqua Shard pop-up', 'The Abbeville', 'Venn Street Records', 'Bistro Union'],
     gaps: ['No high-end cocktail bar on the High Street', 'Brunch-heavy but no premium dinner destination', 'Gap for a members-style neighbourhood bar'],
   },
   'Battersea': {
@@ -392,13 +392,13 @@ const competitorData = {
     totalVenues: 95, bars: 30, restaurants: 45, cafes: 20,
     avgRating: 4.2, saturation: 'competitive',
     notable: ['The Fat Bear', 'Mazi', 'Granger & Co', 'The Churchill Arms', 'The Ledbury'],
-    gaps: ['No mezcal or agave-focused bar', 'Tourist-facing \u2014 opportunity for locals-only concept', 'No late-night cocktail bar'],
+    gaps: ['No mezcal or agave-focused bar', 'Tourist-facing — opportunity for locals-only concept', 'No late-night cocktail bar'],
   },
   'Camden': {
     totalVenues: 120, bars: 45, restaurants: 45, cafes: 30,
     avgRating: 3.9, saturation: 'competitive',
-    notable: ['The Jazz Caf\u00e9', 'Chin Chin Labs', 'The Hawley Arms', 'Shaka Zulu', 'Q Grill'],
-    gaps: ['Live music heavy but no premium cocktail bar', 'No natural wine bar', 'Tourist footfall high but avg spend low \u2014 premium positioning risky'],
+    notable: ['The Jazz Café', 'Chin Chin Labs', 'The Hawley Arms', 'Shaka Zulu', 'Q Grill'],
+    gaps: ['Live music heavy but no premium cocktail bar', 'No natural wine bar', 'Tourist footfall high but avg spend low — premium positioning risky'],
   },
   'Islington': {
     totalVenues: 130, bars: 40, restaurants: 60, cafes: 30,
@@ -410,18 +410,18 @@ const competitorData = {
     totalVenues: 55, bars: 15, restaurants: 30, cafes: 10,
     avgRating: 3.8, saturation: 'opportunity',
     notable: ['Plateau', 'Roka', 'Boisdale', 'Hawksmoor', 'The Ivy in the Park'],
-    gaps: ['No craft cocktail bar at all', 'No natural wine bar', 'Chains dominate \u2014 huge gap for quality independent operator'],
+    gaps: ['No craft cocktail bar at all', 'No natural wine bar', 'Chains dominate — huge gap for quality independent operator'],
   },
   'Stratford': {
     totalVenues: 50, bars: 12, restaurants: 25, cafes: 13,
     avgRating: 3.9, saturation: 'opportunity',
     notable: ['Westfield venues', 'The Cow', 'Crate Brewery', 'Randy\'s Wing Bar', 'The Breakfast Club'],
-    gaps: ['No high-end cocktail bar despite Westfield footfall', 'No natural wine bar', 'Chains dominate \u2014 massive gap for quality independent dining'],
+    gaps: ['No high-end cocktail bar despite Westfield footfall', 'No natural wine bar', 'Chains dominate — massive gap for quality independent dining'],
   },
   'Whitechapel': {
     totalVenues: 70, bars: 22, restaurants: 35, cafes: 13,
     avgRating: 4.0, saturation: 'opportunity',
-    notable: ['Gunpowder', 'Tayyabs', 'The Whitechapel Gallery Dining Room', 'Satan\'s Whiskers', 'Cafe Spice Namast\u00e9'],
+    notable: ['Gunpowder', 'Tayyabs', 'The Whitechapel Gallery Dining Room', 'Satan\'s Whiskers', 'Cafe Spice Namasté'],
     gaps: ['No premium wine bar', 'No brunch spot with full bar licence', 'Growing residential but underserved commercially for quality cocktails'],
   },
   'Borough / London Bridge': {
@@ -445,8 +445,8 @@ const competitorData = {
   'Fulham': {
     totalVenues: 80, bars: 25, restaurants: 38, cafes: 17,
     avgRating: 4.0, saturation: 'competitive',
-    notable: ['The River Caf\u00e9', 'The Harwood Arms', 'The Sands End', 'Megan\'s', 'The Tommy Tucker'],
-    gaps: ['No craft cocktail bar on Fulham Road', 'No natural wine bar', 'Pub-heavy \u2014 gap for premium spirits-forward bar'],
+    notable: ['The River Café', 'The Harwood Arms', 'The Sands End', 'Megan\'s', 'The Tommy Tucker'],
+    gaps: ['No craft cocktail bar on Fulham Road', 'No natural wine bar', 'Pub-heavy — gap for premium spirits-forward bar'],
   },
   "Shepherd's Bush": {
     totalVenues: 60, bars: 18, restaurants: 28, cafes: 14,
@@ -458,7 +458,7 @@ const competitorData = {
     totalVenues: 55, bars: 18, restaurants: 25, cafes: 12,
     avgRating: 4.0, saturation: 'opportunity',
     notable: ['The Exhibit', 'Foxlow', 'The Bedford', 'Harrison\'s', 'Balham Bowls Club'],
-    gaps: ['No craft cocktail bar', 'No natural wine bar despite affluent demographic', 'Pub-dominated \u2014 huge gap for quality drinking'],
+    gaps: ['No craft cocktail bar', 'No natural wine bar despite affluent demographic', 'Pub-dominated — huge gap for quality drinking'],
   },
   'Tooting': {
     totalVenues: 40, bars: 10, restaurants: 22, cafes: 8,
@@ -470,8 +470,447 @@ const competitorData = {
     totalVenues: 35, bars: 10, restaurants: 18, cafes: 7,
     avgRating: 3.8, saturation: 'opportunity',
     notable: ['Mercato Metropolitano', 'The Elephant & Castle pub', 'Sticks\'n\'Sushi', 'Castle Square venues', 'Palaces & Pints'],
-    gaps: ['No high-end cocktail bar despite massive regeneration', 'No natural wine bar', 'Growing residential from Elephant Park \u2014 massive first-mover advantage'],
+    gaps: ['No high-end cocktail bar despite massive regeneration', 'No natural wine bar', 'Growing residential from Elephant Park — massive first-mover advantage'],
   },
+}
+
+// Staffing models by venue type and size bracket
+const VENUE_TYPES = ['Cocktail Bar', 'Wine Bar', 'Gastropub', 'Restaurant', 'Caf\u00e9']
+
+const staffingModels = {
+  'Cocktail Bar': {
+    perShift: (sqft) => {
+      if (sqft <= 600) return { bartenders: 1, barbacks: 1, hosts: 0, floor: 0, kitchen: 0, senior: 1, label: 'Intimate bar' }
+      if (sqft <= 1200) return { bartenders: 2, barbacks: 1, hosts: 1, floor: 0, kitchen: 0, senior: 1, label: 'Standard bar' }
+      if (sqft <= 2500) return { bartenders: 3, barbacks: 2, hosts: 1, floor: 1, kitchen: 0, senior: 1, label: 'Large bar' }
+      return { bartenders: 5, barbacks: 3, hosts: 2, floor: 2, kitchen: 0, senior: 2, label: 'Flagship' }
+    },
+    shiftsPerDay: 2, revPerSqft: 650,
+  },
+  'Wine Bar': {
+    perShift: (sqft) => {
+      if (sqft <= 600) return { bartenders: 1, barbacks: 0, hosts: 0, floor: 1, kitchen: 0, senior: 1, label: 'Intimate wine bar' }
+      if (sqft <= 1200) return { bartenders: 1, barbacks: 1, hosts: 1, floor: 1, kitchen: 1, senior: 1, label: 'Standard wine bar' }
+      if (sqft <= 2500) return { bartenders: 2, barbacks: 1, hosts: 1, floor: 2, kitchen: 1, senior: 1, label: 'Large wine bar' }
+      return { bartenders: 3, barbacks: 2, hosts: 2, floor: 3, kitchen: 2, senior: 2, label: 'Flagship' }
+    },
+    shiftsPerDay: 2, revPerSqft: 550,
+  },
+  'Gastropub': {
+    perShift: (sqft) => {
+      if (sqft <= 1000) return { bartenders: 1, barbacks: 1, hosts: 0, floor: 1, kitchen: 2, senior: 1, label: 'Small gastropub' }
+      if (sqft <= 2000) return { bartenders: 2, barbacks: 1, hosts: 1, floor: 2, kitchen: 3, senior: 1, label: 'Mid-size gastropub' }
+      if (sqft <= 3500) return { bartenders: 2, barbacks: 2, hosts: 1, floor: 3, kitchen: 4, senior: 2, label: 'Large gastropub' }
+      return { bartenders: 3, barbacks: 2, hosts: 2, floor: 4, kitchen: 5, senior: 2, label: 'Flagship' }
+    },
+    shiftsPerDay: 2, revPerSqft: 480,
+  },
+  'Restaurant': {
+    perShift: (sqft) => {
+      if (sqft <= 800) return { bartenders: 0, barbacks: 0, hosts: 1, floor: 2, kitchen: 3, senior: 1, label: 'Small restaurant' }
+      if (sqft <= 1800) return { bartenders: 1, barbacks: 0, hosts: 1, floor: 3, kitchen: 4, senior: 1, label: 'Mid-size restaurant' }
+      if (sqft <= 3500) return { bartenders: 1, barbacks: 1, hosts: 2, floor: 4, kitchen: 5, senior: 2, label: 'Large restaurant' }
+      return { bartenders: 2, barbacks: 1, hosts: 2, floor: 6, kitchen: 7, senior: 3, label: 'Flagship' }
+    },
+    shiftsPerDay: 2, revPerSqft: 520,
+  },
+  'Caf\u00e9': {
+    perShift: (sqft) => {
+      if (sqft <= 500) return { bartenders: 0, barbacks: 0, hosts: 0, floor: 1, kitchen: 1, senior: 1, label: 'Small caf\u00e9' }
+      if (sqft <= 1200) return { bartenders: 0, barbacks: 0, hosts: 1, floor: 2, kitchen: 2, senior: 1, label: 'Mid-size caf\u00e9' }
+      if (sqft <= 2500) return { bartenders: 0, barbacks: 1, hosts: 1, floor: 3, kitchen: 3, senior: 1, label: 'Large caf\u00e9' }
+      return { bartenders: 1, barbacks: 1, hosts: 2, floor: 4, kitchen: 4, senior: 2, label: 'Flagship' }
+    },
+    shiftsPerDay: 1.5, revPerSqft: 380,
+  },
+}
+
+const HOURLY_RATE_STAFF = 13.15 // London Living Wage
+const HOURLY_RATE_SENIOR = 16.50 // Senior staff rate
+const SHIFT_HOURS = 8
+
+// Detailed competitor venues for each area (10-15 per area)
+const detailedVenues = {
+  'City of London': [
+    { name: 'The Ned', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Hawksmoor Guildhall', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Duck & Waffle', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Sushi Samba', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: "Coq d'Argent", type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Anthologist', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Merchants Tavern', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Counting House', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Humble Grape', type: 'Wine Bar', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'City Social', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Sweetings', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'The Fable', type: 'Cocktail Bar', rating: 3.9, price: '\u00a3\u00a3' },
+  ],
+  'Shoreditch': [
+    { name: "Lyle's", type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Brat', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Callooh Callay', type: 'Cocktail Bar', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Happiness Forgets', type: 'Cocktail Bar', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'The Clove Club', type: 'Restaurant', rating: 4.6, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Dishoom Shoreditch', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Nightjar', type: 'Cocktail Bar', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Hoxton Hotel Bar', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Beigel Bake', type: 'Caf\u00e9', rating: 4.3, price: '\u00a3' },
+    { name: 'Smoking Goat', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'The Boundary', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Bad Sports', type: 'Cocktail Bar', rating: 4.1, price: '\u00a3\u00a3' },
+  ],
+  'Soho': [
+    { name: 'Bar Termini', type: 'Cocktail Bar', rating: 4.5, price: '\u00a3\u00a3' },
+    { name: 'Quo Vadis', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Andrew Edmunds', type: 'Wine Bar', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'Swift', type: 'Cocktail Bar', rating: 4.5, price: '\u00a3\u00a3' },
+    { name: 'Barrafina', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Basement Sate', type: 'Cocktail Bar', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Bocca di Lupo', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Dean Street Townhouse', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Ducksoup', type: 'Wine Bar', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'The French House', type: 'Pub', rating: 4.2, price: '\u00a3' },
+    { name: 'Milk & Honey', type: 'Cocktail Bar', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Kiln', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Ronnie Scott\'s', type: 'Live Music Bar', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Covent Garden': [
+    { name: 'Frenchie', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Clos Maggiore', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Balthazar', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Rules', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Sager + Wilde', type: 'Wine Bar', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Ivy', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Flat Iron', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Oystermen', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'The Lamb & Flag', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Dishoom Covent Garden', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'MNKY HSE', type: 'Cocktail Bar', rating: 3.9, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Mayfair': [
+    { name: 'Connaught Bar', type: 'Cocktail Bar', rating: 4.7, price: '\u00a3\u00a3\u00a3' },
+    { name: "Scott's", type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Sexy Fish', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Wolseley', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: "Claridge's Bar", type: 'Cocktail Bar', rating: 4.6, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Gymkhana', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Beaumont Bar', type: 'Cocktail Bar', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Sketch', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Guinea Grill', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Nobu', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Hide', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Marylebone': [
+    { name: 'The Chiltern Firehouse', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: "Fischer's", type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Trishna', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Daylesford Organic', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Lurra', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Barley Mow', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Orrery', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Wigmore', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Pachamama', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Monocle Caf\u00e9', type: 'Caf\u00e9', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Carousel', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Fitzrovia': [
+    { name: 'The Fitzroy', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Purl', type: 'Cocktail Bar', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Hakkasan', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Roka', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Riding House Caf\u00e9', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Berners Tavern', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Dalloway Terrace', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Newman Arms', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Lima Fitzrovia', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Honey & Co', type: 'Caf\u00e9', rating: 4.4, price: '\u00a3\u00a3' },
+  ],
+  "King's Cross": [
+    { name: 'German Gymnasium', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Dishoom', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'The Gilbert Scott', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Barrafina KX', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Vermuteria', type: 'Wine Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Lighterman', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Caravan King\'s Cross', type: 'Caf\u00e9', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Granary Square Brasserie', type: 'Restaurant', rating: 3.9, price: '\u00a3\u00a3' },
+    { name: 'Coal Drops Yard venues', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Parcel Yard', type: 'Pub', rating: 4.0, price: '\u00a3' },
+  ],
+  'Clerkenwell': [
+    { name: 'The Quality Chop House', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'St. John', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Sushi Tetsu', type: 'Restaurant', rating: 4.7, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Eagle', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Granger & Co', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Modern Pantry', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Moro', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'The Well', type: 'Gastropub', rating: 3.9, price: '\u00a3\u00a3' },
+    { name: 'Exmouth Market vendors', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'Luca', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Fox & Anchor', type: 'Pub', rating: 4.1, price: '\u00a3' },
+  ],
+  'Bermondsey': [
+    { name: 'Jos\u00e9 Tapas Bar', type: 'Wine Bar', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'Bermondsey Arts Club', type: 'Cocktail Bar', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'The Garrison', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: '40 Maltby Street', type: 'Wine Bar', rating: 4.5, price: '\u00a3\u00a3' },
+    { name: 'Antico', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Cask Pub & Kitchen', type: 'Pub', rating: 4.2, price: '\u00a3' },
+    { name: 'The Woolpack', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'Pizarro', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Maltby Street Market', type: 'Caf\u00e9', rating: 4.3, price: '\u00a3' },
+    { name: 'Bermondsey Larder', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+  ],
+  'Brixton': [
+    { name: 'Shrub & Shutter', type: 'Cocktail Bar', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Casa Morita', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Salon Brixton', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Franco Manca', type: 'Restaurant', rating: 4.1, price: '\u00a3' },
+    { name: 'Brixton Village venues', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'The Prince of Wales', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Craft Brixton', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Kaosarn', type: 'Restaurant', rating: 4.3, price: '\u00a3' },
+    { name: 'The Effra', type: 'Pub', rating: 3.8, price: '\u00a3' },
+    { name: 'Amorino', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'Market Row venues', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+  ],
+  'Hackney': [
+    { name: 'Bright', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'P. Franco', type: 'Wine Bar', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'Pidgin', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Three Crowns', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Well Street Kitchen', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3' },
+    { name: 'Silo', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Cornerstone', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Spurstowe Arms', type: 'Pub', rating: 4.1, price: '\u00a3' },
+    { name: 'Mare Street Market', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'E5 Bakehouse', type: 'Caf\u00e9', rating: 4.3, price: '\u00a3' },
+    { name: 'Marksman', type: 'Gastropub', rating: 4.3, price: '\u00a3\u00a3' },
+  ],
+  'Dalston': [
+    { name: 'Three Sheets', type: 'Cocktail Bar', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'Brilliant Corners', type: 'Wine Bar', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Mangal 2', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'The Dalston Superstore', type: 'Cocktail Bar', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: "Voodoo Ray's", type: 'Restaurant', rating: 4.0, price: '\u00a3' },
+    { name: 'The Shacklewell Arms', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Angelina', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Ridley Road Market Bar', type: 'Cocktail Bar', rating: 3.9, price: '\u00a3' },
+    { name: 'The Jazz Bar Dalston', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Pamban', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+  ],
+  'Peckham': [
+    { name: 'Forza Wine', type: 'Wine Bar', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'Mr Bao', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Coal Rooms', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: "Frank's Caf\u00e9", type: 'Cocktail Bar', rating: 4.1, price: '\u00a3' },
+    { name: 'Peckham Bazaar', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'The Beehive', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Levan', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Kanvan', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'Rye Lane vendors', type: 'Caf\u00e9', rating: 3.9, price: '\u00a3' },
+    { name: 'The Montpelier', type: 'Pub', rating: 4.1, price: '\u00a3' },
+    { name: 'Kudu', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Clapham': [
+    { name: 'The Abbeville', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Venn Street Records', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Bistro Union', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'The Manor', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Aqua Shard pop-up', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Windmill', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Tsunami Clapham', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Goods Way', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'The Prince of Wales', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'Ben\'s Canteen', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Trinity', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Battersea': [
+    { name: 'Augustine Kitchen', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Fox & Hounds', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Bunga Bunga', type: 'Cocktail Bar', rating: 3.9, price: '\u00a3\u00a3' },
+    { name: 'Wright Brothers', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Power Station restaurants', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Latchmere', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Dynamo', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3' },
+    { name: 'Cinnamon Kitchen', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Hive', type: 'Pub', rating: 3.8, price: '\u00a3' },
+    { name: 'Fiume', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Notting Hill': [
+    { name: 'The Fat Bear', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Mazi', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Granger & Co', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Churchill Arms', type: 'Pub', rating: 4.3, price: '\u00a3' },
+    { name: 'The Ledbury', type: 'Restaurant', rating: 4.7, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Farmacy', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Elgin', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Pomona\'s', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Distillery', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Core by Clare Smyth', type: 'Restaurant', rating: 4.6, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Portobello Market vendors', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+  ],
+  'Camden': [
+    { name: 'The Jazz Caf\u00e9', type: 'Live Music Bar', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Chin Chin Labs', type: 'Caf\u00e9', rating: 4.3, price: '\u00a3' },
+    { name: 'The Hawley Arms', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Shaka Zulu', type: 'Restaurant', rating: 3.8, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Q Grill', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Lock Tavern', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'York & Albany', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Edinboro Castle', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Stables Market vendors', type: 'Caf\u00e9', rating: 3.9, price: '\u00a3' },
+    { name: 'Camden Market Bar', type: 'Cocktail Bar', rating: 3.8, price: '\u00a3' },
+    { name: 'Greenberry Caf\u00e9', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3\u00a3' },
+  ],
+  'Islington': [
+    { name: 'Ottolenghi', type: 'Caf\u00e9', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'The Pig and Butcher', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Trullo', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: '69 Colebrooke Row', type: 'Cocktail Bar', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Smokehouse', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'The Drapers Arms', type: 'Gastropub', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'Oldroyd', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'The Duke of Cambridge', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Plaquemine Lock', type: 'Cocktail Bar', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Westerns Laundry', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Albion', type: 'Pub', rating: 4.0, price: '\u00a3' },
+  ],
+  'Canary Wharf': [
+    { name: 'Plateau', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Roka', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Boisdale', type: 'Wine Bar', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Hawksmoor', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Ivy in the Park', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Amerigo Vespucci', type: 'Restaurant', rating: 3.9, price: '\u00a3\u00a3' },
+    { name: 'The Narrow', type: 'Gastropub', rating: 3.8, price: '\u00a3\u00a3' },
+    { name: 'The Gun', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Chai Ki', type: 'Restaurant', rating: 3.9, price: '\u00a3\u00a3' },
+    { name: 'Wahaca Canary Wharf', type: 'Restaurant', rating: 3.8, price: '\u00a3' },
+  ],
+  'Stratford': [
+    { name: 'Crate Brewery', type: 'Pub', rating: 4.2, price: '\u00a3' },
+    { name: 'Randy\'s Wing Bar', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Breakfast Club', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'The Cow', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'Westfield chain restaurants', type: 'Restaurant', rating: 3.7, price: '\u00a3\u00a3' },
+    { name: 'Bao Stratford', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'The Plough', type: 'Pub', rating: 3.8, price: '\u00a3' },
+    { name: 'Counter Caf\u00e9', type: 'Caf\u00e9', rating: 4.3, price: '\u00a3' },
+    { name: 'The King Eddie', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'Moka East', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+  ],
+  'Whitechapel': [
+    { name: 'Gunpowder', type: 'Restaurant', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'Tayyabs', type: 'Restaurant', rating: 4.3, price: '\u00a3' },
+    { name: 'The Whitechapel Gallery Dining Room', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: "Satan's Whiskers", type: 'Cocktail Bar', rating: 4.4, price: '\u00a3\u00a3' },
+    { name: 'Caf\u00e9 Spice Namast\u00e9', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'The Blind Beggar', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'Lahore Kebab House', type: 'Restaurant', rating: 4.2, price: '\u00a3' },
+    { name: 'The Culpeper', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Indo', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'E Pellicci', type: 'Caf\u00e9', rating: 4.5, price: '\u00a3' },
+  ],
+  'Borough / London Bridge': [
+    { name: 'Padella', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3' },
+    { name: 'The Anchor Bankside', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Roast', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Londrino', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Flat Iron', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Borough Market vendors', type: 'Caf\u00e9', rating: 4.4, price: '\u00a3' },
+    { name: 'The Wheatsheaf', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Arabica Bar & Kitchen', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Tanner & Co', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Elliot\'s', type: 'Wine Bar', rating: 4.3, price: '\u00a3\u00a3' },
+    { name: 'The Table Caf\u00e9', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3' },
+  ],
+  'Victoria': [
+    { name: 'The Cinnamon Club', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Tozi', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Other Naughty Piglet', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Bbar', type: 'Cocktail Bar', rating: 3.9, price: '\u00a3\u00a3' },
+    { name: 'Nova Victoria venues', type: 'Restaurant', rating: 3.8, price: '\u00a3\u00a3' },
+    { name: 'The Thomas Cubitt', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Aster', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Rail House Caf\u00e9', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Jugged Hare', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Albert', type: 'Pub', rating: 4.0, price: '\u00a3' },
+  ],
+  'Chelsea': [
+    { name: 'The Ivy Chelsea Garden', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Bluebird', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Colbert', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Builders Arms', type: 'Pub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Cadogan Arms', type: 'Gastropub', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Medlar', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Pig\'s Ear', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Phene', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Rabbit', type: 'Restaurant', rating: 4.2, price: '\u00a3\u00a3\u00a3' },
+    { name: 'Tom\'s Kitchen', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Cross Keys', type: 'Pub', rating: 4.0, price: '\u00a3' },
+  ],
+  'Fulham': [
+    { name: 'The River Caf\u00e9', type: 'Restaurant', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Harwood Arms', type: 'Gastropub', rating: 4.5, price: '\u00a3\u00a3\u00a3' },
+    { name: 'The Sands End', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Megan\'s', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'The Tommy Tucker', type: 'Gastropub', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Brown Cow', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'The Atlas', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Manuka Kitchen', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Durrell Arms', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'Koji', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+  ],
+  "Shepherd's Bush": [
+    { name: 'The Defectors Weld', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'The Princess Victoria', type: 'Gastropub', rating: 4.2, price: '\u00a3\u00a3' },
+    { name: 'Bush Hall Dining Rooms', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Bluebird Garage', type: 'Restaurant', rating: 3.9, price: '\u00a3\u00a3' },
+    { name: 'The Oak', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Uxbridge Road eateries', type: 'Restaurant', rating: 3.8, price: '\u00a3' },
+    { name: 'The Sindercombe Social', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'The Westfield food hall', type: 'Caf\u00e9', rating: 3.7, price: '\u00a3\u00a3' },
+    { name: 'Mahalo', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'The Cabin', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3' },
+  ],
+  'Balham': [
+    { name: 'The Exhibit', type: 'Cocktail Bar', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Foxlow', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Bedford', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Harrison\'s', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Balham Bowls Club', type: 'Pub', rating: 4.1, price: '\u00a3' },
+    { name: 'Dynamo', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'The Devonshire', type: 'Gastropub', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Cheese & Chutney', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3' },
+    { name: 'The Avalon', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Lamberts', type: 'Restaurant', rating: 4.3, price: '\u00a3\u00a3\u00a3' },
+  ],
+  'Tooting': [
+    { name: 'Tooting Market venues', type: 'Caf\u00e9', rating: 4.1, price: '\u00a3' },
+    { name: 'The Selkirk', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Graveney Gin', type: 'Cocktail Bar', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'The Castle', type: 'Pub', rating: 3.9, price: '\u00a3' },
+    { name: 'Hare & Tortoise', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Rick\'s Caf\u00e9', type: 'Caf\u00e9', rating: 4.0, price: '\u00a3' },
+    { name: 'The Antelope', type: 'Pub', rating: 4.0, price: '\u00a3' },
+    { name: 'Lahore Karahi', type: 'Restaurant', rating: 4.3, price: '\u00a3' },
+    { name: 'Masal\'e', type: 'Restaurant', rating: 4.1, price: '\u00a3' },
+    { name: 'The Trafalgar Arms', type: 'Pub', rating: 3.8, price: '\u00a3' },
+  ],
+  'Elephant & Castle': [
+    { name: 'Mercato Metropolitano', type: 'Caf\u00e9', rating: 4.2, price: '\u00a3' },
+    { name: 'The Elephant & Castle pub', type: 'Pub', rating: 3.8, price: '\u00a3' },
+    { name: 'Sticks\'n\'Sushi', type: 'Restaurant', rating: 4.1, price: '\u00a3\u00a3' },
+    { name: 'Castle Square venues', type: 'Caf\u00e9', rating: 3.9, price: '\u00a3' },
+    { name: 'Palaces & Pints', type: 'Pub', rating: 3.8, price: '\u00a3' },
+    { name: 'Elephant Springs', type: 'Caf\u00e9', rating: 3.9, price: '\u00a3' },
+    { name: 'Mamuska!', type: 'Restaurant', rating: 4.0, price: '\u00a3' },
+    { name: 'The Albert Arms', type: 'Pub', rating: 3.8, price: '\u00a3' },
+    { name: 'Casa del Gusto', type: 'Restaurant', rating: 4.0, price: '\u00a3\u00a3' },
+    { name: 'Ivory Arch', type: 'Restaurant', rating: 3.9, price: '\u00a3' },
+  ],
 }
 
 // SDLT calculation for commercial leases (UK rates)
@@ -552,10 +991,26 @@ export default function Expansion() {
   const [leaseSize, setLeaseSize] = useState(1000)
   const [leaseLength, setLeaseLength] = useState(5)
   const [fitOutLevel, setFitOutLevel] = useState('medium')
+  const [venueType, setVenueType] = useState('Cocktail Bar')
 
   // Competitor mapping state
   const [competitorSort, setCompetitorSort] = useState('opportunity')
   const [saturationFilter, setSaturationFilter] = useState('all')
+  const [expandedCompetitor, setExpandedCompetitor] = useState(null)
+
+  // Ref for scrolling to top of page
+  const pageTopRef = useRef(null)
+
+  // Handler for "Model this area" from competitor mapping
+  const handleModelArea = (areaName) => {
+    setLeaseArea(areaName)
+    setActiveTab(2)
+    setTimeout(() => {
+      if (pageTopRef.current) {
+        pageTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 50)
+  }
 
   // Lease calculator derived values
   const leaseCalc = useMemo(() => {
@@ -571,15 +1026,39 @@ export default function Expansion() {
     const legalFees = annualRent > 200000 ? 5000 : annualRent > 100000 ? 4000 : 3000
     const keyMoney = area.keyMoney
     const businessRates = area.businessRates
-    const totalYear1 = annualRent + sdlt + legalFees + keyMoney + businessRates + fitOutCost
-    const total5Year = (annualRent * 5) + sdlt + legalFees + keyMoney + (businessRates * 5) + fitOutCost
+
+    // Staffing calculations
+    const model = staffingModels[venueType]
+    const shift = model.perShift(leaseSize)
+    const staffPerShift = shift.bartenders + shift.barbacks + shift.hosts + shift.floor + shift.kitchen
+    const seniorPerShift = shift.senior
+    const totalPerShift = staffPerShift + seniorPerShift
+    const shiftsPerDay = model.shiftsPerDay
+    const weeklyStaffHours = Math.round(totalPerShift * shiftsPerDay * SHIFT_HOURS * 7)
+    const weeklyLabourCost = Math.round(
+      (staffPerShift * shiftsPerDay * SHIFT_HOURS * 7 * HOURLY_RATE_STAFF) +
+      (seniorPerShift * shiftsPerDay * SHIFT_HOURS * 7 * HOURLY_RATE_SENIOR)
+    )
+    const monthlyLabourCost = Math.round(weeklyLabourCost * 4.33)
+    const annualLabourCost = monthlyLabourCost * 12
+    const projectedAnnualRevenue = leaseSize * model.revPerSqft
+    const labourPct = ((annualLabourCost / projectedAnnualRevenue) * 100).toFixed(1)
+    const labourTrafficLight = parseFloat(labourPct) > 35 ? 'red' : parseFloat(labourPct) > 30 ? 'amber' : 'green'
+    const staffing = {
+      shift, staffPerShift, seniorPerShift, totalPerShift, shiftsPerDay,
+      weeklyStaffHours, weeklyLabourCost, monthlyLabourCost, annualLabourCost,
+      projectedAnnualRevenue, labourPct, labourTrafficLight, label: shift.label,
+    }
+
+    const totalYear1 = annualRent + sdlt + legalFees + keyMoney + businessRates + fitOutCost + annualLabourCost
+    const total5Year = (annualRent * 5) + sdlt + legalFees + keyMoney + (businessRates * 5) + fitOutCost + (annualLabourCost * 5)
     const dailyBreakEven = Math.ceil(totalYear1 / 365)
     return {
       area, rentPerSqft, annualRent, quarterlyRent, monthlyRent,
       fitOutCost, sdlt, legalFees, keyMoney, businessRates,
-      totalYear1, total5Year, dailyBreakEven, totalRentOverLease,
+      totalYear1, total5Year, dailyBreakEven, totalRentOverLease, staffing,
     }
-  }, [leaseArea, leaseSize, leaseLength, fitOutLevel])
+  }, [leaseArea, leaseSize, leaseLength, fitOutLevel, venueType])
 
   const costBreakdownData = useMemo(() => [
     { name: 'Annual Rent', value: leaseCalc.annualRent, fill: C.amber },
@@ -674,7 +1153,7 @@ export default function Expansion() {
   const chartColors = [C.amber, C.teal, C.blue, C.green, C.orange, C.red, '#8B5CF6', '#EC4899']
 
   return (
-    <div className="animate-in">
+    <div className="animate-in" ref={pageTopRef}>
       {/* Tab Selector */}
       <div style={{ display: 'flex', gap: 0, marginBottom: 24, borderBottom: `1px solid ${C.border}` }}>
         {TABS.map((tab, i) => (
@@ -714,9 +1193,9 @@ export default function Expansion() {
                   <MapPin size={10} />{s.location} &bull; {s.type}
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 11 }}>
-                  <div><span style={{ color: C.textDim }}>Setup:</span> <span style={{ color: C.ink, fontWeight: 600 }}>{'\u00a3'}{(s.setupCost / 1000).toFixed(0)}k</span></div>
+                  <div><span style={{ color: C.textDim }}>Setup:</span> <span style={{ color: C.ink, fontWeight: 600 }}>{'£'}{(s.setupCost / 1000).toFixed(0)}k</span></div>
                   <div><span style={{ color: C.textDim }}>Break-even:</span> <span style={{ color: C.amber, fontWeight: 600 }}>Month {s.breakEvenMonth}</span></div>
-                  <div><span style={{ color: C.textDim }}>EBITDA:</span> <span style={{ color: C.green, fontWeight: 600 }}>{'\u00a3'}{(s.projectedEbitda / 1000).toFixed(0)}k/mo</span></div>
+                  <div><span style={{ color: C.textDim }}>EBITDA:</span> <span style={{ color: C.green, fontWeight: 600 }}>{'£'}{(s.projectedEbitda / 1000).toFixed(0)}k/mo</span></div>
                   <div><span style={{ color: C.textDim }}>Y2 ROI:</span> <span style={{ color: s.yearTwoROI > 0 ? C.green : C.red, fontWeight: 600 }}>{s.yearTwoROI}%</span></div>
                 </div>
               </div>
@@ -740,9 +1219,9 @@ export default function Expansion() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
                   <XAxis dataKey="month" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} />
-                  <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `\u00a3${(v / 1000).toFixed(0)}k`} />
+                  <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `£${(v / 1000).toFixed(0)}k`} />
                   <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-                    formatter={v => [`\u00a3${v.toLocaleString()}`, '']} />
+                    formatter={v => [`£${v.toLocaleString()}`, '']} />
                   <Area type="monotone" dataKey="revenue" stroke={C.green} strokeWidth={2} fill="url(#expGreen)" name="Revenue" />
                   <Area type="monotone" dataKey="costs" stroke={C.red} strokeWidth={2} fill="url(#expRed)" name="Costs" />
                 </AreaChart>
@@ -756,12 +1235,12 @@ export default function Expansion() {
               <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Financial Model: {scenario.name}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
-                  { label: 'Total Setup Cost', value: `\u00a3${scenario.setupCost.toLocaleString()}`, icon: Building2 },
-                  { label: 'Monthly Rent', value: `\u00a3${scenario.monthlyRent.toLocaleString()}`, icon: PoundSterling },
+                  { label: 'Total Setup Cost', value: `£${scenario.setupCost.toLocaleString()}`, icon: Building2 },
+                  { label: 'Monthly Rent', value: `£${scenario.monthlyRent.toLocaleString()}`, icon: PoundSterling },
                   { label: 'Staff Required', value: `${scenario.staffCount} FTEs`, icon: Calculator },
-                  { label: 'Monthly Labour', value: `\u00a3${scenario.monthlyLabour.toLocaleString()}`, icon: Calculator },
-                  { label: 'Projected Monthly Revenue', value: `\u00a3${scenario.projectedRevenue.toLocaleString()}`, icon: TrendingUp },
-                  { label: 'Projected Monthly EBITDA', value: `\u00a3${scenario.projectedEbitda.toLocaleString()}`, icon: TrendingUp },
+                  { label: 'Monthly Labour', value: `£${scenario.monthlyLabour.toLocaleString()}`, icon: Calculator },
+                  { label: 'Projected Monthly Revenue', value: `£${scenario.projectedRevenue.toLocaleString()}`, icon: TrendingUp },
+                  { label: 'Projected Monthly EBITDA', value: `£${scenario.projectedEbitda.toLocaleString()}`, icon: TrendingUp },
                   { label: 'Year 1 ROI', value: `${scenario.yearOneROI}%`, icon: TrendingUp },
                   { label: 'Year 2 ROI', value: `${scenario.yearTwoROI}%`, icon: TrendingUp },
                 ].map((m, i) => (
@@ -813,10 +1292,10 @@ export default function Expansion() {
           {/* KPI Cards */}
           <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: 24 }}>
             {[
-              { label: 'Avg Commercial Rent', value: `\u00a3${agg.avgRent}/sq ft`, sub: `${selectedYear} average`, color: C.amber },
+              { label: 'Avg Commercial Rent', value: `£${agg.avgRent}/sq ft`, sub: `${selectedYear} average`, color: C.amber },
               { label: 'Avg Vacancy Rate', value: `${agg.avgVacancy}%`, sub: 'across 30 areas', color: parseFloat(agg.avgVacancy) > 8 ? C.red : parseFloat(agg.avgVacancy) > 5 ? C.orange : C.green },
-              { label: 'Cheapest Area', value: agg.cheapest.name, sub: `\u00a3${agg.cheapest.rents[selectedYear]}/sq ft`, color: C.green },
-              { label: 'Most Expensive', value: agg.mostExpensive.name, sub: `\u00a3${agg.mostExpensive.rents[selectedYear]}/sq ft`, color: C.red },
+              { label: 'Cheapest Area', value: agg.cheapest.name, sub: `£${agg.cheapest.rents[selectedYear]}/sq ft`, color: C.green },
+              { label: 'Most Expensive', value: agg.mostExpensive.name, sub: `£${agg.mostExpensive.rents[selectedYear]}/sq ft`, color: C.red },
               { label: 'Fastest Rising (5yr)', value: agg.fastestRising.name, sub: `+${agg.fastestRisingPct}% since 2021`, color: C.orange },
             ].map((kpi, i) => (
               <div key={i} style={{
@@ -865,9 +1344,9 @@ export default function Expansion() {
                 <LineChart data={rentChartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
                   <XAxis dataKey="year" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} />
-                  <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `\u00a3${v}`} />
+                  <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `£${v}`} />
                   <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 11 }}
-                    formatter={(v, name) => [`\u00a3${v}/sq ft`, name]} />
+                    formatter={(v, name) => [`£${v}/sq ft`, name]} />
                   <Legend wrapperStyle={{ fontSize: 10, color: C.textMuted }} />
                   {chartAreas.map((name, i) => (
                     <Line key={name} type="monotone" dataKey={name} stroke={chartColors[i % chartColors.length]}
@@ -949,7 +1428,7 @@ export default function Expansion() {
                   border: `1px solid ${budgetMax === val ? C.green : C.border}`,
                   borderRadius: val === 40 ? '6px 0 0 6px' : val === 200 ? '0 6px 6px 0' : 0,
                   cursor: 'pointer',
-                }}>{'\u00a3'}{val}{val === 200 ? '+' : ''}</button>
+                }}>{'£'}{val}{val === 200 ? '+' : ''}</button>
               ))}
             </div>
             <span style={{ fontSize: 11, color: C.textDim }}>
@@ -969,7 +1448,7 @@ export default function Expansion() {
                 <tr style={{ background: C.bg }}>
                   <SortHeader field="name" label="Area" />
                   <th style={{ padding: '10px 8px', fontSize: 11, fontWeight: 600, color: C.textMuted, borderBottom: `1px solid ${C.border}`, textAlign: 'left' }}>Postcode</th>
-                  <SortHeader field="rent" label={`Rent (\u00a3/sqft) ${selectedYear}`} />
+                  <SortHeader field="rent" label={`Rent (£/sqft) ${selectedYear}`} />
                   <th style={{ padding: '10px 8px', fontSize: 11, fontWeight: 600, color: C.textMuted, borderBottom: `1px solid ${C.border}`, textAlign: 'left' }}>YoY %</th>
                   <SortHeader field="fiveYr" label="5yr Change" />
                   <SortHeader field="vacancy" label="Vacancy %" />
@@ -996,9 +1475,9 @@ export default function Expansion() {
                         </div>
                       </td>
                       <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, color: C.textDim }}>{area.postcode}</td>
-                      <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 12, fontWeight: 600, color: C.ink }}>{'\u00a3'}{metrics.rent}</td>
+                      <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 12, fontWeight: 600, color: C.ink }}>{'£'}{metrics.rent}</td>
                       <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, color: metrics.yoyChange > 0 ? C.orange : C.green }}>
-                        {metrics.yoyChange ? `${metrics.yoyChange > 0 ? '+' : ''}${metrics.yoyChange}%` : '\u2014'}
+                        {metrics.yoyChange ? `${metrics.yoyChange > 0 ? '+' : ''}${metrics.yoyChange}%` : '—'}
                       </td>
                       <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, fontWeight: 600, color: parseFloat(metrics.fiveYearChange) > 50 ? C.red : parseFloat(metrics.fiveYearChange) > 30 ? C.orange : C.green }}>
                         +{metrics.fiveYearChange}%
@@ -1007,8 +1486,8 @@ export default function Expansion() {
                         {metrics.vacancy}%
                       </td>
                       <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, color: C.textMuted }}>{area.leaseYears}yr</td>
-                      <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, color: C.textMuted }}>{'\u00a3'}{(area.keyMoney / 1000).toFixed(0)}k</td>
-                      <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, color: C.textMuted }}>{'\u00a3'}{(area.businessRates / 1000).toFixed(0)}k</td>
+                      <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, color: C.textMuted }}>{'£'}{(area.keyMoney / 1000).toFixed(0)}k</td>
+                      <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}`, fontSize: 11, color: C.textMuted }}>{'£'}{(area.businessRates / 1000).toFixed(0)}k</td>
                       <td style={{ padding: '10px 8px', borderBottom: `1px solid ${C.border}` }}>
                         <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 6px', borderRadius: 4, color: footfallColors[area.footfall], background: footfallColors[area.footfall] + '15', textTransform: 'uppercase' }}>
                           {area.footfall}
@@ -1055,10 +1534,10 @@ export default function Expansion() {
                       <LineChart data={rentHistory}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
                         <XAxis dataKey="year" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} />
-                        <YAxis yAxisId="left" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `\u00a3${v}`} />
+                        <YAxis yAxisId="left" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `£${v}`} />
                         <YAxis yAxisId="right" orientation="right" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `${v}%`} />
                         <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 11 }} />
-                        <Line yAxisId="left" type="monotone" dataKey="rent" stroke={C.amber} strokeWidth={2} name="Rent (\u00a3/sqft)" dot={{ r: 4 }} />
+                        <Line yAxisId="left" type="monotone" dataKey="rent" stroke={C.amber} strokeWidth={2} name="Rent (£/sqft)" dot={{ r: 4 }} />
                         <Line yAxisId="right" type="monotone" dataKey="vacancy" stroke={C.teal} strokeWidth={2} name="Vacancy %" dot={{ r: 4 }} />
                         <Legend wrapperStyle={{ fontSize: 10 }} />
                       </LineChart>
@@ -1068,10 +1547,10 @@ export default function Expansion() {
                     <div style={{ fontSize: 13, fontWeight: 600, color: C.ink, marginBottom: 12 }}>Annual Cost Estimate (1,000 sq ft)</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {[
-                        { label: 'Annual Rent', value: `\u00a3${(area.rents[selectedYear] * 1000).toLocaleString()}`, color: C.amber },
-                        { label: 'Business Rates', value: `\u00a3${area.businessRates.toLocaleString()}`, color: C.textMuted },
-                        { label: 'Key Money / Premium', value: `\u00a3${area.keyMoney.toLocaleString()}`, color: C.textMuted },
-                        { label: 'Total Year 1 Cost', value: `\u00a3${(area.rents[selectedYear] * 1000 + area.businessRates + area.keyMoney).toLocaleString()}`, color: C.ink },
+                        { label: 'Annual Rent', value: `£${(area.rents[selectedYear] * 1000).toLocaleString()}`, color: C.amber },
+                        { label: 'Business Rates', value: `£${area.businessRates.toLocaleString()}`, color: C.textMuted },
+                        { label: 'Key Money / Premium', value: `£${area.keyMoney.toLocaleString()}`, color: C.textMuted },
+                        { label: 'Total Year 1 Cost', value: `£${(area.rents[selectedYear] * 1000 + area.businessRates + area.keyMoney).toLocaleString()}`, color: C.ink },
                         { label: 'Typical Lease', value: `${area.leaseYears} years`, color: C.textDim },
                       ].map((item, i) => (
                         <div key={i} style={{
@@ -1089,8 +1568,8 @@ export default function Expansion() {
                     }}>
                       <strong>Operator Insight:</strong> {area.name} has {area.hospitalityDensity} hospitality venues.
                       {' '}{area.footfall === 'high' ? 'High footfall makes this area strong for walk-in trade.' :
-                        area.footfall === 'medium' ? 'Medium footfall \u2014 destination-driven concepts work best here.' :
-                        'Lower footfall \u2014 strong branding and marketing essential.'}
+                        area.footfall === 'medium' ? 'Medium footfall — destination-driven concepts work best here.' :
+                        'Lower footfall — strong branding and marketing essential.'}
                       {' '}Vacancy at {area.vacancy[selectedYear]}% in {selectedYear}
                       {area.vacancy[selectedYear] < 4 ? ' means competition for space is fierce.' :
                        area.vacancy[selectedYear] < 7 ? ' indicates a healthy market with some availability.' :
@@ -1128,36 +1607,36 @@ export default function Expansion() {
               {selectedYear === 2021 && (
                 <>
                   <p style={{ marginBottom: 10 }}>2021 marked the nadir of London{'\u2019'}s commercial property market following the COVID-19 pandemic. Vacancy rates averaged over 9% across the 30 areas tracked, with prime locations like Covent Garden hitting 15.2% and the City of London at 12.5%. Rents fell 15-25% from pre-pandemic peaks in many areas, creating the best entry opportunity in a decade for hospitality operators willing to take on risk.</p>
-                  <p style={{ marginBottom: 10 }}>Emerging areas like Peckham ({'\u00a3'}22/sq ft), Tooting ({'\u00a3'}22/sq ft), and Dalston ({'\u00a3'}25/sq ft) offered exceptional value for operators willing to bet on neighbourhood recovery. Canary Wharf began its structural decline in office occupancy, pushing commercial rents down despite the area{'\u2019'}s infrastructure quality.</p>
+                  <p style={{ marginBottom: 10 }}>Emerging areas like Peckham ({'£'}22/sq ft), Tooting ({'£'}22/sq ft), and Dalston ({'£'}25/sq ft) offered exceptional value for operators willing to bet on neighbourhood recovery. Canary Wharf began its structural decline in office occupancy, pushing commercial rents down despite the area{'\u2019'}s infrastructure quality.</p>
                   <p>The smart money moved early: operators who locked in 2021 leases in areas like Bermondsey, Brixton, and Elephant &amp; Castle captured 50-90% rent appreciation over the subsequent four years.</p>
                 </>
               )}
               {selectedYear === 2022 && (
                 <>
                   <p style={{ marginBottom: 10 }}>2022 saw the beginning of the recovery. Footfall returned to 75-85% of pre-pandemic levels in central London, and landlords began tightening terms. Vacancy rates dropped 2-3 percentage points across most areas. However, the cost-of-living crisis and energy price spike created new headwinds, particularly for independent operators.</p>
-                  <p style={{ marginBottom: 10 }}>East London continued its structural outperformance: Shoreditch rents rose from {'\u00a3'}42 to {'\u00a3'}48/sq ft (+14.3%), while Hackney jumped from {'\u00a3'}32 to {'\u00a3'}38 (+18.8%). Gentrification accelerated in Peckham, Whitechapel, and Elephant &amp; Castle, with multiple new openings attracting media attention and further footfall.</p>
+                  <p style={{ marginBottom: 10 }}>East London continued its structural outperformance: Shoreditch rents rose from {'£'}42 to {'£'}48/sq ft (+14.3%), while Hackney jumped from {'£'}32 to {'£'}38 (+18.8%). Gentrification accelerated in Peckham, Whitechapel, and Elephant &amp; Castle, with multiple new openings attracting media attention and further footfall.</p>
                   <p>Prime West End rents (Soho, Covent Garden, Mayfair) remained below 2019 peaks but showed clear upward momentum. Operators securing leases in this window still captured significant value.</p>
                 </>
               )}
               {selectedYear === 2023 && (
                 <>
                   <p style={{ marginBottom: 10 }}>2023 represented the inflection point. London hospitality vacancies dropped below 6% in most tracked areas, and rents surpassed pre-pandemic levels in 18 of 30 areas. The return of international tourism, combined with strong domestic demand for experiential dining and drinking, created fierce competition for A3/A4 units.</p>
-                  <p style={{ marginBottom: 10 }}>Soho crossed the {'\u00a3'}110/sq ft threshold, up 29% from its 2021 low. Borough/London Bridge emerged as a top-tier hospitality destination, with rents rising 30% in two years. Meanwhile, Canary Wharf bucked the trend, continuing to decline as hybrid working permanently reduced weekday footfall.</p>
+                  <p style={{ marginBottom: 10 }}>Soho crossed the {'£'}110/sq ft threshold, up 29% from its 2021 low. Borough/London Bridge emerged as a top-tier hospitality destination, with rents rising 30% in two years. Meanwhile, Canary Wharf bucked the trend, continuing to decline as hybrid working permanently reduced weekday footfall.</p>
                   <p>The gentrification premium became undeniable: Elephant &amp; Castle rents jumped 44% in two years, driven by the regeneration around Elephant Park. Operators in emerging areas faced a narrowing window to secure space before pricing normalised.</p>
                 </>
               )}
               {selectedYear === 2024 && (
                 <>
-                  <p style={{ marginBottom: 10 }}>2024 saw the London commercial market reach maturity in its post-COVID cycle. Vacancy rates fell to 3-5% in most prime and emerging areas, creating a landlord{'\u2019'}s market. Competition for new space intensified, with some units receiving 10+ applications. Key money and premiums rose significantly, adding {'\u00a3'}50k-{'\u00a3'}100k to entry costs in desirable locations.</p>
-                  <p style={{ marginBottom: 10 }}>Rent growth moderated from the recovery-era spikes but remained positive across all areas except Canary Wharf. The spread between prime (Mayfair at {'\u00a3'}145, Covent Garden at {'\u00a3'}128) and emerging (Peckham at {'\u00a3'}38, Tooting at {'\u00a3'}34) widened to over {'\u00a3'}100/sq ft, the largest gap in a decade.</p>
+                  <p style={{ marginBottom: 10 }}>2024 saw the London commercial market reach maturity in its post-COVID cycle. Vacancy rates fell to 3-5% in most prime and emerging areas, creating a landlord{'\u2019'}s market. Competition for new space intensified, with some units receiving 10+ applications. Key money and premiums rose significantly, adding {'£'}50k-{'£'}100k to entry costs in desirable locations.</p>
+                  <p style={{ marginBottom: 10 }}>Rent growth moderated from the recovery-era spikes but remained positive across all areas except Canary Wharf. The spread between prime (Mayfair at {'£'}145, Covent Garden at {'£'}128) and emerging (Peckham at {'£'}38, Tooting at {'£'}34) widened to over {'£'}100/sq ft, the largest gap in a decade.</p>
                   <p>Smart operators pivoted to secondary locations within prime postcodes, seeking backstreet units in Soho and side roads off Upper Street in Islington, where rents were 30-40% lower than prime frontage.</p>
                 </>
               )}
               {selectedYear === 2025 && (
                 <>
-                  <p style={{ marginBottom: 10 }}>2025 represents a mature market with limited entry points. London average commercial rent hit {'\u00a3'}{agg.avgRent}/sq ft with average vacancy at just {agg.avgVacancy}%. The best opportunities now exist in areas still completing their gentrification cycle: Elephant &amp; Castle ({'\u00a3'}48/sq ft, 4.5% vacancy), Stratford ({'\u00a3'}45/sq ft, high footfall from the Olympics legacy), and Tooting ({'\u00a3'}38/sq ft), which remains London{'\u2019'}s most undervalued high-footfall neighbourhood.</p>
-                  <p style={{ marginBottom: 10 }}>The premium segment is fully priced: Mayfair at {'\u00a3'}155/sq ft and Covent Garden at {'\u00a3'}140/sq ft offer minimal margin upside unless the concept commands ultra-premium pricing. Operators seeking value must now look beyond Zone 1, targeting transport-connected neighbourhoods with strong residential density.</p>
-                  <p>Canary Wharf presents a contrarian opportunity at {'\u00a3'}44/sq ft with 10% vacancy {'\u2014'} the highest in London. If the Wharf{'\u2019'}s pivot to mixed-use (adding 3,500 residential units by 2027) succeeds, today{'\u2019'}s rates may look like a bargain. However, the risk is significant and the area{'\u2019'}s hospitality track record remains weak.</p>
+                  <p style={{ marginBottom: 10 }}>2025 represents a mature market with limited entry points. London average commercial rent hit {'£'}{agg.avgRent}/sq ft with average vacancy at just {agg.avgVacancy}%. The best opportunities now exist in areas still completing their gentrification cycle: Elephant &amp; Castle ({'£'}48/sq ft, 4.5% vacancy), Stratford ({'£'}45/sq ft, high footfall from the Olympics legacy), and Tooting ({'£'}38/sq ft), which remains London{'\u2019'}s most undervalued high-footfall neighbourhood.</p>
+                  <p style={{ marginBottom: 10 }}>The premium segment is fully priced: Mayfair at {'£'}155/sq ft and Covent Garden at {'£'}140/sq ft offer minimal margin upside unless the concept commands ultra-premium pricing. Operators seeking value must now look beyond Zone 1, targeting transport-connected neighbourhoods with strong residential density.</p>
+                  <p>Canary Wharf presents a contrarian opportunity at {'£'}44/sq ft with 10% vacancy {'—'} the highest in London. If the Wharf{'\u2019'}s pivot to mixed-use (adding 3,500 residential units by 2027) succeeds, today{'\u2019'}s rates may look like a bargain. However, the risk is significant and the area{'\u2019'}s hospitality track record remains weak.</p>
                 </>
               )}
             </div>
@@ -1190,7 +1669,7 @@ export default function Expansion() {
                   borderRadius: 8, color: C.ink, fontSize: 13, outline: 'none', cursor: 'pointer',
                 }}>
                   {londonAreas.map(a => (
-                    <option key={a.name} value={a.name}>{a.name} ({'\u00a3'}{a.rents[2025]}/sq ft)</option>
+                    <option key={a.name} value={a.name}>{a.name} ({'£'}{a.rents[2025]}/sq ft)</option>
                   ))}
                 </select>
               </div>
@@ -1230,9 +1709,9 @@ export default function Expansion() {
                 <label style={{ fontSize: 11, color: C.textMuted, display: 'block', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Fit-out Budget</label>
                 <div style={{ display: 'flex', gap: 8 }}>
                   {[
-                    { key: 'light', label: 'Light Refresh', rate: '\u00a350/sqft', desc: 'Paint, minor fixes' },
-                    { key: 'medium', label: 'Medium Refit', rate: '\u00a3100/sqft', desc: 'New bar, fixtures' },
-                    { key: 'full', label: 'Full Refit', rate: '\u00a3200/sqft', desc: 'Complete buildout' },
+                    { key: 'light', label: 'Light Refresh', rate: '£50/sqft', desc: 'Paint, minor fixes' },
+                    { key: 'medium', label: 'Medium Refit', rate: '£100/sqft', desc: 'New bar, fixtures' },
+                    { key: 'full', label: 'Full Refit', rate: '£200/sqft', desc: 'Complete buildout' },
                   ].map(opt => (
                     <button key={opt.key} onClick={() => setFitOutLevel(opt.key)} style={{
                       flex: 1, padding: '10px 8px', background: fitOutLevel === opt.key ? C.amberBg : C.bg,
@@ -1245,6 +1724,21 @@ export default function Expansion() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Venue type selector */}
+              <div style={{ marginBottom: 18 }}>
+                <label style={{ fontSize: 11, color: C.textMuted, display: 'block', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  <Users size={11} style={{ verticalAlign: 'middle', marginRight: 4 }} />Venue Type
+                </label>
+                <select value={venueType} onChange={e => setVenueType(e.target.value)} style={{
+                  width: '100%', padding: '10px 12px', background: C.bg, border: `1px solid ${C.border}`,
+                  borderRadius: 8, color: C.ink, fontSize: 13, outline: 'none', cursor: 'pointer',
+                }}>
+                  {VENUE_TYPES.map(vt => (
+                    <option key={vt} value={vt}>{vt}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Area info card */}
@@ -1264,10 +1758,10 @@ export default function Expansion() {
               {/* Cost summary cards */}
               <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
                 {[
-                  { label: 'Annual Rent', value: `\u00a3${leaseCalc.annualRent.toLocaleString()}`, color: C.amber },
-                  { label: 'Quarterly Rent', value: `\u00a3${Math.round(leaseCalc.quarterlyRent).toLocaleString()}`, color: C.amber },
-                  { label: 'Monthly Rent', value: `\u00a3${Math.round(leaseCalc.monthlyRent).toLocaleString()}`, color: C.amber },
-                  { label: 'Rate/sq ft', value: `\u00a3${leaseCalc.rentPerSqft}`, color: C.textMuted },
+                  { label: 'Annual Rent', value: `£${leaseCalc.annualRent.toLocaleString()}`, color: C.amber },
+                  { label: 'Quarterly Rent', value: `£${Math.round(leaseCalc.quarterlyRent).toLocaleString()}`, color: C.amber },
+                  { label: 'Monthly Rent', value: `£${Math.round(leaseCalc.monthlyRent).toLocaleString()}`, color: C.amber },
+                  { label: 'Rate/sq ft', value: `£${leaseCalc.rentPerSqft}`, color: C.textMuted },
                 ].map((kpi, i) => (
                   <div key={i} style={{
                     background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: 14,
@@ -1291,6 +1785,7 @@ export default function Expansion() {
                       { label: 'Business Rates', value: leaseCalc.businessRates, color: C.orange, note: 'Annual \u2014 may qualify for relief' },
                       { label: 'SDLT on Lease', value: leaseCalc.sdlt, color: '#8B5CF6', note: `${leaseLength}yr lease, NPV \u00a3${Math.round(leaseCalc.totalRentOverLease).toLocaleString()}` },
                       { label: 'Legal Fees', value: leaseCalc.legalFees, color: C.red, note: 'Solicitor + agent fees' },
+                      { label: 'Annual Labour Cost', value: leaseCalc.staffing.annualLabourCost, color: C.green, note: `${venueType} \u2014 ${leaseCalc.staffing.totalPerShift} staff/shift \u00d7 ${leaseCalc.staffing.shiftsPerDay} shifts` },
                     ].map((item, i) => (
                       <div key={i} style={{
                         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -1303,7 +1798,7 @@ export default function Expansion() {
                           </div>
                           <div style={{ fontSize: 10, color: C.textDim, marginLeft: 14, marginTop: 2 }}>{item.note}</div>
                         </div>
-                        <span style={{ fontSize: 13, fontWeight: 600, color: C.ink, whiteSpace: 'nowrap' }}>{'\u00a3'}{Math.round(item.value).toLocaleString()}</span>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: C.ink, whiteSpace: 'nowrap' }}>{'£'}{Math.round(item.value).toLocaleString()}</span>
                       </div>
                     ))}
                     <div style={{
@@ -1312,14 +1807,14 @@ export default function Expansion() {
                       marginTop: 4,
                     }}>
                       <span style={{ fontSize: 13, fontWeight: 700, color: C.ink }}>Total Year 1 Cost</span>
-                      <span style={{ fontSize: 18, fontWeight: 700, color: C.amber }}>{'\u00a3'}{Math.round(leaseCalc.totalYear1).toLocaleString()}</span>
+                      <span style={{ fontSize: 18, fontWeight: 700, color: C.amber }}>{'£'}{Math.round(leaseCalc.totalYear1).toLocaleString()}</span>
                     </div>
                     <div style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       padding: '10px 14px', background: C.bg, borderRadius: 8, border: `1px solid ${C.border}`,
                     }}>
                       <span style={{ fontSize: 12, color: C.textMuted }}>Total 5-Year Cost</span>
-                      <span style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>{'\u00a3'}{Math.round(leaseCalc.total5Year).toLocaleString()}</span>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>{'£'}{Math.round(leaseCalc.total5Year).toLocaleString()}</span>
                     </div>
                   </div>
 
@@ -1329,10 +1824,10 @@ export default function Expansion() {
                       <BarChart data={costBreakdownData} layout="vertical" margin={{ left: 0, right: 10, top: 0, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" horizontal={false} />
                         <XAxis type="number" stroke="#333" tick={{ fill: '#666', fontSize: 10 }} axisLine={false}
-                          tickFormatter={v => v >= 1000 ? `\u00a3${(v / 1000).toFixed(0)}k` : `\u00a3${v}`} />
+                          tickFormatter={v => v >= 1000 ? `£${(v / 1000).toFixed(0)}k` : `£${v}`} />
                         <YAxis type="category" dataKey="name" stroke="#333" tick={{ fill: '#999', fontSize: 10 }} axisLine={false} width={80} />
                         <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 11 }}
-                          formatter={v => [`\u00a3${Math.round(v).toLocaleString()}`, '']} />
+                          formatter={v => [`£${Math.round(v).toLocaleString()}`, '']} />
                         <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={24}>
                           {costBreakdownData.map((entry, i) => (
                             <Cell key={i} fill={entry.fill} />
@@ -1348,15 +1843,15 @@ export default function Expansion() {
               <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 12 }}>Break-Even Analysis</div>
                 <div style={{ fontSize: 12, color: C.text, marginBottom: 16, lineHeight: 1.6 }}>
-                  To cover your Year 1 fixed costs of <span style={{ fontWeight: 700, color: C.amber }}>{'\u00a3'}{Math.round(leaseCalc.totalYear1).toLocaleString()}</span>,
-                  you need to generate a minimum of <span style={{ fontWeight: 700, color: C.green }}>{'\u00a3'}{leaseCalc.dailyBreakEven.toLocaleString()}/day</span> in
+                  To cover your Year 1 fixed costs of <span style={{ fontWeight: 700, color: C.amber }}>{'£'}{Math.round(leaseCalc.totalYear1).toLocaleString()}</span>,
+                  you need to generate a minimum of <span style={{ fontWeight: 700, color: C.green }}>{'£'}{leaseCalc.dailyBreakEven.toLocaleString()}/day</span> in
                   revenue just to break even on occupancy costs. This excludes stock, labour, utilities, and other operational costs.
                 </div>
                 {/* Break-even bar */}
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                     <span style={{ fontSize: 11, color: C.textMuted }}>Daily revenue target</span>
-                    <span style={{ fontSize: 16, fontWeight: 700, color: C.green }}>{'\u00a3'}{leaseCalc.dailyBreakEven.toLocaleString()}/day</span>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: C.green }}>{'£'}{leaseCalc.dailyBreakEven.toLocaleString()}/day</span>
                   </div>
                   <div style={{ width: '100%', height: 28, background: C.bg, borderRadius: 8, border: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
                     <div style={{
@@ -1374,8 +1869,8 @@ export default function Expansion() {
                     }}>BREAK EVEN</div>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: C.textDim, marginTop: 4 }}>
-                    <span>{'\u00a3'}0</span>
-                    <span>{'\u00a3'}{(leaseCalc.dailyBreakEven * 2).toLocaleString()}/day</span>
+                    <span>{'£'}0</span>
+                    <span>{'£'}{(leaseCalc.dailyBreakEven * 2).toLocaleString()}/day</span>
                   </div>
                 </div>
                 {/* Context benchmarks */}
@@ -1389,10 +1884,101 @@ export default function Expansion() {
                       padding: '10px 12px', background: C.bg, borderRadius: 8, border: `1px solid ${C.border}`,
                     }}>
                       <div style={{ fontSize: 11, fontWeight: 600, color: C.text, marginBottom: 2 }}>{bench.label}</div>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.amber }}>{'\u00a3'}{bench.daily}/day</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.amber }}>{'£'}{bench.daily}/day</div>
                       <div style={{ fontSize: 10, color: C.textDim }}>{bench.note}</div>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Staffing Estimate Section */}
+              <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Users size={16} color={C.amber} /> Staffing Estimate: {venueType}
+                  </div>
+                  <span style={{
+                    padding: '4px 12px', borderRadius: 6, fontSize: 11, fontWeight: 700,
+                    color: leaseCalc.staffing.labourTrafficLight === 'green' ? C.green : leaseCalc.staffing.labourTrafficLight === 'amber' ? C.orange : C.red,
+                    background: (leaseCalc.staffing.labourTrafficLight === 'green' ? C.green : leaseCalc.staffing.labourTrafficLight === 'amber' ? C.orange : C.red) + '15',
+                  }}>
+                    {leaseCalc.staffing.labourPct}% of Revenue
+                  </span>
+                </div>
+
+                <div style={{ fontSize: 11, color: C.textDim, marginBottom: 14 }}>
+                  {leaseCalc.staffing.label} &bull; {leaseSize.toLocaleString()} sq ft &bull; {leaseCalc.staffing.shiftsPerDay} shifts/day (lunch + evening{venueType === 'Caf\u00e9' ? ', half evening' : ''})
+                </div>
+
+                {/* Staff breakdown per shift */}
+                <div style={{ fontSize: 12, fontWeight: 600, color: C.ink, marginBottom: 10 }}>Per-Shift Staffing</div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
+                  {[
+                    { role: 'Bartenders', count: leaseCalc.staffing.shift.bartenders, rate: HOURLY_RATE_STAFF },
+                    { role: 'Barbacks', count: leaseCalc.staffing.shift.barbacks, rate: HOURLY_RATE_STAFF },
+                    { role: 'Hosts', count: leaseCalc.staffing.shift.hosts, rate: HOURLY_RATE_STAFF },
+                    { role: 'Floor Staff', count: leaseCalc.staffing.shift.floor, rate: HOURLY_RATE_STAFF },
+                    { role: 'Kitchen', count: leaseCalc.staffing.shift.kitchen, rate: HOURLY_RATE_STAFF },
+                    { role: 'Senior/Manager', count: leaseCalc.staffing.shift.senior, rate: HOURLY_RATE_SENIOR },
+                  ].filter(s => s.count > 0).map((s, i) => (
+                    <div key={i} style={{
+                      padding: '8px 14px', background: C.bg, borderRadius: 8, border: `1px solid ${C.border}`,
+                      textAlign: 'center', minWidth: 100,
+                    }}>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: C.ink }}>{s.count}</div>
+                      <div style={{ fontSize: 10, color: C.textMuted, marginBottom: 2 }}>{s.role}</div>
+                      <div style={{ fontSize: 9, color: C.textDim }}>{'\u00a3'}{s.rate.toFixed(2)}/hr</div>
+                    </div>
+                  ))}
+                  <div style={{
+                    padding: '8px 14px', background: C.amberBg, borderRadius: 8, border: `1px solid ${C.amber}40`,
+                    textAlign: 'center', minWidth: 100,
+                  }}>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: C.amber }}>{leaseCalc.staffing.totalPerShift}</div>
+                    <div style={{ fontSize: 10, color: C.amber, fontWeight: 600 }}>Total/Shift</div>
+                    <div style={{ fontSize: 9, color: C.textDim }}>{SHIFT_HOURS}hr shifts</div>
+                  </div>
+                </div>
+
+                {/* Labour cost summary */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {[
+                    { label: 'Weekly Staff Hours', value: `${leaseCalc.staffing.weeklyStaffHours.toLocaleString()} hrs` },
+                    { label: 'Weekly Labour Cost', value: `\u00a3${leaseCalc.staffing.weeklyLabourCost.toLocaleString()}` },
+                    { label: 'Monthly Labour Cost', value: `\u00a3${leaseCalc.staffing.monthlyLabourCost.toLocaleString()}`, bold: true },
+                    { label: 'Annual Labour Cost', value: `\u00a3${leaseCalc.staffing.annualLabourCost.toLocaleString()}`, bold: true },
+                    { label: 'Projected Annual Revenue', value: `\u00a3${leaseCalc.staffing.projectedAnnualRevenue.toLocaleString()}`, note: `${venueType} @ \u00a3${staffingModels[venueType].revPerSqft}/sqft` },
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '8px 12px', background: C.bg, borderRadius: 6, border: `1px solid ${C.border}`,
+                    }}>
+                      <div>
+                        <span style={{ fontSize: 12, color: C.textMuted }}>{item.label}</span>
+                        {item.note && <span style={{ fontSize: 10, color: C.textDim, marginLeft: 6 }}>({item.note})</span>}
+                      </div>
+                      <span style={{ fontSize: 13, fontWeight: item.bold ? 700 : 500, color: C.ink }}>{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Traffic light indicator */}
+                <div style={{
+                  marginTop: 14, padding: '12px 14px', borderRadius: 8,
+                  background: (leaseCalc.staffing.labourTrafficLight === 'green' ? C.green : leaseCalc.staffing.labourTrafficLight === 'amber' ? C.orange : C.red) + '10',
+                  borderLeft: `3px solid ${leaseCalc.staffing.labourTrafficLight === 'green' ? C.green : leaseCalc.staffing.labourTrafficLight === 'amber' ? C.orange : C.red}`,
+                  fontSize: 12, color: C.text, lineHeight: 1.6,
+                }}>
+                  <strong>Labour Assessment:</strong>{' '}
+                  {leaseCalc.staffing.labourTrafficLight === 'green' && (
+                    <>Labour at {leaseCalc.staffing.labourPct}% of projected revenue is within the healthy range ({'<'}30%). This leaves sufficient margin for COGS, rent, and profit.</>
+                  )}
+                  {leaseCalc.staffing.labourTrafficLight === 'amber' && (
+                    <>Labour at {leaseCalc.staffing.labourPct}% of projected revenue is in the caution zone (30-35%). Consider optimising shift patterns, cross-training staff, or increasing average spend per head to improve margins.</>
+                  )}
+                  {leaseCalc.staffing.labourTrafficLight === 'red' && (
+                    <>Labour at {leaseCalc.staffing.labourPct}% of projected revenue exceeds the danger threshold ({'>'}35%). This venue model may not be commercially viable at this size/location without significantly higher revenue or reduced staffing.</>
+                  )}
                 </div>
               </div>
             </div>
@@ -1456,7 +2042,7 @@ export default function Expansion() {
               { label: 'Opportunity Areas', value: competitorAreas.filter(a => a.saturation === 'opportunity').length, total: londonAreas.length, color: C.green, icon: CheckCircle },
               { label: 'Competitive Areas', value: competitorAreas.filter(a => a.saturation === 'competitive').length, total: londonAreas.length, color: C.orange, icon: AlertTriangle },
               { label: 'Oversaturated', value: competitorAreas.filter(a => a.saturation === 'oversaturated').length, total: londonAreas.length, color: C.red, icon: XCircle },
-              { label: 'Best Avg Rating', value: (() => { const best = [...competitorAreas].sort((a, b) => b.avgRating - a.avgRating)[0]; return best ? `${best.name} (${best.avgRating})` : '\u2014' })(), total: null, color: C.amber, icon: Star },
+              { label: 'Best Avg Rating', value: (() => { const best = [...competitorAreas].sort((a, b) => b.avgRating - a.avgRating)[0]; return best ? `${best.name} (${best.avgRating})` : '—' })(), total: null, color: C.amber, icon: Star },
             ].map((kpi, i) => (
               <div key={i} style={{
                 background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 16,
@@ -1481,15 +2067,23 @@ export default function Expansion() {
               const satColors = { opportunity: C.green, competitive: C.orange, oversaturated: C.red }
               const satLabels = { opportunity: 'Opportunity', competitive: 'Competitive', oversaturated: 'Oversaturated' }
               const satColor = satColors[area.saturation] || C.textMuted
+              const isExpanded = expandedCompetitor === area.name
+              const areaVenues = detailedVenues[area.name] || []
               return (
                 <div key={area.name} style={{
-                  background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 18,
+                  background: C.card, border: `1px solid ${isExpanded ? C.amber + '60' : C.border}`, borderRadius: 12, padding: 18,
                   transition: 'border-color 0.2s',
                 }}>
-                  {/* Header */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                  {/* Header — clickable */}
+                  <div
+                    onClick={() => setExpandedCompetitor(isExpanded ? null : area.name)}
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, cursor: 'pointer' }}
+                  >
                     <div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 2 }}>{area.name}</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
+                        {area.name}
+                        {isExpanded ? <ChevronUp size={14} color={C.amber} /> : <ChevronDown size={14} color={C.textDim} />}
+                      </div>
                       <div style={{ fontSize: 11, color: C.textDim }}>{area.postcode} &bull; {'\u00a3'}{area.rents[2025]}/sq ft</div>
                     </div>
                     <span style={{
@@ -1515,30 +2109,103 @@ export default function Expansion() {
                     ))}
                   </div>
 
-                  {/* Notable venues */}
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 10, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Notable Venues</div>
-                    <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5 }}>
-                      {area.notable.join(' \u2022 ')}
+                  {/* Notable venues (collapsed) */}
+                  {!isExpanded && (
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ fontSize: 10, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Notable Venues</div>
+                      <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5 }}>
+                        {area.notable.join(' \u2022 ')}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  {/* Gap analysis */}
-                  <div>
-                    <div style={{ fontSize: 10, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Gap Analysis</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {area.gaps.map((gap, i) => (
-                        <div key={i} style={{
-                          display: 'flex', alignItems: 'flex-start', gap: 6,
-                          padding: '6px 10px', background: area.saturation === 'opportunity' ? C.greenBg : C.bg,
-                          borderRadius: 6, border: `1px solid ${area.saturation === 'opportunity' ? C.green + '30' : C.border}`,
-                        }}>
-                          <span style={{ color: area.saturation === 'opportunity' ? C.green : C.amber, fontSize: 11, marginTop: 1, flexShrink: 0 }}>{'\u2192'}</span>
-                          <span style={{ fontSize: 11, color: C.text, lineHeight: 1.4 }}>{gap}</span>
-                        </div>
-                      ))}
+                  {/* Gap analysis (collapsed — summary) */}
+                  {!isExpanded && (
+                    <div>
+                      <div style={{ fontSize: 10, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Gap Analysis</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                        {area.gaps.slice(0, 2).map((gap, i) => (
+                          <div key={i} style={{
+                            display: 'flex', alignItems: 'flex-start', gap: 6,
+                            padding: '6px 10px', background: area.saturation === 'opportunity' ? C.greenBg : C.bg,
+                            borderRadius: 6, border: `1px solid ${area.saturation === 'opportunity' ? C.green + '30' : C.border}`,
+                          }}>
+                            <span style={{ color: area.saturation === 'opportunity' ? C.green : C.amber, fontSize: 11, marginTop: 1, flexShrink: 0 }}>{'\u2192'}</span>
+                            <span style={{ fontSize: 11, color: C.text, lineHeight: 1.4 }}>{gap}</span>
+                          </div>
+                        ))}
+                        {area.gaps.length > 2 && (
+                          <div style={{ fontSize: 10, color: C.textDim, textAlign: 'center', marginTop: 2 }}>
+                            Click to see all {area.gaps.length} gaps + full venue list
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {/* ===== EXPANDED SECTION ===== */}
+                  {isExpanded && (
+                    <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: 14 }}>
+                      {/* Full venue list */}
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: C.ink, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <Building2 size={13} color={C.amber} /> Notable Venues in {area.name}
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6 }}>
+                          {areaVenues.map((venue, i) => (
+                            <div key={i} style={{
+                              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                              padding: '7px 10px', background: C.bg, borderRadius: 6, border: `1px solid ${C.border}`,
+                            }}>
+                              <div style={{ minWidth: 0 }}>
+                                <div style={{ fontSize: 11, fontWeight: 600, color: C.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{venue.name}</div>
+                                <div style={{ fontSize: 9, color: C.textDim }}>{venue.type}</div>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                                <span style={{ fontSize: 10, color: C.amber, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 2 }}>
+                                  <Star size={9} />{venue.rating}
+                                </span>
+                                <span style={{ fontSize: 10, color: C.textMuted, fontWeight: 500 }}>{venue.price}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Full gap analysis */}
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: C.ink, marginBottom: 10 }}>Detailed Gap Analysis</div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                          {area.gaps.map((gap, i) => (
+                            <div key={i} style={{
+                              display: 'flex', alignItems: 'flex-start', gap: 8,
+                              padding: '8px 12px', background: area.saturation === 'opportunity' ? C.greenBg : C.bg,
+                              borderRadius: 6, border: `1px solid ${area.saturation === 'opportunity' ? C.green + '30' : C.border}`,
+                            }}>
+                              <span style={{ color: area.saturation === 'opportunity' ? C.green : C.amber, fontSize: 12, marginTop: 1, flexShrink: 0 }}>{'\u2192'}</span>
+                              <span style={{ fontSize: 12, color: C.text, lineHeight: 1.5 }}>{gap}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Model this area button */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleModelArea(area.name); }}
+                        style={{
+                          width: '100%', padding: '12px 16px', background: C.amber, color: '#000',
+                          border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                          transition: 'opacity 0.2s',
+                        }}
+                        onMouseEnter={e => e.target.style.opacity = '0.9'}
+                        onMouseLeave={e => e.target.style.opacity = '1'}
+                      >
+                        <Calculator size={14} /> Model This Area in Lease Calculator
+                        <ExternalLink size={12} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -1552,8 +2219,8 @@ export default function Expansion() {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7 }}>
               <p style={{ marginBottom: 10 }}>
                 <strong style={{ color: C.green }}>Strongest opportunities</strong> exist in areas completing their gentrification cycle with growing residential populations but
-                thin hospitality infrastructure. <strong>Tooting</strong> ({'\u00a3'}38/sq ft, only 40 venues), <strong>Elephant {'\u0026'} Castle</strong> ({'\u00a3'}48/sq ft, 35 venues with massive regeneration),
-                and <strong>Stratford</strong> ({'\u00a3'}45/sq ft, 50 venues despite Westfield footfall) offer the best combination of low entry cost and high growth potential.
+                thin hospitality infrastructure. <strong>Tooting</strong> ({'£'}38/sq ft, only 40 venues), <strong>Elephant {'&'} Castle</strong> ({'£'}48/sq ft, 35 venues with massive regeneration),
+                and <strong>Stratford</strong> ({'£'}45/sq ft, 50 venues despite Westfield footfall) offer the best combination of low entry cost and high growth potential.
               </p>
               <p style={{ marginBottom: 10 }}>
                 <strong style={{ color: C.amber }}>Key gap across London:</strong> Premium craft cocktail bars and natural wine bars are dramatically underrepresented outside
@@ -1562,7 +2229,7 @@ export default function Expansion() {
               </p>
               <p>
                 <strong style={{ color: C.red }}>Avoid</strong> entering <strong>Soho</strong> or <strong>Covent Garden</strong> without a highly differentiated concept and deep
-                pockets ({'\u00a3'}500k+ all-in). Both are oversaturated, with 300+ venues and rents above {'\u00a3'}130/sq ft. The failure rate for new openings in these areas
+                pockets ({'£'}500k+ all-in). Both are oversaturated, with 300+ venues and rents above {'£'}130/sq ft. The failure rate for new openings in these areas
                 exceeds 40% within the first 18 months.
               </p>
             </div>

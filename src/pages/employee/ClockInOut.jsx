@@ -70,7 +70,7 @@ export default function ClockInOut() {
           fontFamily: "'JetBrains Mono', monospace",
         }}>{timeStr}</div>
         <div style={{ fontSize: 13, color: C.textMuted, marginTop: 8 }}>
-          Tuesday 18 March 2026
+          {currentTime.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
         </div>
 
         {/* GPS / WiFi verification */}

@@ -157,7 +157,7 @@ CUSTOMERS.forEach(c => {
   c.rewardsRedeemed = Math.floor(c.totalVisits / 10)
   // Segment reasoning
   if (c.segment === 'regular') c.segmentReason = `Visited ${c.totalVisits} times — averaging 3+ visits per week`
-  else if (c.segment === 'high_spender') c.segmentReason = `Average spend \u00a3${c.avgSpend} — top 10% by transaction value`
+  else if (c.segment === 'high_spender') c.segmentReason = `Average spend £${c.avgSpend} — top 10% by transaction value`
   else if (c.segment === 'lapsed') c.segmentReason = `Last visit ${c.lastVisit} — no activity for 30+ days`
   else if (c.segment === 'new') c.segmentReason = `First visited ${c.memberSince} — ${c.totalVisits} visit${c.totalVisits > 1 ? 's' : ''} this month`
   else c.segmentReason = `${c.totalVisits} visits over ${Math.round((new Date(2026,2,26) - new Date(c.memberSince)) / 86400000 / 30)} months — moderate engagement`
@@ -167,7 +167,7 @@ CUSTOMERS.forEach(c => {
 const CAMPAIGNS = [
   { id: 'camp001', name: 'We Miss You — March', segment: 'lapsed', status: 'sent', channel: 'email', sentDate: '2026-03-15', sent: 12, opened: 8, clicked: 5, redeemed: 2, message: 'Hey! We noticed you haven\'t visited in a while. Come back this week and enjoy 20% off your first round. We\'ve got some exciting new cocktails waiting for you.' },
   { id: 'camp002', name: 'Regular Appreciation', segment: 'regular', status: 'sent', channel: 'sms', sentDate: '2026-03-10', sent: 15, opened: 15, clicked: 12, redeemed: 8, message: 'Thanks for being one of our favourite regulars! Flash this text for a complimentary cocktail on your next visit. Valid until 31 March.' },
-  { id: 'camp003', name: 'VIP Spring Tasting', segment: 'high_spender', status: 'scheduled', channel: 'email', sentDate: '2026-04-01', sent: 0, opened: 0, clicked: 0, redeemed: 0, message: 'You\'re invited to an exclusive spring cocktail tasting on April 5th. Limited to 20 guests. New menu preview, paired canap\u00e9s, and a gift bag. RSVP required.' },
+  { id: 'camp003', name: 'VIP Spring Tasting', segment: 'high_spender', status: 'scheduled', channel: 'email', sentDate: '2026-04-01', sent: 0, opened: 0, clicked: 0, redeemed: 0, message: 'You\'re invited to an exclusive spring cocktail tasting on April 5th. Limited to 20 guests. New menu preview, paired canapés, and a gift bag. RSVP required.' },
   { id: 'camp004', name: 'Welcome Series — Week 2', segment: 'new', status: 'draft', channel: 'email', sentDate: null, sent: 0, opened: 0, clicked: 0, redeemed: 0, message: 'Glad you found us! Here\'s a little something — 15% off your next visit when you bring a friend. Share the love.' },
   { id: 'camp005', name: 'Friday Night Kickoff', segment: 'regular', status: 'sent', channel: 'sms', sentDate: '2026-03-21', sent: 15, opened: 15, clicked: 10, redeemed: 6, message: 'TGIF! DJ set tonight from 9pm. Your usual spot is waiting. See you there?' },
   { id: 'camp006', name: 'Birthday Month — April', segment: 'regular', status: 'draft', channel: 'email', sentDate: null, sent: 0, opened: 0, clicked: 0, redeemed: 0, message: 'Happy Birthday month! Celebrate with us and enjoy a complimentary bottle of prosecco with any booking of 4+.' },

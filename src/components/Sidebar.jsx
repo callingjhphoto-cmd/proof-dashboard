@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Receipt, Package, Users, Brain, Bell, Grid3X3, TrendingUp,
   Calendar, ArrowLeftRight, Clock, BookOpen, PoundSterling, Megaphone,
   ClipboardCheck, BarChart3, Truck, Coffee, GraduationCap, LogOut,
-  Building2, Wallet, Expand, UserCircle, Send, Award
+  Building2, Wallet, Expand, UserCircle, Send, Award, Activity, FileText, Eye
 } from 'lucide-react'
 import { ROLES, ROLE_META, useRole } from '../context/RoleContext'
 

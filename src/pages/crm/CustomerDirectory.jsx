@@ -97,8 +97,8 @@ export default function CustomerDirectory() {
       {/* Stats */}
       <div className="grid-kpi-4" style={{ marginBottom: 20 }}>
         <StatCard icon={Users} label="Total Customers" value={totalCustomers} color={C.amber} />
-        <StatCard icon={PoundSterling} label="Total Revenue" value={`\u00a3${totalRevenue.toLocaleString()}`} color={C.green} />
-        <StatCard icon={TrendingUp} label="Avg Lifetime Value" value={`\u00a3${avgLTV.toLocaleString()}`} color={C.blue} />
+        <StatCard icon={PoundSterling} label="Total Revenue" value={`£${totalRevenue.toLocaleString()}`} color={C.green} />
+        <StatCard icon={TrendingUp} label="Avg Lifetime Value" value={`£${avgLTV.toLocaleString()}`} color={C.blue} />
         <StatCard icon={Clock} label="Active This Month" value={activeThisMonth} color={C.amber} />
       </div>
 
@@ -195,8 +195,8 @@ export default function CustomerDirectory() {
                 </td>
                 <td style={{ padding: '14px 16px' }}><SegmentBadge segment={c.segment} /></td>
                 <td style={{ padding: '14px 16px', fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono', monospace" }}>{c.totalVisits}</td>
-                <td style={{ padding: '14px 16px', fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono', monospace" }}>{'\u00a3'}{c.totalSpend.toLocaleString()}</td>
-                <td style={{ padding: '14px 16px', fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono', monospace" }}>{'\u00a3'}{c.avgSpend}</td>
+                <td style={{ padding: '14px 16px', fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{c.totalSpend.toLocaleString()}</td>
+                <td style={{ padding: '14px 16px', fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{c.avgSpend}</td>
                 <td style={{ padding: '14px 16px', fontSize: 13, color: C.text }}>{c.lastVisit}</td>
                 <td style={{ padding: '14px 16px', fontSize: 13, color: C.textMuted }}>{c.favouriteItem}</td>
               </tr>
@@ -236,7 +236,7 @@ export default function CustomerDirectory() {
               </div>
               <div>
                 <div style={{ fontSize: 10, color: C.textDim }}>Spend</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, fontFamily: "'JetBrains Mono', monospace" }}>{'\u00a3'}{c.totalSpend.toLocaleString()}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{c.totalSpend.toLocaleString()}</div>
               </div>
               <div>
                 <div style={{ fontSize: 10, color: C.textDim }}>Last Visit</div>

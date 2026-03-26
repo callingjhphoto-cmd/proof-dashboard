@@ -102,7 +102,8 @@ export default function Team({ C }) {
       <Card title="This Week's Rota" C={C}>
         <div className="grid-7day">
           {rota.map((day, i) => {
-            const isToday = day.day === 'Mon'
+            const todayShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date().getDay()]
+            const isToday = day.day === todayShort
             return (
               <div key={i} style={{
                 padding: 12, borderRadius: 8, textAlign: 'center',
