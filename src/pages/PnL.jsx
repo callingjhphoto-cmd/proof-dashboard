@@ -68,7 +68,7 @@ export default function PnL({ C }) {
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>Net Profit</div>
           <div style={{ fontSize: 22, fontWeight: 700, color: C.amber }}>£{(current.net / 1000).toFixed(0)}k</div>
-          <div style={{ fontSize: 11, color: C.green, marginTop: 2 }}>+{((current.net - prev.net) / prev.net * 100).toFixed(1)}% vs LM</div>
+          <div style={{ fontSize: 11, color: (current.net - prev.net) >= 0 ? C.green : C.red, marginTop: 2 }}>{(current.net - prev.net) >= 0 ? '+' : ''}{((current.net - prev.net) / prev.net * 100).toFixed(1)}% vs last month</div>
         </div>
       </div>
 

@@ -103,10 +103,14 @@ export default function Reports() {
             <div style={{ fontSize: 16, fontWeight: 600, color: C.ink }}>February 2026 &mdash; Executive Summary</div>
             <div style={{ fontSize: 12, color: C.textMuted, marginTop: 4 }}>Preview of last completed report</div>
           </div>
-          <button style={{
-            display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 8,
-            background: C.amber, border: 'none', color: '#000', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-          }}>
+          <button
+            onClick={() => alert('Downloading February 2026 Board Report (14 pages)...\n\nIn production, this generates a full PDF export.')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 8,
+              background: C.amber, border: 'none', color: '#000', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+            }}
+            aria-label="Download February 2026 Board Report as PDF"
+          >
             <Download size={14} /> Full PDF
           </button>
         </div>
@@ -172,13 +176,16 @@ export default function Reports() {
                   </div>
                 </div>
               </div>
-              <button style={{
-                display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 6,
-                border: `1px solid ${C.border}`, background: 'transparent', color: C.textMuted,
-                fontSize: 12, cursor: 'pointer', transition: 'all 0.15s',
-              }}
+              <button
+                onClick={() => alert(`Downloading ${r.title} (${r.pages} pages)...\n\nIn production, this generates a PDF export.`)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 6,
+                  border: `1px solid ${C.border}`, background: 'transparent', color: C.textMuted,
+                  fontSize: 12, cursor: 'pointer', transition: 'all 0.15s',
+                }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = C.amber; e.currentTarget.style.color = C.amber }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textMuted }}
+                aria-label={`Download ${r.title} as PDF`}
               >
                 <Download size={14} /> PDF
               </button>

@@ -134,7 +134,7 @@ export default function Insights({ C }) {
         <Card title="Revenue Per Cover Trend" icon={TrendingUp} C={C}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <div style={{ fontSize: 36, fontWeight: 700, color: C.ink }}>£{latestRpc.toFixed(2)}</div>
-            <div style={{ fontSize: 12, color: C.green, marginTop: 4 }}>+{rpcTrend}% vs 12-week avg (£{avgRpc.toFixed(2)})</div>
+            <div style={{ fontSize: 12, color: parseFloat(rpcTrend) >= 0 ? C.green : C.red, marginTop: 4 }}>{parseFloat(rpcTrend) >= 0 ? '+' : ''}{rpcTrend}% vs 12-week avg (£{avgRpc.toFixed(2)})</div>
           </div>
           <div style={{ display: 'flex', alignItems: 'end', gap: 4, height: 160, padding: '0 8px' }}>
             {revenuePerCover.map((w, i) => {

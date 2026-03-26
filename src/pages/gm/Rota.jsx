@@ -104,11 +104,14 @@ export default function Rota() {
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, overflowX: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>Weekly Rota</div>
-          <button style={{
-            display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
-            background: C.teal + '15', border: `1px solid ${C.teal}30`, color: C.teal,
-            fontSize: 12, fontWeight: 600, cursor: 'pointer',
-          }}>
+          <button
+            onClick={() => alert('Cover request sent to available staff.\n\nIn production, this sends push notifications to off-duty team members.')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
+              background: C.teal + '15', border: `1px solid ${C.teal}30`, color: C.teal,
+              fontSize: 12, fontWeight: 600, cursor: 'pointer',
+            }}
+          >
             <UserPlus size={14} /> Request Cover
           </button>
         </div>
