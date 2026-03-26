@@ -21,6 +21,8 @@ import CompetitorWatch from './pages/owner/CompetitorWatch'
 import Stock from './pages/Stock'
 import MorningBriefing from './pages/owner/MorningBriefing'
 import Bookings from './pages/Bookings'
+import Suppliers from './pages/Suppliers'
+import Reviews from './pages/Reviews'
 
 // CRM pages
 import CustomerDirectory from './pages/crm/CustomerDirectory'
@@ -79,6 +81,8 @@ function OwnerRoutes() {
       <Route path="/loyalty" element={<Loyalty />} />
       <Route path="/morning-briefing" element={<MorningBriefing />} />
       <Route path="/bookings" element={<Bookings />} />
+      <Route path="/suppliers" element={<Suppliers />} />
+      <Route path="/reviews" element={<Reviews />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
@@ -99,6 +103,8 @@ function GMRoutes() {
       <Route path="/loyalty" element={<Loyalty />} />
       <Route path="/morning-briefing" element={<MorningBriefing />} />
       <Route path="/bookings" element={<Bookings />} />
+      <Route path="/suppliers" element={<Suppliers />} />
+      <Route path="/reviews" element={<Reviews />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
