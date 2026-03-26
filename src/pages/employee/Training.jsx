@@ -68,7 +68,7 @@ export default function Training() {
       </div>
 
       {/* Stats */}
-      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20 }}>
+      <div className="grid-kpi-4" style={{ marginBottom: 20 }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Completed</div>
           <div style={{ fontSize: 26, fontWeight: 700, color: C.green }}>{completed}/{modules.length}</div>

@@ -22,6 +22,7 @@ const NAV_BY_ROLE = {
     { to: '/pl', icon: Receipt, label: 'P&L' },
     { to: '/cash-flow', icon: Wallet, label: 'Cash Flow' },
     { to: '/labour', icon: Users, label: 'Labour Trends' },
+    { to: '/stock', icon: Package, label: 'Stock Intelligence' },
     { to: '/insights', icon: Brain, label: 'AI Insights' },
     { to: '/expansion', icon: Expand, label: 'Expansion' },
     { to: '/reports', icon: BarChart3, label: 'Reports' },
@@ -127,7 +128,7 @@ export default function Sidebar({ open }) {
       </div>
 
       <div style={{ padding: '8px 20px 0', fontSize: 10, color: C.textDim }}>
-        v0.2.0 &mdash; Three-Tier Access
+        v0.3.0 &mdash; Demo Ready
       </div>
     </aside>
   )

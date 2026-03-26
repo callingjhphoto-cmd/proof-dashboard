@@ -15,6 +15,7 @@ import CashFlow from './pages/owner/CashFlow'
 import LabourTrends from './pages/owner/LabourTrends'
 import Expansion from './pages/owner/Expansion'
 import Reports from './pages/owner/Reports'
+import Stock from './pages/Stock'
 
 // GM pages
 import Dashboard from './pages/Dashboard'
@@ -51,6 +52,7 @@ function OwnerRoutes() {
       <Route path="/pl" element={<PnL C={C} />} />
       <Route path="/cash-flow" element={<CashFlow />} />
       <Route path="/labour" element={<LabourTrends />} />
+      <Route path="/stock" element={<Stock C={C} />} />
       <Route path="/insights" element={<Insights C={C} />} />
       <Route path="/expansion" element={<Expansion />} />
       <Route path="/reports" element={<Reports />} />

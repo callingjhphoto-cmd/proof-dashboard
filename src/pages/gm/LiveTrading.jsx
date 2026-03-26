@@ -103,7 +103,7 @@ export default function LiveTrading() {
         </div>
       </div>
 
-      <div className="grid-2col" style={{ gridTemplateColumns: '1fr 340px', marginBottom: 16 }}>
+      <div className="grid-2col-sidebar" style={{ marginBottom: 16 }}>
         {/* Hourly Revenue */}
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Revenue by Hour</div>

@@ -93,7 +93,7 @@ export default function Expansion() {
       </div>
 
       {/* Scenario Selector */}
-      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: 24 }}>
+      <div className="grid-kpi-3" style={{ marginBottom: 24 }}>
         {scenarios.map((s, i) => (
           <div
             key={i}

@@ -46,7 +46,7 @@ export default function Team({ C }) {
       </div>
 
       {/* KPIs */}
-      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20 }}>
+      <div className="grid-kpi-4" style={{ marginBottom: 20 }}>
         {[
           { label: 'On Shift Now', value: team.filter(t => t.status === 'on-shift').length.toString(), icon: Users, color: '#22C55E' },
           { label: 'Hours This Week', value: `${totalWorked}/${totalScheduled}`, icon: Clock, color: C.ink },
@@ -63,7 +63,7 @@ export default function Team({ C }) {
 
       {/* Team List */}
       <Card title="Team Status" C={C} style={{ marginBottom: 16 }}>
-        <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div className="grid-kpi-4">
           {team.map((t, i) => (
             <div key={i} style={{
               padding: '14px 16px', borderRadius: 10, background: C.bg, border: `1px solid ${C.border}`,

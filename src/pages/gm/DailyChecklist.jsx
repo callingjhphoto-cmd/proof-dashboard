@@ -69,7 +69,7 @@ export default function DailyChecklist() {
         Daily Checklist
       </div>
 
-      <div className="grid-kpi" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: 20 }}>
+      <div className="grid-kpi-3" style={{ marginBottom: 20 }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Opening Complete</div>
           <div style={{ fontSize: 26, fontWeight: 700, color: openingDone === openingChecks.length ? C.green : C.amber }}>

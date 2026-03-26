@@ -58,8 +58,8 @@ export default function Stock({ C }) {
       </div>
 
       {/* Summary */}
-      <div className="grid-kpi" style={{
-        gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20,
+      <div className="grid-kpi-4" style={{
+        marginBottom: 20,
       }}>
         {[
           { label: 'Stock Value', value: '\u00A314,280', icon: Package, color: C.ink },

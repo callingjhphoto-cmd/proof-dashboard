@@ -54,10 +54,10 @@ export default function PnL({ C }) {
       </div>
 
       {/* Summary KPIs */}
-      <div style={{
-        gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: 20,
+      <div className="grid-kpi-5" style={{
+        marginBottom: 20,
         background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '20px 24px',
-      }} className="grid-kpi">
+      }}>
         <Metric label="Revenue" value={current.revenue} vs={prev.revenue} C={C} />
         <Metric label="COGS" value={current.cogs} vs={prev.cogs} C={C} />
         <Metric label="Labour" value={current.labour} vs={prev.labour} C={C} />

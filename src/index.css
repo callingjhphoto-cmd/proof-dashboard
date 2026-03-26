@@ -30,7 +30,11 @@ body {
 
 /* Responsive grid utilities */
 .grid-kpi { display: grid; gap: 14px; }
+.grid-kpi-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid-kpi-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid-kpi-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
 .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-2col-sidebar { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
 .grid-7day { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
 
 /* Mobile: tablets */
@@ -46,9 +50,10 @@ body {
   .mobile-menu-btn { display: flex !important; }
 
   /* Grids collapse */
-  .grid-2col { grid-template-columns: 1fr; }
+  .grid-2col { grid-template-columns: 1fr !important; }
+  .grid-2col-sidebar { grid-template-columns: 1fr !important; }
   .grid-7day { grid-template-columns: repeat(4, 1fr); }
-  .grid-kpi { grid-template-columns: repeat(2, 1fr) !important; }
+  .grid-kpi, .grid-kpi-3, .grid-kpi-4, .grid-kpi-5 { grid-template-columns: repeat(2, 1fr) !important; }
 }
 
 /* Mobile: phones */
@@ -58,7 +63,7 @@ body {
 
 @media (max-width: 480px) {
   .main-content main { padding: 12px !important; }
-  .grid-kpi { grid-template-columns: 1fr !important; }
+  .grid-kpi, .grid-kpi-3, .grid-kpi-4, .grid-kpi-5 { grid-template-columns: 1fr !important; }
   .grid-7day { grid-template-columns: repeat(3, 1fr); }
 }
 
