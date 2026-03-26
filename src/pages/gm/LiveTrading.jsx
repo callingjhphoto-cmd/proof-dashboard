@@ -413,7 +413,7 @@ export default function LiveTrading() {
       </div>
 
       {/* Recent Transactions */}
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Recent Transactions</div>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <thead>
@@ -435,6 +435,121 @@ export default function LiveTrading() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* ── Top Sellers — Full Profit Breakdown ── */}
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
+        {/* Header + Period Toggle */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>Top Sellers &mdash; Profit Breakdown</div>
+          <div style={{ display: 'flex', gap: 4 }}>
+            {Object.entries(SELLER_PERIOD_LABELS).map(([key, label]) => (
+              <button key={key} onClick={() => setSellersPeriod(key)} style={{
+                padding: '5px 14px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                border: sellersPeriod === key ? `1px solid ${C.teal}` : `1px solid ${C.border}`,
+                background: sellersPeriod === key ? `${C.teal}18` : 'transparent',
+                color: sellersPeriod === key ? C.teal : C.textMuted,
+                transition: 'all 0.2s',
+              }}>{label}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* KPI Cards */}
+        <div className="grid-kpi-3" style={{ marginBottom: 16 }}>
+          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: 14, textAlign: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 6 }}>
+              <PoundSterling size={14} style={{ color: C.amber }} />
+              <span style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Avg Pour Profit</span>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: C.ink, fontFamily: "'JetBrains Mono', monospace" }}>
+              {'£'}{avgPourProfit.toFixed(2)}
+            </div>
+          </div>
+          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: 14, textAlign: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 6 }}>
+              <Award size={14} style={{ color: C.green }} />
+              <span style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Best Margin</span>
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.green, fontFamily: "'JetBrains Mono', monospace" }}>
+              {bestMarginItem?.item}
+            </div>
+            <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{bestMarginItem?.margin.toFixed(1)}%</div>
+          </div>
+          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: 14, textAlign: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 6 }}>
+              <Target size={14} style={{ color: C.teal }} />
+              <span style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Highest Volume</span>
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.teal, fontFamily: "'JetBrains Mono', monospace" }}>
+              {highestVolumeItem?.item}
+            </div>
+            <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{highestVolumeItem?.qty} sold</div>
+          </div>
+        </div>
+
+        {/* Sortable Table */}
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, minWidth: 720 }}>
+            <thead>
+              <tr style={{ borderBottom: `1px solid ${C.border}` }}>
+                {SELLER_COLUMNS.map(col => (
+                  <th key={col.key}
+                    onClick={col.sortable ? () => handleSellerSort(col.key) : undefined}
+                    style={{
+                      padding: '8px 8px', textAlign: col.key === 'item' ? 'left' : 'right',
+                      color: C.textDim, fontWeight: 500, fontSize: 10, textTransform: 'uppercase',
+                      cursor: col.sortable ? 'pointer' : 'default', whiteSpace: 'nowrap',
+                      userSelect: 'none',
+                    }}>
+                    {col.label}{col.sortable && <SortIcon column={col.key} sortCol={sortCol} sortDir={sortDir} />}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {sellersRows.map((r, i) => {
+                const isHighestMargin = bestMarginItem && r.item === bestMarginItem.item
+                const isHighestVolume = highestVolumeItem && r.item === highestVolumeItem.item
+                return (
+                  <tr key={r.item} style={{
+                    borderBottom: `1px solid ${C.border}`,
+                    background: isHighestMargin ? `${C.green}08` : isHighestVolume ? `${C.teal}08` : 'transparent',
+                  }}>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', color: C.textDim, fontFamily: "'JetBrains Mono', monospace", fontSize: 11 }}>{i + 1}</td>
+                    <td style={{ padding: '10px 8px', textAlign: 'left', color: C.ink, fontWeight: 500 }}>
+                      {r.item}
+                      {isHighestMargin && <span style={{ marginLeft: 6, fontSize: 9, color: C.green, border: `1px solid ${C.green}40`, padding: '1px 5px', borderRadius: 4, fontWeight: 600 }}>BEST MARGIN</span>}
+                      {isHighestVolume && !isHighestMargin && <span style={{ marginLeft: 6, fontSize: 9, color: C.teal, border: `1px solid ${C.teal}40`, padding: '1px 5px', borderRadius: 4, fontWeight: 600 }}>TOP VOLUME</span>}
+                    </td>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', color: C.text, fontFamily: "'JetBrains Mono', monospace" }}>{r.qty}</td>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', color: C.ink, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{r.revenue.toFixed(2)}</td>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', color: C.red, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{r.cogs.toFixed(2)}</td>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', color: C.textMuted, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{r.labour.toFixed(2)}</td>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', color: C.textMuted, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{r.fixed.toFixed(2)}</td>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', color: C.green, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{r.profit.toFixed(2)}</td>
+                    <td style={{ padding: '10px 8px', textAlign: 'right', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: marginColor(r.margin) }}>
+                      {r.margin.toFixed(1)}%
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+            <tfoot>
+              <tr style={{ borderTop: `2px solid ${C.border}`, background: `${C.teal}06` }}>
+                <td style={{ padding: '10px 8px' }} />
+                <td style={{ padding: '10px 8px', textAlign: 'left', color: C.ink, fontWeight: 700, fontSize: 11, textTransform: 'uppercase' }}>Totals</td>
+                <td style={{ padding: '10px 8px', textAlign: 'right', color: C.ink, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{sellersTotals.qty}</td>
+                <td style={{ padding: '10px 8px', textAlign: 'right', color: C.ink, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{sellersTotals.revenue.toFixed(2)}</td>
+                <td style={{ padding: '10px 8px', textAlign: 'right', color: C.red, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{sellersTotals.cogs.toFixed(2)}</td>
+                <td style={{ padding: '10px 8px', textAlign: 'right', color: C.textMuted, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{sellersTotals.labour.toFixed(2)}</td>
+                <td style={{ padding: '10px 8px', textAlign: 'right', color: C.textMuted, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{sellersTotals.fixed.toFixed(2)}</td>
+                <td style={{ padding: '10px 8px', textAlign: 'right', color: C.green, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{sellersTotals.profit.toFixed(2)}</td>
+                <td style={{ padding: '10px 8px', textAlign: 'right', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: marginColor(totalMargin) }}>{totalMargin.toFixed(1)}%</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
 
       <style>{`
