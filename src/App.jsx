@@ -17,6 +17,12 @@ import Expansion from './pages/owner/Expansion'
 import Reports from './pages/owner/Reports'
 import Stock from './pages/Stock'
 
+// CRM pages
+import CustomerDirectory from './pages/crm/CustomerDirectory'
+import CustomerProfile from './pages/crm/CustomerProfile'
+import Campaigns from './pages/crm/Campaigns'
+import Loyalty from './pages/crm/Loyalty'
+
 // Shared pages
 import StaffProfile from './pages/StaffProfile'
 
@@ -59,6 +65,10 @@ function OwnerRoutes() {
       <Route path="/insights" element={<Insights C={C} />} />
       <Route path="/expansion" element={<Expansion />} />
       <Route path="/reports" element={<Reports />} />
+      <Route path="/customers" element={<CustomerDirectory />} />
+      <Route path="/customers/:customerId" element={<CustomerProfile />} />
+      <Route path="/campaigns" element={<Campaigns />} />
+      <Route path="/loyalty" element={<Loyalty />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
@@ -74,6 +84,9 @@ function GMRoutes() {
       <Route path="/checklist" element={<DailyChecklist />} />
       <Route path="/team" element={<Team C={C} />} />
       <Route path="/insights" element={<Insights C={C} />} />
+      <Route path="/customers" element={<CustomerDirectory />} />
+      <Route path="/customers/:customerId" element={<CustomerProfile />} />
+      <Route path="/loyalty" element={<Loyalty />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )

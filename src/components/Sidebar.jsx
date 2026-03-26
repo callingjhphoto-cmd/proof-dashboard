@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Receipt, Package, Users, Brain, Bell, Grid3X3, TrendingUp,
   Calendar, ArrowLeftRight, Clock, BookOpen, PoundSterling, Megaphone,
   ClipboardCheck, BarChart3, Truck, Coffee, GraduationCap, LogOut,
-  Building2, Wallet, Expand
+  Building2, Wallet, Expand, UserCircle, Send, Award
 } from 'lucide-react'
 import { ROLES, ROLE_META, useRole } from '../context/RoleContext'
 
@@ -26,6 +26,10 @@ const NAV_BY_ROLE = {
     { to: '/insights', icon: Brain, label: 'AI Insights' },
     { to: '/expansion', icon: Expand, label: 'Expansion' },
     { to: '/reports', icon: BarChart3, label: 'Reports' },
+    { divider: true, label: 'Customers' },
+    { to: '/customers', icon: UserCircle, label: 'Directory' },
+    { to: '/campaigns', icon: Send, label: 'Campaigns' },
+    { to: '/loyalty', icon: Award, label: 'Loyalty' },
   ],
   [ROLES.GM]: [
     { to: '/', icon: LayoutDashboard, label: 'The Pass' },
@@ -35,6 +39,9 @@ const NAV_BY_ROLE = {
     { to: '/checklist', icon: ClipboardCheck, label: 'Daily Checklist' },
     { to: '/team', icon: Users, label: 'Team' },
     { to: '/insights', icon: Brain, label: 'AI Insights' },
+    { divider: true, label: 'Customers' },
+    { to: '/customers', icon: UserCircle, label: 'Directory' },
+    { to: '/loyalty', icon: Award, label: 'Loyalty' },
   ],
   [ROLES.EMPLOYEE]: [
     { to: '/', icon: Calendar, label: 'My Shifts' },
@@ -97,17 +104,29 @@ export default function Sidebar({ open }) {
 
       {/* Nav */}
       <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, padding: '0 8px' }}>
-        {nav.map(({ to, icon: Icon, label }) => (
-          <NavLink key={to} to={to} end={to === '/'} style={({ isActive }) => ({
-            display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 8,
-            textDecoration: 'none', fontSize: 13, fontWeight: isActive ? 600 : 400, transition: 'all 0.15s',
-            color: isActive ? roleColor : C.textMuted,
-            background: isActive ? roleBg : 'transparent',
-            borderLeft: isActive ? `3px solid ${roleColor}` : '3px solid transparent',
-          })}>
-            <Icon size={18} />{label}
-          </NavLink>
-        ))}
+        {nav.map((item, i) => {
+          if (item.divider) {
+            return (
+              <div key={`div-${i}`} style={{
+                fontSize: 10, fontWeight: 600, color: C.textDim, textTransform: 'uppercase',
+                letterSpacing: '1px', padding: '14px 12px 6px',
+                borderTop: `1px solid ${C.border}`, marginTop: 6,
+              }}>{item.label}</div>
+            )
+          }
+          const { to, icon: Icon, label } = item
+          return (
+            <NavLink key={to} to={to} end={to === '/'} style={({ isActive }) => ({
+              display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 8,
+              textDecoration: 'none', fontSize: 13, fontWeight: isActive ? 600 : 400, transition: 'all 0.15s',
+              color: isActive ? roleColor : C.textMuted,
+              background: isActive ? roleBg : 'transparent',
+              borderLeft: isActive ? `3px solid ${roleColor}` : '3px solid transparent',
+            })}>
+              <Icon size={18} />{label}
+            </NavLink>
+          )
+        })}
       </nav>
 
       {/* Switch role */}
