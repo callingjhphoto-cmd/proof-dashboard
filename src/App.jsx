@@ -5,6 +5,7 @@ import RoleSelector from './components/RoleSelector'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { ToastProvider } from './components/Toast'
+import Onboarding from './components/Onboarding'
 
 const MobileContext = createContext({ sidebarOpen: false, setSidebarOpen: () => {} })
 export function useMobile() { return useContext(MobileContext) }
@@ -28,6 +29,7 @@ import MenuEngineering from './pages/owner/MenuEngineering'
 import LeagueTable from './pages/owner/LeagueTable'
 import Scheduling from './pages/gm/Scheduling'
 import BusinessLoop from './pages/owner/BusinessLoop'
+import Pricing from './pages/owner/Pricing'
 
 // CRM pages
 import CustomerDirectory from './pages/crm/CustomerDirectory'
@@ -93,6 +95,7 @@ function OwnerRoutes() {
       <Route path="/venues/league" element={<LeagueTable />} />
       <Route path="/business-loop" element={<BusinessLoop />} />
       <Route path="/scheduling" element={<Scheduling />} />
+      <Route path="/pricing" element={<Pricing />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
@@ -152,6 +155,7 @@ function AppContent() {
 
   return (
     <MobileContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
+      <Onboarding />
       <div className="app-layout">
         {/* Mobile overlay */}
         {sidebarOpen && (

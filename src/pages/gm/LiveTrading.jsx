@@ -12,6 +12,12 @@ const C = {
   text: '#E5E5E5', textMuted: '#888', textDim: '#555', ink: '#fff',
 }
 
+// ─── POS INTEGRATION ────────────────────────────────────────────────
+// TODO: When Square account is available, replace mock data with live POS feed.
+// Integration points: Square Web Payments SDK, Square Orders API, Square Inventory API.
+// All data below is mock — ready to swap with real Square API responses.
+// Env var: VITE_SQUARE_ACCESS_TOKEN (not yet set)
+
 // ─── TIME PERIOD DATA ───────────────────────────────────────────────
 
 const hourlyData = [

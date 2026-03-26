@@ -4,7 +4,8 @@ import {
   Calendar, ArrowLeftRight, Clock, BookOpen, PoundSterling, Megaphone,
   ClipboardCheck, BarChart3, Truck, Coffee, GraduationCap, LogOut,
   Building2, Wallet, Expand, UserCircle, Send, Award, Activity, FileText, Eye,
-  Sun, Star, MessageSquare, UtensilsCrossed, Boxes, CloudSun, CalendarClock, Zap
+  Sun, Star, MessageSquare, UtensilsCrossed, Boxes, CloudSun, CalendarClock, Zap,
+  HelpCircle, RotateCcw, Tag
 } from 'lucide-react'
 import { ROLES, ROLE_META, useRole } from '../context/RoleContext'
 
@@ -19,7 +20,7 @@ const C = {
 
 const NAV_BY_ROLE = {
   [ROLES.OWNER]: [
-    { to: '/', icon: Zap, label: 'Business Loop' },
+    { to: '/', icon: Zap, label: 'Business Loop', tourId: 'business-loop' },
     { to: '/morning-briefing', icon: Sun, label: 'Morning Briefing' },
     { to: '/venues', icon: Grid3X3, label: 'Venue Grid' },
     { to: '/pl', icon: Receipt, label: 'P&L' },
@@ -27,10 +28,10 @@ const NAV_BY_ROLE = {
     { to: '/labour', icon: Users, label: 'Labour Trends' },
     { to: '/stock', icon: Package, label: 'Stock Intelligence' },
     { to: '/insights', icon: Brain, label: 'AI Insights' },
-    { to: '/ops-intelligence', icon: Activity, label: 'Ops Intelligence' },
+    { to: '/ops-intelligence', icon: Activity, label: 'Ops Intelligence', tourId: 'ops-section' },
     { to: '/ops-weekly', icon: FileText, label: 'Weekly Review' },
     { to: '/competitor-watch', icon: Eye, label: 'Competitor Watch' },
-    { to: '/expansion', icon: Expand, label: 'Expansion' },
+    { to: '/expansion', icon: Expand, label: 'Expansion', tourId: 'expansion-link' },
     { to: '/reports', icon: BarChart3, label: 'Reports' },
     { to: '/bookings', icon: BookOpen, label: 'Bookings' },
     { to: '/suppliers', icon: Truck, label: 'Suppliers' },
@@ -38,8 +39,9 @@ const NAV_BY_ROLE = {
     { to: '/menu-engineering', icon: UtensilsCrossed, label: 'Menu Engineering' },
     { to: '/venues/league', icon: Award, label: 'League Table' },
     { to: '/scheduling', icon: CalendarClock, label: 'Scheduling AI' },
+    { to: '/pricing', icon: Tag, label: 'Pricing' },
     { divider: true, label: 'Customers' },
-    { to: '/customers', icon: UserCircle, label: 'Directory' },
+    { to: '/customers', icon: UserCircle, label: 'Directory', tourId: 'crm-section' },
     { to: '/campaigns', icon: Send, label: 'Campaigns' },
     { to: '/loyalty', icon: Award, label: 'Loyalty' },
   ],

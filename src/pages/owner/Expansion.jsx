@@ -485,7 +485,8 @@ const staffingModels = {
       if (sqft <= 2500) return { bartenders: 3, barbacks: 2, hosts: 1, floor: 1, kitchen: 0, senior: 1, label: 'Large bar' }
       return { bartenders: 5, barbacks: 3, hosts: 2, floor: 2, kitchen: 0, senior: 2, label: 'Flagship' }
     },
-    shiftsPerDay: 2, revPerSqft: 650,
+    // London benchmark: Lyaness ~£700/sqft, avg cocktail bar £500-600/sqft
+    shiftsPerDay: 2, revPerSqft: 580,
   },
   'Wine Bar': {
     perShift: (sqft) => {
@@ -494,7 +495,8 @@ const staffingModels = {
       if (sqft <= 2500) return { bartenders: 2, barbacks: 1, hosts: 1, floor: 2, kitchen: 1, senior: 1, label: 'Large wine bar' }
       return { bartenders: 3, barbacks: 2, hosts: 2, floor: 3, kitchen: 2, senior: 2, label: 'Flagship' }
     },
-    shiftsPerDay: 2, revPerSqft: 550,
+    // London benchmark: Noble Rot ~£520/sqft, avg wine bar £400-500/sqft
+    shiftsPerDay: 2, revPerSqft: 480,
   },
   'Gastropub': {
     perShift: (sqft) => {
@@ -503,7 +505,8 @@ const staffingModels = {
       if (sqft <= 3500) return { bartenders: 2, barbacks: 2, hosts: 1, floor: 3, kitchen: 4, senior: 2, label: 'Large gastropub' }
       return { bartenders: 3, barbacks: 2, hosts: 2, floor: 4, kitchen: 5, senior: 2, label: 'Flagship' }
     },
-    shiftsPerDay: 2, revPerSqft: 480,
+    // London benchmark: Harwood Arms ~£450/sqft, avg gastropub £380-450/sqft
+    shiftsPerDay: 2, revPerSqft: 420,
   },
   'Restaurant': {
     perShift: (sqft) => {
@@ -512,7 +515,8 @@ const staffingModels = {
       if (sqft <= 3500) return { bartenders: 1, barbacks: 1, hosts: 2, floor: 4, kitchen: 5, senior: 2, label: 'Large restaurant' }
       return { bartenders: 2, barbacks: 1, hosts: 2, floor: 6, kitchen: 7, senior: 3, label: 'Flagship' }
     },
-    shiftsPerDay: 2, revPerSqft: 520,
+    // London benchmark: mid-market restaurant £420-500/sqft, fine dining higher
+    shiftsPerDay: 2, revPerSqft: 460,
   },
   'Caf\u00e9': {
     perShift: (sqft) => {
@@ -521,7 +525,8 @@ const staffingModels = {
       if (sqft <= 2500) return { bartenders: 0, barbacks: 1, hosts: 1, floor: 3, kitchen: 3, senior: 1, label: 'Large caf\u00e9' }
       return { bartenders: 1, barbacks: 1, hosts: 2, floor: 4, kitchen: 4, senior: 2, label: 'Flagship' }
     },
-    shiftsPerDay: 1.5, revPerSqft: 380,
+    // London benchmark: Grind ~£340/sqft, avg all-day caf\u00e9 £300-380/sqft
+    shiftsPerDay: 1.5, revPerSqft: 340,
   },
 }
 
@@ -1035,18 +1040,43 @@ export default function Expansion() {
     const totalPerShift = staffPerShift + seniorPerShift
     const shiftsPerDay = model.shiftsPerDay
     const weeklyStaffHours = Math.round(totalPerShift * shiftsPerDay * SHIFT_HOURS * 7)
-    const weeklyLabourCost = Math.round(
+    const weeklyBaseLabourCost = Math.round(
       (staffPerShift * shiftsPerDay * SHIFT_HOURS * 7 * HOURLY_RATE_STAFF) +
       (seniorPerShift * shiftsPerDay * SHIFT_HOURS * 7 * HOURLY_RATE_SENIOR)
     )
-    const monthlyLabourCost = Math.round(weeklyLabourCost * 4.33)
-    const annualLabourCost = monthlyLabourCost * 12
+    const monthlyBaseLabourCost = Math.round(weeklyBaseLabourCost * 4.33)
+    const annualBaseLabourCost = monthlyBaseLabourCost * 12
+
+    // Employer on-costs (UK statutory obligations)
+    // Employer NI: 13.8% on earnings above £9,100/year threshold per employee
+    const NI_THRESHOLD_ANNUAL = 9100
+    const NI_RATE = 0.138
+    const annualPerStaff = HOURLY_RATE_STAFF * SHIFT_HOURS * shiftsPerDay * 365
+    const annualPerSenior = HOURLY_RATE_SENIOR * SHIFT_HOURS * shiftsPerDay * 365
+    const niCostStaff = staffPerShift * Math.max(0, annualPerStaff - NI_THRESHOLD_ANNUAL) * NI_RATE
+    const niCostSenior = seniorPerShift * Math.max(0, annualPerSenior - NI_THRESHOLD_ANNUAL) * NI_RATE
+    const annualEmployerNI = Math.round(niCostStaff + niCostSenior)
+
+    // Employer pension: 3% minimum auto-enrolment contribution
+    const PENSION_RATE = 0.03
+    const annualPension = Math.round(annualBaseLabourCost * PENSION_RATE)
+
+    // Holiday pay: 12.07% accrual (28 days / 232 working days)
+    const HOLIDAY_ACCRUAL = 0.1207
+    const annualHolidayPay = Math.round(annualBaseLabourCost * HOLIDAY_ACCRUAL)
+
+    const annualEmployerOnCosts = annualEmployerNI + annualPension + annualHolidayPay
+    const annualLabourCost = annualBaseLabourCost + annualEmployerOnCosts
+    const weeklyLabourCost = Math.round(annualLabourCost / 52)
+    const monthlyLabourCost = Math.round(annualLabourCost / 12)
+
     const projectedAnnualRevenue = leaseSize * model.revPerSqft
     const labourPct = ((annualLabourCost / projectedAnnualRevenue) * 100).toFixed(1)
     const labourTrafficLight = parseFloat(labourPct) > 35 ? 'red' : parseFloat(labourPct) > 30 ? 'amber' : 'green'
     const staffing = {
       shift, staffPerShift, seniorPerShift, totalPerShift, shiftsPerDay,
       weeklyStaffHours, weeklyLabourCost, monthlyLabourCost, annualLabourCost,
+      annualBaseLabourCost, annualEmployerNI, annualPension, annualHolidayPay, annualEmployerOnCosts,
       projectedAnnualRevenue, labourPct, labourTrafficLight, label: shift.label,
     }
 
@@ -1944,9 +1974,14 @@ export default function Expansion() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {[
                     { label: 'Weekly Staff Hours', value: `${leaseCalc.staffing.weeklyStaffHours.toLocaleString()} hrs` },
-                    { label: 'Weekly Labour Cost', value: `\u00a3${leaseCalc.staffing.weeklyLabourCost.toLocaleString()}` },
-                    { label: 'Monthly Labour Cost', value: `\u00a3${leaseCalc.staffing.monthlyLabourCost.toLocaleString()}`, bold: true },
-                    { label: 'Annual Labour Cost', value: `\u00a3${leaseCalc.staffing.annualLabourCost.toLocaleString()}`, bold: true },
+                    { label: 'Base Wages (annual)', value: `\u00a3${leaseCalc.staffing.annualBaseLabourCost.toLocaleString()}` },
+                    { label: 'Employer NI (13.8% above \u00a39,100)', value: `\u00a3${leaseCalc.staffing.annualEmployerNI.toLocaleString()}`, note: 'statutory' },
+                    { label: 'Employer Pension (3%)', value: `\u00a3${leaseCalc.staffing.annualPension.toLocaleString()}`, note: 'auto-enrolment' },
+                    { label: 'Holiday Pay Accrual (12.07%)', value: `\u00a3${leaseCalc.staffing.annualHolidayPay.toLocaleString()}`, note: '28 days' },
+                    { label: 'Total Employer On-Costs', value: `\u00a3${leaseCalc.staffing.annualEmployerOnCosts.toLocaleString()}`, bold: true },
+                    { label: 'Weekly Total Labour Cost', value: `\u00a3${leaseCalc.staffing.weeklyLabourCost.toLocaleString()}` },
+                    { label: 'Monthly Total Labour Cost', value: `\u00a3${leaseCalc.staffing.monthlyLabourCost.toLocaleString()}`, bold: true },
+                    { label: 'Annual Total Labour Cost', value: `\u00a3${leaseCalc.staffing.annualLabourCost.toLocaleString()}`, bold: true },
                     { label: 'Projected Annual Revenue', value: `\u00a3${leaseCalc.staffing.projectedAnnualRevenue.toLocaleString()}`, note: `${venueType} @ \u00a3${staffingModels[venueType].revPerSqft}/sqft` },
                   ].map((item, i) => (
                     <div key={i} style={{
