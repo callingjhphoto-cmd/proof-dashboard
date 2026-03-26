@@ -1,11 +1,11 @@
-import { useState, useEffect, createContext, useContext } from 'react'
+import { useState, useEffect, useCallback, createContext, useContext } from 'react'
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { RoleProvider, ROLES, useRole } from './context/RoleContext'
 import RoleSelector from './components/RoleSelector'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { ToastProvider } from './components/Toast'
-import Onboarding from './components/Onboarding'
+import OnboardingTour, { resetTour } from './components/OnboardingTour'
 
 const MobileContext = createContext({ sidebarOpen: false, setSidebarOpen: () => {} })
 export function useMobile() { return useContext(MobileContext) }
@@ -30,6 +30,7 @@ import LeagueTable from './pages/owner/LeagueTable'
 import Scheduling from './pages/gm/Scheduling'
 import BusinessLoop from './pages/owner/BusinessLoop'
 import Pricing from './pages/owner/Pricing'
+import Settings from './pages/owner/Settings'
 
 // CRM pages
 import CustomerDirectory from './pages/crm/CustomerDirectory'
@@ -96,6 +97,7 @@ function OwnerRoutes() {
       <Route path="/business-loop" element={<BusinessLoop />} />
       <Route path="/scheduling" element={<Scheduling />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
@@ -142,6 +144,7 @@ function EmployeeRoutes() {
 function AppContent() {
   const { role, setRole } = useRole()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [forceTour, setForceTour] = useState(false)
   const location = useLocation()
 
   // Close sidebar on route change (mobile)
@@ -149,13 +152,23 @@ function AppContent() {
     setSidebarOpen(false)
   }, [location.pathname])
 
+  const handleRestartTour = useCallback(() => {
+    if (role) {
+      resetTour(role)
+      setForceTour(true)
+    }
+  }, [role])
+
+  const handleTourComplete = useCallback(() => {
+    setForceTour(false)
+  }, [])
+
   if (!role) {
     return <RoleSelector onSelect={setRole} />
   }
 
   return (
     <MobileContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
-      <Onboarding />
       <div className="app-layout">
         {/* Mobile overlay */}
         {sidebarOpen && (
@@ -164,7 +177,7 @@ function AppContent() {
             onClick={() => setSidebarOpen(false)}
           />
         )}
-        <Sidebar open={sidebarOpen} />
+        <Sidebar open={sidebarOpen} onRestartTour={handleRestartTour} />
         <div className="main-content">
           <Header onMenuClick={() => setSidebarOpen(prev => !prev)} />
           <main style={{ padding: 24 }}>
@@ -174,6 +187,11 @@ function AppContent() {
           </main>
         </div>
       </div>
+      <OnboardingTour
+        role={role}
+        forceShow={forceTour}
+        onComplete={handleTourComplete}
+      />
     </MobileContext.Provider>
   )
 }

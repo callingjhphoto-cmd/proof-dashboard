@@ -72,7 +72,7 @@ export default function Header({ onMenuClick }) {
   const sevColorMap = { red: C.red, orange: '#F97316', amber: C.amber, green: '#22C55E' }
 
   return (
-    <header style={{
+    <header data-tour="header" style={{
       height: 56, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center',
       justifyContent: 'space-between', padding: '0 24px', background: C.bg,
     }}>

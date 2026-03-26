@@ -135,7 +135,9 @@ export default function BusinessLoop() {
                   zIndex: isHovered ? 10 : 1,
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
+                  transform: `translate(-50%, -50%) ${isHovered ? 'scale(1.15)' : 'scale(1)'}`,
                 }}
+                title={`Go to ${node.label}`}
               >
                 {/* Node circle */}
                 <div style={{
@@ -145,7 +147,7 @@ export default function BusinessLoop() {
                   border: `2px solid ${isHovered ? C.amber : C.border}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'all 0.3s ease',
-                  boxShadow: isHovered ? `0 0 20px ${C.amber}30` : 'none',
+                  boxShadow: isHovered ? `0 0 24px ${C.amber}40, 0 0 48px ${C.amber}15` : 'none',
                 }}>
                   <NodeIcon size={isHovered ? 28 : 22} color={isHovered ? C.amber : C.textMuted} />
                 </div>
@@ -240,31 +242,56 @@ export default function BusinessLoop() {
           {LOOP_NODES.map((node, i) => {
             const NodeIcon = node.icon
             return (
-              <div key={node.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
+              <div
+                key={node.id}
+                onClick={() => navigate(node.route)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  cursor: 'pointer', padding: '8px 12px', borderRadius: 10,
+                  border: `1px solid transparent`,
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = C.amberBg
+                  e.currentTarget.style.borderColor = C.amber + '30'
+                  e.currentTarget.querySelector('.loop-step-icon').style.borderColor = C.amber
+                  e.currentTarget.querySelector('.loop-step-icon').style.background = C.amberBg
+                  e.currentTarget.querySelector('.loop-step-label').style.color = C.amber
+                  e.currentTarget.querySelector('.loop-step-btn').style.borderColor = C.amber + '50'
+                  e.currentTarget.querySelector('.loop-step-btn').style.color = C.amber
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'transparent'
+                  e.currentTarget.style.borderColor = 'transparent'
+                  e.currentTarget.querySelector('.loop-step-icon').style.borderColor = C.border
+                  e.currentTarget.querySelector('.loop-step-icon').style.background = C.card
+                  e.currentTarget.querySelector('.loop-step-label').style.color = C.ink
+                  e.currentTarget.querySelector('.loop-step-btn').style.borderColor = C.border
+                  e.currentTarget.querySelector('.loop-step-btn').style.color = C.textMuted
+                }}
+              >
+                <div className="loop-step-icon" style={{
                   width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
                   background: C.card, border: `1px solid ${C.border}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all 0.2s ease',
                 }}>
                   <NodeIcon size={16} color={C.amber} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{node.label}</div>
+                  <div className="loop-step-label" style={{ fontSize: 13, fontWeight: 600, color: C.ink, transition: 'color 0.2s' }}>{node.label}</div>
                   <div style={{ fontSize: 11, color: C.textMuted }}>{node.dataFlows[0]}</div>
                 </div>
-                <button
-                  onClick={() => navigate(node.route)}
+                <div
+                  className="loop-step-btn"
                   style={{
                     padding: '6px 14px', borderRadius: 6, border: `1px solid ${C.border}`,
-                    background: 'transparent', color: C.textMuted, fontSize: 11, cursor: 'pointer',
+                    background: 'transparent', color: C.textMuted, fontSize: 11,
+                    transition: 'all 0.2s ease',
                   }}
                 >
-                  View
-                </button>
-                {i < LOOP_NODES.length - 1 && (
-                  <div style={{ position: 'absolute', left: 17, marginTop: 44, color: C.textDim }}>
-                  </div>
-                )}
+                  View &rarr;
+                </div>
               </div>
             )
           })}

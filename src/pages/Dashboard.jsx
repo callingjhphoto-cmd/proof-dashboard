@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-import { TrendingUp, TrendingDown, Users, UtensilsCrossed, AlertTriangle, Clock, Percent, PoundSterling, Sun, Cloud, CloudRain, CloudSnow, Droplets } from 'lucide-react'
+import { TrendingUp, TrendingDown, Users, UtensilsCrossed, AlertTriangle, Clock, Percent, PoundSterling, Sun, Cloud, CloudRain, CloudSnow, Droplets, Lightbulb } from 'lucide-react'
 
 const revenueData = [
   { day: 'Mon', thisWeek: 5200, lastWeek: 4800 },
@@ -85,6 +85,22 @@ export default function Dashboard({ C }) {
         <KPI icon={Percent} label="Labour %" value="34%" change="+4pts" changeDir="up" goodDir="down" period="vs last week" C={C} />
         <KPI icon={UtensilsCrossed} label="Gross Profit %" value="68.2%" change="+1.7pts" changeDir="up" goodDir="up" period="vs last week" C={C} />
         <KPI icon={Users} label="Covers Today" value="98" change="+8%" changeDir="up" goodDir="up" period="vs last week" C={C} />
+      </div>
+
+      {/* AI Insight Narrative */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(212,168,83,0.04), rgba(212,168,83,0.01))',
+        border: `1px solid rgba(212,168,83,0.15)`,
+        borderLeft: `3px solid ${C.amber}`,
+        borderRadius: 12, padding: '14px 16px', marginBottom: 20,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <Lightbulb size={14} color={C.amber} />
+          <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', color: C.amber }}>AI Insight</span>
+        </div>
+        <div style={{ fontSize: 13, color: C.text, lineHeight: 1.5 }}>
+          Revenue is <strong style={{ color: C.green }}>+12% above last week</strong>, driven by increased covers (+8%) and higher average spend per head. However, <strong style={{ color: C.red }}>labour is running 10pts above bar benchmark</strong> (34% vs 24% target) due to staff overlap 14:00{'\u2013'}16:00. Reducing overlap by 1 staff member during that window would save approximately {'\u00a3'}85/day ({'\u00a3'}595/week). GP% at 68.2% is strong but below the 70%+ cocktail bar benchmark {'\u2014'} check pour costs on well spirits.
+        </div>
       </div>
 
       {/* Weather Demand Forecast — Next 7 Days */}

@@ -5,7 +5,7 @@ import {
   ClipboardCheck, BarChart3, Truck, Coffee, GraduationCap, LogOut,
   Building2, Wallet, Expand, UserCircle, Send, Award, Activity, FileText, Eye,
   Sun, Star, MessageSquare, UtensilsCrossed, Boxes, CloudSun, CalendarClock, Zap,
-  HelpCircle, RotateCcw, Tag
+  HelpCircle, RotateCcw, Tag, Settings
 } from 'lucide-react'
 import { ROLES, ROLE_META, useRole } from '../context/RoleContext'
 
@@ -44,14 +44,16 @@ const NAV_BY_ROLE = {
     { to: '/customers', icon: UserCircle, label: 'Directory', tourId: 'crm-section' },
     { to: '/campaigns', icon: Send, label: 'Campaigns' },
     { to: '/loyalty', icon: Award, label: 'Loyalty' },
+    { divider: true, label: 'System' },
+    { to: '/settings', icon: Settings, label: 'Settings & Integrations' },
   ],
   [ROLES.GM]: [
     { to: '/morning-briefing', icon: Sun, label: 'Morning Briefing' },
     { to: '/', icon: LayoutDashboard, label: 'The Pass' },
-    { to: '/live', icon: TrendingUp, label: 'Live Trading' },
-    { to: '/rota', icon: Calendar, label: 'Rota' },
-    { to: '/stock', icon: Package, label: 'Stock Count' },
-    { to: '/checklist', icon: ClipboardCheck, label: 'Daily Checklist' },
+    { to: '/live', icon: TrendingUp, label: 'Live Trading', tourId: 'live-trading' },
+    { to: '/rota', icon: Calendar, label: 'Rota', tourId: 'rota-link' },
+    { to: '/stock', icon: Package, label: 'Stock Count', tourId: 'stock-link' },
+    { to: '/checklist', icon: ClipboardCheck, label: 'Daily Checklist', tourId: 'checklist-link' },
     { to: '/team', icon: Users, label: 'Team' },
     { to: '/insights', icon: Brain, label: 'AI Insights' },
     { to: '/bookings', icon: BookOpen, label: 'Bookings' },
@@ -65,15 +67,15 @@ const NAV_BY_ROLE = {
   [ROLES.EMPLOYEE]: [
     { to: '/', icon: Calendar, label: 'My Shifts' },
     { to: '/swap', icon: ArrowLeftRight, label: 'Shift Swap' },
-    { to: '/clock', icon: Clock, label: 'Clock In/Out' },
-    { to: '/specials', icon: Coffee, label: "Today's Specials" },
+    { to: '/clock', icon: Clock, label: 'Clock In/Out', tourId: 'clock-link' },
+    { to: '/specials', icon: Coffee, label: "Today's Specials", tourId: 'specials-link' },
     { to: '/tips', icon: PoundSterling, label: 'My Tips' },
     { to: '/training', icon: GraduationCap, label: 'Training' },
     { to: '/announcements', icon: Megaphone, label: 'Announcements' },
   ],
 }
 
-export default function Sidebar({ open }) {
+export default function Sidebar({ open, onRestartTour }) {
   const { role, setRole, notifications } = useRole()
   const meta = ROLE_META[role]
   const nav = NAV_BY_ROLE[role] || []
@@ -82,7 +84,7 @@ export default function Sidebar({ open }) {
   const notifCount = notifications[role] || 0
 
   return (
-    <aside className={open ? 'sidebar-open' : ''} style={{
+    <aside data-tour="sidebar" className={open ? 'sidebar-open' : ''} style={{
       width: 220, minHeight: '100vh', background: C.bg, borderRight: `1px solid ${C.border}`,
       display: 'flex', flexDirection: 'column', padding: '20px 0', position: 'fixed', left: 0, top: 0, zIndex: 100,
       transition: 'transform 0.3s ease',
@@ -133,9 +135,9 @@ export default function Sidebar({ open }) {
               }}>{item.label}</div>
             )
           }
-          const { to, icon: Icon, label } = item
+          const { to, icon: Icon, label, tourId } = item
           return (
-            <NavLink key={to} to={to} end={to === '/'} style={({ isActive }) => ({
+            <NavLink key={to} to={to} end={to === '/'} {...(tourId ? { 'data-tour': tourId } : {})} style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 8,
               textDecoration: 'none', fontSize: 13, fontWeight: isActive ? 600 : 400, transition: 'all 0.15s',
               color: isActive ? roleColor : C.textMuted,
@@ -147,6 +149,25 @@ export default function Sidebar({ open }) {
           )
         })}
       </nav>
+
+      {/* Restart Tour */}
+      {onRestartTour && (
+        <div style={{ padding: '4px 12px 0' }}>
+          <button
+            onClick={onRestartTour}
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 8,
+              padding: '8px 12px', borderRadius: 8, border: 'none',
+              background: 'transparent', color: C.textDim, fontSize: 11, cursor: 'pointer',
+              transition: 'all 0.15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = C.textMuted }}
+            onMouseLeave={e => { e.currentTarget.style.color = C.textDim }}
+          >
+            <HelpCircle size={13} /> Restart Tour
+          </button>
+        </div>
+      )}
 
       {/* Switch role */}
       <div style={{ padding: '12px', borderTop: `1px solid ${C.border}` }}>
