@@ -5,7 +5,7 @@ import {
   ClipboardCheck, BarChart3, Truck, Coffee, GraduationCap, LogOut,
   Building2, Wallet, Expand, UserCircle, Send, Award, Activity, FileText, Eye,
   Sun, Star, MessageSquare, UtensilsCrossed, Boxes, CloudSun, CalendarClock, Zap,
-  HelpCircle, RotateCcw, Tag, Settings
+  HelpCircle, RotateCcw, Settings
 } from 'lucide-react'
 import { ROLES, ROLE_META, useRole } from '../context/RoleContext'
 
@@ -39,7 +39,6 @@ const NAV_BY_ROLE = {
     { to: '/menu-engineering', icon: UtensilsCrossed, label: 'Menu Engineering' },
     { to: '/venues/league', icon: Award, label: 'League Table' },
     { to: '/scheduling', icon: CalendarClock, label: 'Scheduling AI' },
-    { to: '/pricing', icon: Tag, label: 'Pricing' },
     { divider: true, label: 'Customers' },
     { to: '/customers', icon: UserCircle, label: 'Directory', tourId: 'crm-section' },
     { to: '/campaigns', icon: Send, label: 'Campaigns' },

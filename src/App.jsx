@@ -29,7 +29,6 @@ import MenuEngineering from './pages/owner/MenuEngineering'
 import LeagueTable from './pages/owner/LeagueTable'
 import Scheduling from './pages/gm/Scheduling'
 import BusinessLoop from './pages/owner/BusinessLoop'
-import Pricing from './pages/owner/Pricing'
 import Settings from './pages/owner/Settings'
 
 // CRM pages
@@ -96,7 +95,6 @@ function OwnerRoutes() {
       <Route path="/venues/league" element={<LeagueTable />} />
       <Route path="/business-loop" element={<BusinessLoop />} />
       <Route path="/scheduling" element={<Scheduling />} />
-      <Route path="/pricing" element={<Pricing />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
