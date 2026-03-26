@@ -15,7 +15,12 @@ import CashFlow from './pages/owner/CashFlow'
 import LabourTrends from './pages/owner/LabourTrends'
 import Expansion from './pages/owner/Expansion'
 import Reports from './pages/owner/Reports'
+import OpsIntelligence from './pages/owner/OpsIntelligence'
+import OpsWeekly from './pages/owner/OpsWeekly'
+import CompetitorWatch from './pages/owner/CompetitorWatch'
 import Stock from './pages/Stock'
+import MorningBriefing from './pages/owner/MorningBriefing'
+import Bookings from './pages/Bookings'
 
 // CRM pages
 import CustomerDirectory from './pages/crm/CustomerDirectory'
@@ -65,10 +70,15 @@ function OwnerRoutes() {
       <Route path="/insights" element={<Insights C={C} />} />
       <Route path="/expansion" element={<Expansion />} />
       <Route path="/reports" element={<Reports />} />
+      <Route path="/ops-intelligence" element={<OpsIntelligence />} />
+      <Route path="/ops-weekly" element={<OpsWeekly />} />
+      <Route path="/competitor-watch" element={<CompetitorWatch />} />
       <Route path="/customers" element={<CustomerDirectory />} />
       <Route path="/customers/:customerId" element={<CustomerProfile />} />
       <Route path="/campaigns" element={<Campaigns />} />
       <Route path="/loyalty" element={<Loyalty />} />
+      <Route path="/morning-briefing" element={<MorningBriefing />} />
+      <Route path="/bookings" element={<Bookings />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
@@ -87,6 +97,8 @@ function GMRoutes() {
       <Route path="/customers" element={<CustomerDirectory />} />
       <Route path="/customers/:customerId" element={<CustomerProfile />} />
       <Route path="/loyalty" element={<Loyalty />} />
+      <Route path="/morning-briefing" element={<MorningBriefing />} />
+      <Route path="/bookings" element={<Bookings />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )

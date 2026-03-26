@@ -3,7 +3,8 @@ import {
   LayoutDashboard, Receipt, Package, Users, Brain, Bell, Grid3X3, TrendingUp,
   Calendar, ArrowLeftRight, Clock, BookOpen, PoundSterling, Megaphone,
   ClipboardCheck, BarChart3, Truck, Coffee, GraduationCap, LogOut,
-  Building2, Wallet, Expand, UserCircle, Send, Award, Activity, FileText, Eye
+  Building2, Wallet, Expand, UserCircle, Send, Award, Activity, FileText, Eye,
+  Sun, Star, MessageSquare, UtensilsCrossed, Boxes, CloudSun, CalendarClock
 } from 'lucide-react'
 import { ROLES, ROLE_META, useRole } from '../context/RoleContext'
 
@@ -18,20 +19,26 @@ const C = {
 
 const NAV_BY_ROLE = {
   [ROLES.OWNER]: [
+    { to: '/morning-briefing', icon: Sun, label: 'Morning Briefing' },
     { to: '/', icon: Grid3X3, label: 'Venue Grid' },
     { to: '/pl', icon: Receipt, label: 'P&L' },
     { to: '/cash-flow', icon: Wallet, label: 'Cash Flow' },
     { to: '/labour', icon: Users, label: 'Labour Trends' },
     { to: '/stock', icon: Package, label: 'Stock Intelligence' },
     { to: '/insights', icon: Brain, label: 'AI Insights' },
+    { to: '/ops-intelligence', icon: Activity, label: 'Ops Intelligence' },
+    { to: '/ops-weekly', icon: FileText, label: 'Weekly Review' },
+    { to: '/competitor-watch', icon: Eye, label: 'Competitor Watch' },
     { to: '/expansion', icon: Expand, label: 'Expansion' },
     { to: '/reports', icon: BarChart3, label: 'Reports' },
+    { to: '/bookings', icon: BookOpen, label: 'Bookings' },
     { divider: true, label: 'Customers' },
     { to: '/customers', icon: UserCircle, label: 'Directory' },
     { to: '/campaigns', icon: Send, label: 'Campaigns' },
     { to: '/loyalty', icon: Award, label: 'Loyalty' },
   ],
   [ROLES.GM]: [
+    { to: '/morning-briefing', icon: Sun, label: 'Morning Briefing' },
     { to: '/', icon: LayoutDashboard, label: 'The Pass' },
     { to: '/live', icon: TrendingUp, label: 'Live Trading' },
     { to: '/rota', icon: Calendar, label: 'Rota' },
@@ -39,6 +46,7 @@ const NAV_BY_ROLE = {
     { to: '/checklist', icon: ClipboardCheck, label: 'Daily Checklist' },
     { to: '/team', icon: Users, label: 'Team' },
     { to: '/insights', icon: Brain, label: 'AI Insights' },
+    { to: '/bookings', icon: BookOpen, label: 'Bookings' },
     { divider: true, label: 'Customers' },
     { to: '/customers', icon: UserCircle, label: 'Directory' },
     { to: '/loyalty', icon: Award, label: 'Loyalty' },
