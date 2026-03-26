@@ -134,7 +134,7 @@ export default function VenueGrid() {
                   <div style={{ fontSize: 18, fontWeight: 700, color: C.ink }}>{`£${(venue.revenue / 1000).toFixed(0)}k`}</div>
                   <div style={{ fontSize: 11, color: venue.revenueChange >= 0 ? C.green : C.red, display: 'flex', alignItems: 'center', gap: 2 }}>
                     {venue.revenueChange >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                    {venue.revenueChange >= 0 ? '+' : ''}{venue.revenueChange}% MoM
+                    {venue.revenueChange >= 0 ? '+' : ''}{venue.revenueChange}% vs last month
                   </div>
                 </div>
                 <div>

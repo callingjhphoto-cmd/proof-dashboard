@@ -166,8 +166,8 @@ export default function Expansion() {
               { label: 'Monthly Labour', value: `£${scenario.monthlyLabour.toLocaleString()}`, icon: Calculator },
               { label: 'Projected Monthly Revenue', value: `£${scenario.projectedRevenue.toLocaleString()}`, icon: TrendingUp },
               { label: 'Projected Monthly EBITDA', value: `£${scenario.projectedEbitda.toLocaleString()}`, icon: TrendingUp },
-              { label: 'Year 1 ROI', value: `${scenario.yearOneROI}%`, icon: TrendingUp },
-              { label: 'Year 2 ROI', value: `${scenario.yearTwoROI}%`, icon: TrendingUp },
+              { label: 'Year 1 ROI', value: `${scenario.yearOneROI >= 0 ? '+' : ''}${scenario.yearOneROI}%`, icon: TrendingUp, color: scenario.yearOneROI >= 0 ? C.green : C.red },
+              { label: 'Year 2 ROI', value: `${scenario.yearTwoROI >= 0 ? '+' : ''}${scenario.yearTwoROI}%`, icon: TrendingUp, color: scenario.yearTwoROI >= 0 ? C.green : C.red },
             ].map((m, i) => (
               <div key={i} style={{
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -176,7 +176,7 @@ export default function Expansion() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: C.textMuted }}>
                   <m.icon size={14} color={C.textDim} />{m.label}
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{m.value}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: m.color || C.ink }}>{m.value}</div>
               </div>
             ))}
           </div>
