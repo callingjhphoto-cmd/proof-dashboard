@@ -19,8 +19,9 @@ const C = {
 
 const NAV_BY_ROLE = {
   [ROLES.OWNER]: [
+    { to: '/', icon: Zap, label: 'Business Loop' },
     { to: '/morning-briefing', icon: Sun, label: 'Morning Briefing' },
-    { to: '/', icon: Grid3X3, label: 'Venue Grid' },
+    { to: '/venues', icon: Grid3X3, label: 'Venue Grid' },
     { to: '/pl', icon: Receipt, label: 'P&L' },
     { to: '/cash-flow', icon: Wallet, label: 'Cash Flow' },
     { to: '/labour', icon: Users, label: 'Labour Trends' },
@@ -36,7 +37,7 @@ const NAV_BY_ROLE = {
     { to: '/reviews', icon: Star, label: 'Reviews' },
     { to: '/menu-engineering', icon: UtensilsCrossed, label: 'Menu Engineering' },
     { to: '/venues/league', icon: Award, label: 'League Table' },
-    { to: '/business-loop', icon: Zap, label: 'Business Loop' },
+    { to: '/scheduling', icon: CalendarClock, label: 'Scheduling AI' },
     { divider: true, label: 'Customers' },
     { to: '/customers', icon: UserCircle, label: 'Directory' },
     { to: '/campaigns', icon: Send, label: 'Campaigns' },

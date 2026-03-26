@@ -69,7 +69,8 @@ const C = {
 function OwnerRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<VenueGrid />} />
+      <Route path="/" element={<BusinessLoop />} />
+      <Route path="/venues" element={<VenueGrid />} />
       <Route path="/pl" element={<PnL C={C} />} />
       <Route path="/cash-flow" element={<CashFlow />} />
       <Route path="/labour" element={<LabourTrends />} />
@@ -91,6 +92,7 @@ function OwnerRoutes() {
       <Route path="/menu-engineering" element={<MenuEngineering />} />
       <Route path="/venues/league" element={<LeagueTable />} />
       <Route path="/business-loop" element={<BusinessLoop />} />
+      <Route path="/scheduling" element={<Scheduling />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )

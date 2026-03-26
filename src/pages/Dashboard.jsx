@@ -13,8 +13,8 @@ const revenueData = [
 ]
 
 const alerts = [
-  { severity: 'warning', text: 'Labour at 34% — 4% above weekly target', time: '2h ago' },
-  { severity: 'critical', text: 'Low stock: Hendricks Gin (2 bottles remaining)', time: '1h ago' },
+  { severity: 'warning', text: 'Labour at 34% \u2014 10pts above bar benchmark (24%). Staff overlap during quiet hours detected 14:00\u201316:00', time: '2h ago' },
+  { severity: 'critical', text: 'Low stock: Hendricks Gin (2 bottles remaining, est. \u00a3186 cost impact if out-of-stock tonight)', time: '1h ago' },
   { severity: 'info', text: 'VIP arriving: James Worthington (High Spender, £2,840 lifetime, prefers Booth 3, Negroni drinker)', time: '30m ago' },
   { severity: 'info', text: 'Friday booking: 142 covers (18% above avg)', time: '4h ago' },
   { severity: 'success', text: 'GP% trending up: 68.2% vs 66.5% last week', time: '6h ago' },
