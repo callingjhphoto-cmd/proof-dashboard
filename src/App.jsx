@@ -24,6 +24,8 @@ import Bookings from './pages/Bookings'
 import Suppliers from './pages/Suppliers'
 import Reviews from './pages/Reviews'
 import MenuEngineering from './pages/owner/MenuEngineering'
+import LeagueTable from './pages/owner/LeagueTable'
+import Scheduling from './pages/gm/Scheduling'
 
 // CRM pages
 import CustomerDirectory from './pages/crm/CustomerDirectory'
@@ -85,6 +87,7 @@ function OwnerRoutes() {
       <Route path="/suppliers" element={<Suppliers />} />
       <Route path="/reviews" element={<Reviews />} />
       <Route path="/menu-engineering" element={<MenuEngineering />} />
+      <Route path="/venues/league" element={<LeagueTable />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
@@ -107,6 +110,7 @@ function GMRoutes() {
       <Route path="/bookings" element={<Bookings />} />
       <Route path="/suppliers" element={<Suppliers />} />
       <Route path="/reviews" element={<Reviews />} />
+      <Route path="/scheduling" element={<Scheduling />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
