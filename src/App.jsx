@@ -4,6 +4,7 @@ import { RoleProvider, ROLES, useRole } from './context/RoleContext'
 import RoleSelector from './components/RoleSelector'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
+import { ToastProvider } from './components/Toast'
 
 const MobileContext = createContext({ sidebarOpen: false, setSidebarOpen: () => {} })
 export function useMobile() { return useContext(MobileContext) }
@@ -26,6 +27,7 @@ import Reviews from './pages/Reviews'
 import MenuEngineering from './pages/owner/MenuEngineering'
 import LeagueTable from './pages/owner/LeagueTable'
 import Scheduling from './pages/gm/Scheduling'
+import BusinessLoop from './pages/owner/BusinessLoop'
 
 // CRM pages
 import CustomerDirectory from './pages/crm/CustomerDirectory'
@@ -88,6 +90,7 @@ function OwnerRoutes() {
       <Route path="/reviews" element={<Reviews />} />
       <Route path="/menu-engineering" element={<MenuEngineering />} />
       <Route path="/venues/league" element={<LeagueTable />} />
+      <Route path="/business-loop" element={<BusinessLoop />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
@@ -172,9 +175,11 @@ function AppContent() {
 export default function App() {
   return (
     <HashRouter>
-      <RoleProvider>
-        <AppContent />
-      </RoleProvider>
+      <ToastProvider>
+        <RoleProvider>
+          <AppContent />
+        </RoleProvider>
+      </ToastProvider>
     </HashRouter>
   )
 }
