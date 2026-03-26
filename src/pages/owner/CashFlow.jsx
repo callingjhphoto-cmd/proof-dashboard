@@ -55,9 +55,9 @@ export default function CashFlow() {
       {/* KPIs */}
       <div className="grid-kpi-4" style={{ marginBottom: 20 }}>
         {[
-          { label: 'Current Balance', value: `\u00a3${(currentBalance / 1000).toFixed(0)}k`, color: C.ink },
-          { label: 'Projected Month-End', value: `\u00a3${(projectedEnd / 1000).toFixed(0)}k`, color: C.green },
-          { label: 'Upcoming Payments (7d)', value: `\u00a3${((68400 + 12800 + 8400) / 1000).toFixed(0)}k`, color: C.orange },
+          { label: 'Current Balance', value: `£${(currentBalance / 1000).toFixed(0)}k`, color: C.ink },
+          { label: 'Projected Month-End', value: `£${(projectedEnd / 1000).toFixed(0)}k`, color: C.green },
+          { label: 'Upcoming Payments (7d)', value: `£${((68400 + 12800 + 8400) / 1000).toFixed(0)}k`, color: C.orange },
           { label: 'Runway at Current Burn', value: '4.2 months', color: C.amber },
         ].map((kpi, i) => (
           <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
@@ -84,9 +84,9 @@ export default function CashFlow() {
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
             <XAxis dataKey="week" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} />
-            <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `\u00a3${(v/1000).toFixed(0)}k`} />
+            <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `£${(v/1000).toFixed(0)}k`} />
             <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-              formatter={v => v ? [`\u00a3${v.toLocaleString()}`, ''] : ['--', '']} />
+              formatter={v => v ? [`£${v.toLocaleString()}`, ''] : ['--', '']} />
             <Area type="monotone" dataKey="actual" stroke={C.green} strokeWidth={2} fill="url(#cashGreen)" name="Actual" connectNulls={false} />
             <Area type="monotone" dataKey="forecast" stroke={C.amber} strokeWidth={2} strokeDasharray="5 5" fill="url(#cashAmber)" name="Forecast" />
           </AreaChart>
@@ -103,12 +103,12 @@ export default function CashFlow() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{m.month}</span>
                   <span style={{ fontSize: 13, fontWeight: 700, color: m.net >= 100000 ? C.green : m.net >= 50000 ? C.amber : C.red }}>
-                    +\u00a3{(m.net / 1000).toFixed(0)}k net
+                    +£{(m.net / 1000).toFixed(0)}k net
                   </span>
                 </div>
                 <div style={{ display: 'flex', gap: 8, fontSize: 11 }}>
-                  <span style={{ color: C.green }}>\u2191 \u00a3{(m.inflow / 1000).toFixed(0)}k in</span>
-                  <span style={{ color: C.red }}>\u2193 \u00a3{(m.outflow / 1000).toFixed(0)}k out</span>
+                  <span style={{ color: C.green }}>{'\u2191'} £{(m.inflow / 1000).toFixed(0)}k in</span>
+                  <span style={{ color: C.red }}>{'\u2193'} £{(m.outflow / 1000).toFixed(0)}k out</span>
                 </div>
               </div>
             ))}
@@ -129,7 +129,7 @@ export default function CashFlow() {
                   <div style={{ fontSize: 11, color: C.textDim }}>{p.date}</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>\u00a3{p.amount.toLocaleString()}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>£{p.amount.toLocaleString()}</div>
                   <div style={{ fontSize: 10, color: statusColors[p.status], textTransform: 'uppercase' }}>{p.status}</div>
                 </div>
               </div>

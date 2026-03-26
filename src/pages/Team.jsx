@@ -50,8 +50,8 @@ export default function Team({ C }) {
         {[
           { label: 'On Shift Now', value: team.filter(t => t.status === 'on-shift').length.toString(), icon: Users, color: '#22C55E' },
           { label: 'Hours This Week', value: `${totalWorked}/${totalScheduled}`, icon: Clock, color: C.ink },
-          { label: 'Labour Cost WTD', value: `\u00A3${totalLabourCost.toLocaleString('en', { maximumFractionDigits: 0 })}`, icon: PoundSterling, color: C.amber },
-          { label: 'Weekly Forecast', value: `\u00A3${weeklyLabourForecast.toLocaleString()}`, icon: AlertCircle, color: C.blue },
+          { label: 'Labour Cost WTD', value: `£${totalLabourCost.toLocaleString('en', { maximumFractionDigits: 0 })}`, icon: PoundSterling, color: C.amber },
+          { label: 'Weekly Forecast', value: `£${weeklyLabourForecast.toLocaleString()}`, icon: AlertCircle, color: C.blue },
         ].map((kpi, i) => (
           <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
             <kpi.icon size={16} color={C.textMuted} />
@@ -70,7 +70,7 @@ export default function Team({ C }) {
               borderLeft: `3px solid ${statusColor[t.status]}`,
             }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{t.name}</div>
-              <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{t.role} \u2022 \u00A3{t.rate.toFixed(2)}/hr</div>
+              <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{t.role} {'\u2022'} £{t.rate.toFixed(2)}/hr</div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 11 }}>
                 <span style={{ color: statusColor[t.status] }}>{statusLabel[t.status]}</span>
                 <span style={{ color: C.textDim }}>{t.shift}</span>
@@ -106,7 +106,7 @@ export default function Team({ C }) {
                 <div style={{ fontSize: 20, fontWeight: 700, color: C.ink, margin: '6px 0' }}>{day.staff.length}</div>
                 <div style={{ fontSize: 10, color: C.textDim }}>staff</div>
                 <div style={{ fontSize: 11, color: C.textMuted, marginTop: 6 }}>{day.covers} covers</div>
-                <div style={{ fontSize: 11, color: C.amber, marginTop: 2 }}>\u00A3{day.labourCost}</div>
+                <div style={{ fontSize: 11, color: C.amber, marginTop: 2 }}>£{day.labourCost}</div>
               </div>
             )
           })}

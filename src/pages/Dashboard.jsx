@@ -30,8 +30,12 @@ const sevColors = { critical: '#EF4444', warning: '#F97316', info: '#3B82F6', su
 const sevBg = { critical: 'rgba(239,68,68,0.08)', warning: 'rgba(249,115,22,0.08)', info: 'rgba(59,130,246,0.08)', success: 'rgba(34,197,94,0.08)' }
 const statusColors = { on: '#22C55E', ending: '#F97316', upcoming: '#3B82F6' }
 
-function KPI({ icon: Icon, label, value, change, changeDir, C }) {
+function KPI({ icon: Icon, label, value, change, changeDir, goodDir, period, C }) {
   const isUp = changeDir === 'up'
+  // Color logic: if goodDir matches changeDir, it's positive (green). Otherwise negative (red).
+  // e.g., Revenue going up = good (green). Labour going up = bad (red).
+  const isGood = goodDir === changeDir
+  const changeColor = isGood ? C.green : C.red
   return (
     <div style={{
       background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '18px 20px',
@@ -41,10 +45,10 @@ function KPI({ icon: Icon, label, value, change, changeDir, C }) {
         <Icon size={16} color={C.textMuted} />
         <div style={{
           display: 'flex', alignItems: 'center', gap: 3, fontSize: 11, fontWeight: 600,
-          color: isUp ? C.green : C.red,
+          color: changeColor,
         }}>
           {isUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-          {change}
+          {change} {period && <span style={{ color: C.textDim, fontWeight: 400 }}>{period}</span>}
         </div>
       </div>
       <div style={{ fontSize: 28, fontWeight: 700, color: C.ink, letterSpacing: '-0.5px' }}>{value}</div>
@@ -57,10 +61,10 @@ export default function Dashboard({ C }) {
   return (
     <div className="animate-in">
       <div className="grid-kpi-4" style={{ marginBottom: 20 }}>
-        <KPI icon={PoundSterling} label="Today's Revenue" value="\u00A37,140" change="+12%" changeDir="up" C={C} />
-        <KPI icon={Percent} label="Labour %" value="34%" change="+4pts" changeDir="down" C={C} />
-        <KPI icon={UtensilsCrossed} label="Gross Profit %" value="68.2%" change="+1.7pts" changeDir="up" C={C} />
-        <KPI icon={Users} label="Covers Today" value="98" change="+8%" changeDir="up" C={C} />
+        <KPI icon={PoundSterling} label="Today's Revenue" value="£7,140" change="+12%" changeDir="up" goodDir="up" period="vs last week" C={C} />
+        <KPI icon={Percent} label="Labour %" value="34%" change="+4pts" changeDir="up" goodDir="down" period="vs last week" C={C} />
+        <KPI icon={UtensilsCrossed} label="Gross Profit %" value="68.2%" change="+1.7pts" changeDir="up" goodDir="up" period="vs last week" C={C} />
+        <KPI icon={Users} label="Covers Today" value="98" change="+8%" changeDir="up" goodDir="up" period="vs last week" C={C} />
       </div>
 
       <div className="grid-2col-sidebar">
@@ -80,8 +84,8 @@ export default function Dashboard({ C }) {
                 </linearGradient>
               </defs>
               <XAxis dataKey="day" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `\u00A3${(v/1000).toFixed(0)}k`} />
-              <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }} formatter={v => [`\u00A3${v.toLocaleString()}`, '']} />
+              <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `£${(v/1000).toFixed(0)}k`} />
+              <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }} formatter={v => [`£${v.toLocaleString()}`, '']} />
               <Area type="monotone" dataKey="lastWeek" stroke="#444" strokeWidth={1.5} fill="url(#dimGrad)" name="Last Week" />
               <Area type="monotone" dataKey="thisWeek" stroke="#D4A853" strokeWidth={2} fill="url(#amberGrad)" name="This Week" />
             </AreaChart>

@@ -54,7 +54,7 @@ export default function LabourTrends() {
         </div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Total Labour Cost</div>
-          <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>{`\u00a3${(totalCost / 1000).toFixed(0)}k`}</div>
+          <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>{`£${(totalCost / 1000).toFixed(0)}k`}</div>
           <div style={{ fontSize: 11, color: C.textMuted, marginTop: 4 }}>This month across 5 venues</div>
         </div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
@@ -115,7 +115,7 @@ export default function LabourTrends() {
                   }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: C.textDim }}>
-                  <span>{v.staff} staff &bull; \u00a3{(v.cost / 1000).toFixed(0)}k cost</span>
+                  <span>{v.staff} staff &bull; £{(v.cost / 1000).toFixed(0)}k cost</span>
                   <span style={{ color: v.trend === 'up' ? C.red : C.green, display: 'flex', alignItems: 'center', gap: 2 }}>
                     {v.trend === 'up' ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
                     vs last month: {v.prev}%

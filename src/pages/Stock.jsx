@@ -23,17 +23,17 @@ const topSellers = [
 ]
 
 const autoOrder = [
-  { item: "Hendrick's Gin 70cl", qty: 4, supplier: 'Matthew Clark', est: '\u00A3104.00', reason: 'Below par (2/6) + Friday 142 covers' },
-  { item: 'Fever-Tree Indian Tonic 200ml (x24)', qty: 2, supplier: 'Matthew Clark', est: '\u00A338.40', reason: 'Below par (12/48) + high G&T sales' },
-  { item: 'Fresh Limes (box 100)', qty: 1, supplier: 'Total Produce', est: '\u00A318.50', reason: 'Critical (15/60) + cocktail demand' },
-  { item: 'Angostura Bitters 200ml', qty: 3, supplier: 'Matthew Clark', est: '\u00A327.60', reason: 'Critical (1/4) + Old Fashioned demand' },
-  { item: 'Patron Silver 70cl', qty: 3, supplier: 'Enotria & Coe', est: '\u00A389.70', reason: 'Below par (2/5) + Margarita trend' },
+  { item: "Hendrick's Gin 70cl", qty: 4, supplier: 'Matthew Clark', est: '£104.00', reason: 'Below par (2/6) + Friday 142 covers' },
+  { item: 'Fever-Tree Indian Tonic 200ml (x24)', qty: 2, supplier: 'Matthew Clark', est: '£38.40', reason: 'Below par (12/48) + high G&T sales' },
+  { item: 'Fresh Limes (box 100)', qty: 1, supplier: 'Total Produce', est: '£18.50', reason: 'Critical (15/60) + cocktail demand' },
+  { item: 'Angostura Bitters 200ml', qty: 3, supplier: 'Matthew Clark', est: '£27.60', reason: 'Critical (1/4) + Old Fashioned demand' },
+  { item: 'Patron Silver 70cl', qty: 3, supplier: 'Enotria & Coe', est: '£89.70', reason: 'Below par (2/5) + Margarita trend' },
 ]
 
 const wastage = [
-  { date: '15 Mar', item: 'House Red (opened 3 days)', qty: '2 glasses', value: '\u00A37.40', reason: 'Oxidised' },
-  { date: '14 Mar', item: 'Fresh Mint', qty: '1 bunch', value: '\u00A31.80', reason: 'Wilted' },
-  { date: '13 Mar', item: 'Champagne (flat)', qty: '3 glasses', value: '\u00A318.00', reason: 'Left open' },
+  { date: '15 Mar', item: 'House Red (opened 3 days)', qty: '2 glasses', value: '£7.40', reason: 'Oxidised' },
+  { date: '14 Mar', item: 'Fresh Mint', qty: '1 bunch', value: '£1.80', reason: 'Wilted' },
+  { date: '13 Mar', item: 'Champagne (flat)', qty: '3 glasses', value: '£18.00', reason: 'Left open' },
 ]
 
 function Card({ title, icon: Icon, children, C, style }) {
@@ -49,7 +49,7 @@ function Card({ title, icon: Icon, children, C, style }) {
 }
 
 export default function Stock({ C }) {
-  const totalWastageValue = wastage.reduce((s, w) => s + parseFloat(w.value.replace('\u00A3', '')), 0)
+  const totalWastageValue = wastage.reduce((s, w) => s + parseFloat(w.value.replace('£', '')), 0)
 
   return (
     <div className="animate-in">
@@ -62,10 +62,10 @@ export default function Stock({ C }) {
         marginBottom: 20,
       }}>
         {[
-          { label: 'Stock Value', value: '\u00A314,280', icon: Package, color: C.ink },
+          { label: 'Stock Value', value: '£14,280', icon: Package, color: C.ink },
           { label: 'Below Par Items', value: '6', icon: AlertTriangle, color: C.red },
-          { label: 'Wastage This Week', value: `\u00A3${totalWastageValue.toFixed(2)}`, icon: TrendingUp, color: C.orange },
-          { label: 'Auto-Order Value', value: '\u00A3278.20', icon: ShoppingCart, color: C.amber },
+          { label: 'Wastage This Week', value: `£${totalWastageValue.toFixed(2)}`, icon: TrendingUp, color: C.orange },
+          { label: 'Auto-Order Value', value: '£278.20', icon: ShoppingCart, color: C.amber },
         ].map((kpi, i) => (
           <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
             <kpi.icon size={16} color={C.textMuted} />
@@ -118,7 +118,7 @@ export default function Stock({ C }) {
                   <td style={{ padding: '8px', color: C.textDim }}>{i + 1}</td>
                   <td style={{ padding: '8px', color: C.ink, fontWeight: 500 }}>{s.item}</td>
                   <td style={{ padding: '8px', color: C.text }}>{s.sold}</td>
-                  <td style={{ padding: '8px', color: C.amber }}>\u00A3{s.revenue}</td>
+                  <td style={{ padding: '8px', color: C.amber }}>£{s.revenue}</td>
                   <td style={{ padding: '8px', color: s.gp >= 78 ? C.green : C.text }}>{s.gp}%</td>
                 </tr>
               ))}

@@ -13,15 +13,15 @@ const cocktailOfTheDay = {
   name: 'Smoked Maple Old Fashioned',
   spirit: 'Woodford Reserve Bourbon',
   ingredients: ['60ml Woodford Reserve', '10ml maple syrup', '2 dashes Angostura', 'Orange peel', 'Smoked with applewood'],
-  price: '\u00a315.50',
+  price: '£15.50',
   gp: '79%',
   upsellTip: 'Recommend to anyone ordering an Old Fashioned or Whiskey Sour. Mention the smoke presentation as a talking point.',
 }
 
 const menuChanges = [
-  { type: 'new', item: 'Sakura Spritz', note: 'Cherry blossom liqueur, prosecco, elderflower tonic. \u00a313.00' },
-  { type: 'new', item: 'Mezcal Paloma (v2)', note: 'Updated recipe: now uses grapefruit oleo saccharum. \u00a314.00' },
-  { type: 'price', item: 'Espresso Martini', note: 'Price increased from \u00a312.50 to \u00a313.00. New Oatly foam spec.' },
+  { type: 'new', item: 'Sakura Spritz', note: 'Cherry blossom liqueur, prosecco, elderflower tonic. £13.00' },
+  { type: 'new', item: 'Mezcal Paloma (v2)', note: 'Updated recipe: now uses grapefruit oleo saccharum. £14.00' },
+  { type: 'price', item: 'Espresso Martini', note: 'Price increased from £12.50 to £13.00. New Oatly foam spec.' },
   { type: 'removed', item: 'Mulled Wine', note: 'Removed from menu for spring season.' },
 ]
 
@@ -31,10 +31,10 @@ const eightySixed = [
 ]
 
 const wineByTheGlass = [
-  { name: 'Cloudy Bay Sauvignon Blanc', region: 'Marlborough', glass: '\u00a312.50', btl: '\u00a354' },
-  { name: 'Chablis Premier Cru', region: 'Burgundy', glass: '\u00a315.00', btl: '\u00a365' },
-  { name: 'Malbec, Catena Zapata', region: 'Mendoza', glass: '\u00a311.50', btl: '\u00a348' },
-  { name: 'Ros\u00e9, Ch\u00e2teau d\'Esclans', region: 'Provence', glass: '\u00a313.00', btl: '\u00a356' },
+  { name: 'Cloudy Bay Sauvignon Blanc', region: 'Marlborough', glass: '£12.50', btl: '£54' },
+  { name: 'Chablis Premier Cru', region: 'Burgundy', glass: '£15.00', btl: '£65' },
+  { name: 'Malbec, Catena Zapata', region: 'Mendoza', glass: '£11.50', btl: '£48' },
+  { name: 'Ros\u00e9, Ch\u00e2teau d\'Esclans', region: 'Provence', glass: '£13.00', btl: '£56' },
 ]
 
 const typeConfig = {

@@ -64,7 +64,7 @@ export default function MyShifts() {
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: 12, color: C.textDim, marginBottom: 4 }}>Estimated Pay</div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: C.blue }}>{'\u00a3'}{(today.hours * 13.50).toFixed(2)}</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: C.blue }}>{'£'}{(today.hours * 13.50).toFixed(2)}</div>
             </div>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function MyShifts() {
         </div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Est. Earnings</div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: C.blue }}>{'\u00a3'}{earnedThisWeek.toFixed(0)}</div>
+          <div style={{ fontSize: 24, fontWeight: 700, color: C.blue }}>{'£'}{earnedThisWeek.toFixed(0)}</div>
           <div style={{ fontSize: 11, color: C.textMuted }}>This week</div>
         </div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
@@ -120,7 +120,7 @@ export default function MyShifts() {
                     <div style={{ fontSize: 10, color: C.textDim }}>{d.shift.split('-')[1]}</div>
                     <div style={{ fontSize: 11, color: sc.color, marginTop: 6 }}>{d.hours}h</div>
                     {d.tips !== null && (
-                      <div style={{ fontSize: 11, color: C.amber, marginTop: 2 }}>+{'\u00a3'}{d.tips} tips</div>
+                      <div style={{ fontSize: 11, color: C.amber, marginTop: 2 }}>+{'£'}{d.tips} tips</div>
                     )}
                   </>
                 )}

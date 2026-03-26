@@ -51,22 +51,22 @@ export default function TipTracker() {
       <div className="grid-kpi-4" style={{ marginBottom: 20 }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>This Week</div>
-          <div style={{ fontSize: 26, fontWeight: 700, color: C.blue }}>{'\u00a3'}42</div>
+          <div style={{ fontSize: 26, fontWeight: 700, color: C.blue }}>{'£'}42</div>
           <div style={{ fontSize: 11, color: C.textMuted }}>1 shift so far</div>
         </div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Avg Per Week</div>
-          <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>{'\u00a3'}{avgWeekly}</div>
+          <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>{'£'}{avgWeekly}</div>
           <div style={{ fontSize: 11, color: C.textMuted }}>Last 11 weeks</div>
         </div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Avg Per Shift</div>
-          <div style={{ fontSize: 26, fontWeight: 700, color: C.amber }}>{'\u00a3'}{avgPerShift}</div>
+          <div style={{ fontSize: 26, fontWeight: 700, color: C.amber }}>{'£'}{avgPerShift}</div>
           <div style={{ fontSize: 11, color: C.textMuted }}>This year</div>
         </div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Year Total</div>
-          <div style={{ fontSize: 26, fontWeight: 700, color: C.green }}>{'\u00a3'}{totalThisYear.toLocaleString()}</div>
+          <div style={{ fontSize: 26, fontWeight: 700, color: C.green }}>{'£'}{totalThisYear.toLocaleString()}</div>
           <div style={{ fontSize: 11, color: C.textMuted }}>2026 to date</div>
         </div>
       </div>
@@ -78,9 +78,9 @@ export default function TipTracker() {
           <BarChart data={weeklyTips}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
             <XAxis dataKey="week" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} />
-            <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `\u00a3${v}`} />
+            <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `£${v}`} />
             <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-              formatter={v => [`\u00a3${v}`, 'Tips']} />
+              formatter={v => [`£${v}`, 'Tips']} />
             <Bar dataKey="tips" fill={C.blue} radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
@@ -97,10 +97,10 @@ export default function TipTracker() {
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{d.day}</span>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: C.blue }}>{'\u00a3'}{d.tips.toFixed(2)}</span>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: C.blue }}>{'£'}{d.tips.toFixed(2)}</span>
                 </div>
                 <div style={{ fontSize: 11, color: C.textDim }}>
-                  {d.shift} &bull; {d.covers} covers &bull; {'\u00a3'}{d.tpc.toFixed(2)}/cover
+                  {d.shift} &bull; {d.covers} covers &bull; {'£'}{d.tpc.toFixed(2)}/cover
                 </div>
               </div>
             ))}
@@ -124,7 +124,7 @@ export default function TipTracker() {
                   <div style={{ fontSize: 11, color: C.textDim }}>{m.shifts} shifts</div>
                 </div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: i === 0 ? C.blue : C.ink }}>
-                  {'\u00a3'}{m.tips.toLocaleString()}
+                  {'£'}{m.tips.toLocaleString()}
                 </div>
               </div>
             ))}

@@ -2,11 +2,11 @@ import { Brain, Target, TrendingUp, TrendingDown, Star, AlertTriangle, Zap } fro
 
 const dailyBriefing = {
   priorities: [
-    { severity: 'warning', text: 'Labour running hot at 34%. Consider cutting Sarah\'s evening shift to 21:00 or moving Anya to Thursday instead. Saving: \u00A336.' },
-    { severity: 'info', text: 'Wine GP dropped to 62% this week (target 68%). Malbec by-the-glass is the main drag \u2014 current cost \u00A34.20/glass on a \u00A311 sell. Recommend switching to Trivento Reserve (\u00A33.10/glass) or increasing price to \u00A312.50.' },
+    { severity: 'warning', text: 'Labour running hot at 34%. Consider cutting Sarah\'s evening shift to 21:00 or moving Anya to Thursday instead. Saving: £36.' },
+    { severity: 'info', text: 'Wine GP dropped to 62% this week (target 68%). Malbec by-the-glass is the main drag \u2014 current cost £4.20/glass on a £11 sell. Recommend switching to Trivento Reserve (£3.10/glass) or increasing price to £12.50.' },
     { severity: 'success', text: 'Friday fully booked at 142 covers (18% above average). Ensure 4 bar staff + 3 floor. Pre-batch Espresso Martinis and Negronis \u2014 these account for 38% of Friday cocktail orders.' },
   ],
-  insight: 'This week\'s data shows a clear pattern: cocktail sales peak between 20:00-21:30 on Thursday-Saturday, accounting for 62% of weekly spirits revenue. Your Espresso Martini alone generates \u00A31,131/week at 82% GP \u2014 it\'s your single highest-margin item. Consider a \u201cMartini Hour\u201d promotion on slower nights (Mon-Wed) to shift demand.'
+  insight: 'This week\'s data shows a clear pattern: cocktail sales peak between 20:00-21:30 on Thursday-Saturday, accounting for 62% of weekly spirits revenue. Your Espresso Martini alone generates £1,131/week at 82% GP \u2014 it\'s your single highest-margin item. Consider a \u201cMartini Hour\u201d promotion on slower nights (Mon-Wed) to shift demand.'
 }
 
 const menuMatrix = {
@@ -118,12 +118,12 @@ export default function Insights({ C }) {
                   }}>
                     <span style={{ color: C.text }}>{item.item}</span>
                     <span style={{ color: C.textMuted }}>
-                      Pop: {item.popularity}% \u2022 GP: {item.profit}% \u2022 <span style={{ color: C.amber }}>\u00A3{item.revenue}/wk</span>
+                      Pop: {item.popularity}% {'\u2022'} GP: {item.profit}% {'\u2022'} <span style={{ color: C.amber }}>£{item.revenue}/wk</span>
                     </span>
                   </div>
                 ))}
                 <div style={{ fontSize: 11, color: C.textDim, marginTop: 6, fontStyle: 'italic' }}>
-                  \u2192 {matrixActions[type]}
+                  {'\u2192'} {matrixActions[type]}
                 </div>
               </div>
             )
@@ -133,8 +133,8 @@ export default function Insights({ C }) {
         {/* Revenue Per Cover */}
         <Card title="Revenue Per Cover Trend" icon={TrendingUp} C={C}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
-            <div style={{ fontSize: 36, fontWeight: 700, color: C.ink }}>\u00A3{latestRpc.toFixed(2)}</div>
-            <div style={{ fontSize: 12, color: C.green, marginTop: 4 }}>+{rpcTrend}% vs 12-week avg (\u00A3{avgRpc.toFixed(2)})</div>
+            <div style={{ fontSize: 36, fontWeight: 700, color: C.ink }}>£{latestRpc.toFixed(2)}</div>
+            <div style={{ fontSize: 12, color: C.green, marginTop: 4 }}>+{rpcTrend}% vs 12-week avg (£{avgRpc.toFixed(2)})</div>
           </div>
           <div style={{ display: 'flex', alignItems: 'end', gap: 4, height: 160, padding: '0 8px' }}>
             {revenuePerCover.map((w, i) => {
@@ -144,7 +144,7 @@ export default function Insights({ C }) {
               const isLatest = i === revenuePerCover.length - 1
               return (
                 <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                  <div style={{ fontSize: 9, color: isLatest ? C.amber : 'transparent' }}>\u00A3{w.rpc.toFixed(0)}</div>
+                  <div style={{ fontSize: 9, color: isLatest ? C.amber : 'transparent' }}>£{w.rpc.toFixed(0)}</div>
                   <div style={{
                     width: '100%', height, borderRadius: '4px 4px 0 0',
                     background: isLatest ? C.amber : w.rpc >= avgRpc ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.2)',

@@ -88,12 +88,12 @@ export default function LiveTrading() {
           transition: 'color 0.3s',
           ...(pulse ? { color: C.teal } : {}),
         }}>
-          {'\u00a3'}{totalRevenue.toLocaleString()}
+          {'£'}{totalRevenue.toLocaleString()}
         </div>
         <div style={{ marginTop: 10, display: 'flex', justifyContent: 'center', gap: 24, fontSize: 12 }}>
           <span style={{ color: C.textMuted }}>{liveCovers} covers</span>
-          <span style={{ color: C.amber }}>{'\u00a3'}{rpc}/cover</span>
-          <span style={{ color: parseInt(pctTarget) >= 80 ? C.green : C.orange }}>{pctTarget}% of {'\u00a3'}{targetRevenue.toLocaleString()} target</span>
+          <span style={{ color: C.amber }}>{'£'}{rpc}/cover</span>
+          <span style={{ color: parseInt(pctTarget) >= 80 ? C.green : C.orange }}>{pctTarget}% of {'£'}{targetRevenue.toLocaleString()} target</span>
         </div>
         <div style={{ height: 6, background: '#1E1E21', borderRadius: 3, overflow: 'hidden', marginTop: 14, maxWidth: 400, margin: '14px auto 0' }}>
           <div style={{
@@ -116,9 +116,9 @@ export default function LiveTrading() {
                 </linearGradient>
               </defs>
               <XAxis dataKey="hour" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `\u00a3${v}`} />
+              <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `£${v}`} />
               <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-                formatter={v => [`\u00a3${v}`, '']} />
+                formatter={v => [`£${v}`, '']} />
               <Area type="monotone" dataKey="revenue" stroke={C.teal} strokeWidth={2} fill="url(#tealGrad)" />
             </AreaChart>
           </ResponsiveContainer>
@@ -137,7 +137,7 @@ export default function LiveTrading() {
                   <div style={{ fontSize: 12, color: C.ink, fontWeight: 500 }}>{item.item}</div>
                   <div style={{ fontSize: 11, color: C.textDim }}>{item.count} sold today</div>
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: C.teal }}>{'\u00a3'}{item.revenue}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: C.teal }}>{'£'}{item.revenue}</div>
               </div>
             ))}
           </div>
@@ -161,7 +161,7 @@ export default function LiveTrading() {
                 <td style={{ padding: '10px', color: C.textMuted, fontFamily: "'JetBrains Mono', monospace", fontSize: 11 }}>{t.time}</td>
                 <td style={{ padding: '10px', color: C.ink, fontWeight: 600 }}>{t.table}</td>
                 <td style={{ padding: '10px', color: C.text }}>{t.items}</td>
-                <td style={{ padding: '10px', color: C.teal, fontWeight: 600 }}>{'\u00a3'}{t.amount.toFixed(2)}</td>
+                <td style={{ padding: '10px', color: C.teal, fontWeight: 600 }}>{'£'}{t.amount.toFixed(2)}</td>
                 <td style={{ padding: '10px', color: C.textMuted }}>{t.staff}</td>
               </tr>
             ))}

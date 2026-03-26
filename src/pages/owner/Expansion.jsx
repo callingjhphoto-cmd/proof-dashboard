@@ -115,9 +115,9 @@ export default function Expansion() {
               <MapPin size={10} />{s.location} &bull; {s.type}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 11 }}>
-              <div><span style={{ color: C.textDim }}>Setup:</span> <span style={{ color: C.ink, fontWeight: 600 }}>\u00a3{(s.setupCost / 1000).toFixed(0)}k</span></div>
+              <div><span style={{ color: C.textDim }}>Setup:</span> <span style={{ color: C.ink, fontWeight: 600 }}>£{(s.setupCost / 1000).toFixed(0)}k</span></div>
               <div><span style={{ color: C.textDim }}>Break-even:</span> <span style={{ color: C.amber, fontWeight: 600 }}>Month {s.breakEvenMonth}</span></div>
-              <div><span style={{ color: C.textDim }}>EBITDA:</span> <span style={{ color: C.green, fontWeight: 600 }}>\u00a3{(s.projectedEbitda / 1000).toFixed(0)}k/mo</span></div>
+              <div><span style={{ color: C.textDim }}>EBITDA:</span> <span style={{ color: C.green, fontWeight: 600 }}>£{(s.projectedEbitda / 1000).toFixed(0)}k/mo</span></div>
               <div><span style={{ color: C.textDim }}>Y2 ROI:</span> <span style={{ color: s.yearTwoROI > 0 ? C.green : C.red, fontWeight: 600 }}>{s.yearTwoROI}%</span></div>
             </div>
           </div>
@@ -143,9 +143,9 @@ export default function Expansion() {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
               <XAxis dataKey="month" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} />
-              <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `\u00a3${(v / 1000).toFixed(0)}k`} />
+              <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `£${(v / 1000).toFixed(0)}k`} />
               <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-                formatter={v => [`\u00a3${v.toLocaleString()}`, '']} />
+                formatter={v => [`£${v.toLocaleString()}`, '']} />
               <Area type="monotone" dataKey="revenue" stroke={C.green} strokeWidth={2} fill="url(#expGreen)" name="Revenue" />
               <Area type="monotone" dataKey="costs" stroke={C.red} strokeWidth={2} fill="url(#expRed)" name="Costs" />
             </AreaChart>
@@ -160,12 +160,12 @@ export default function Expansion() {
           <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Financial Model: {scenario.name}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
-              { label: 'Total Setup Cost', value: `\u00a3${scenario.setupCost.toLocaleString()}`, icon: Building2 },
-              { label: 'Monthly Rent', value: `\u00a3${scenario.monthlyRent.toLocaleString()}`, icon: PoundSterling },
+              { label: 'Total Setup Cost', value: `£${scenario.setupCost.toLocaleString()}`, icon: Building2 },
+              { label: 'Monthly Rent', value: `£${scenario.monthlyRent.toLocaleString()}`, icon: PoundSterling },
               { label: 'Staff Required', value: `${scenario.staffCount} FTEs`, icon: Calculator },
-              { label: 'Monthly Labour', value: `\u00a3${scenario.monthlyLabour.toLocaleString()}`, icon: Calculator },
-              { label: 'Projected Monthly Revenue', value: `\u00a3${scenario.projectedRevenue.toLocaleString()}`, icon: TrendingUp },
-              { label: 'Projected Monthly EBITDA', value: `\u00a3${scenario.projectedEbitda.toLocaleString()}`, icon: TrendingUp },
+              { label: 'Monthly Labour', value: `£${scenario.monthlyLabour.toLocaleString()}`, icon: Calculator },
+              { label: 'Projected Monthly Revenue', value: `£${scenario.projectedRevenue.toLocaleString()}`, icon: TrendingUp },
+              { label: 'Projected Monthly EBITDA', value: `£${scenario.projectedEbitda.toLocaleString()}`, icon: TrendingUp },
               { label: 'Year 1 ROI', value: `${scenario.yearOneROI}%`, icon: TrendingUp },
               { label: 'Year 2 ROI', value: `${scenario.yearTwoROI}%`, icon: TrendingUp },
             ].map((m, i) => (

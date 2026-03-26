@@ -86,8 +86,8 @@ export default function VenueGrid() {
 
       {/* Portfolio KPIs */}
       <div className="grid-kpi-5" style={{ marginBottom: 20 }}>
-        <KPI label="Portfolio Revenue" value={`\u00A3${(totalRevenue / 1000).toFixed(0)}k`} subtext="This month" color={C.ink} />
-        <KPI label="Total EBITDA" value={`\u00A3${(totalEbitda / 1000).toFixed(0)}k`} subtext={`${(totalEbitda / totalRevenue * 100).toFixed(1)}% margin`} color={C.amber} />
+        <KPI label="Portfolio Revenue" value={`£${(totalRevenue / 1000).toFixed(0)}k`} subtext="This month" color={C.ink} />
+        <KPI label="Total EBITDA" value={`£${(totalEbitda / 1000).toFixed(0)}k`} subtext={`${(totalEbitda / totalRevenue * 100).toFixed(1)}% margin`} color={C.amber} />
         <KPI label="Avg Labour %" value={`${avgLabour}%`} subtext={parseFloat(avgLabour) > 30 ? 'Above target' : 'On target'} color={parseFloat(avgLabour) > 30 ? C.orange : C.green} />
         <KPI label="Avg GP %" value={`${avgGP}%`} subtext="Across all venues" color={parseFloat(avgGP) >= 67 ? C.green : C.red} />
         <KPI label="Active Alerts" value={totalAlerts.toString()} subtext={`${venues.filter(v => v.status === 'red').length} venue(s) in red`} color={totalAlerts > 3 ? C.red : C.orange} />
@@ -131,7 +131,7 @@ export default function VenueGrid() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
                 <div>
                   <div style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase' }}>Revenue</div>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: C.ink }}>{`\u00A3${(venue.revenue / 1000).toFixed(0)}k`}</div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: C.ink }}>{`£${(venue.revenue / 1000).toFixed(0)}k`}</div>
                   <div style={{ fontSize: 11, color: venue.revenueChange >= 0 ? C.green : C.red, display: 'flex', alignItems: 'center', gap: 2 }}>
                     {venue.revenueChange >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
                     {venue.revenueChange >= 0 ? '+' : ''}{venue.revenueChange}% MoM
@@ -139,7 +139,7 @@ export default function VenueGrid() {
                 </div>
                 <div>
                   <div style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase' }}>EBITDA</div>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: C.amber }}>{`\u00A3${(venue.ebitda / 1000).toFixed(0)}k`}</div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: C.amber }}>{`£${(venue.ebitda / 1000).toFixed(0)}k`}</div>
                   <div style={{ fontSize: 11, color: C.textMuted }}>{venue.ebitdaMargin}% margin</div>
                 </div>
                 <div>
@@ -180,9 +180,9 @@ export default function VenueGrid() {
           <BarChart data={waterfallData} barSize={60}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
             <XAxis dataKey="name" stroke="#333" tick={{ fill: '#888', fontSize: 12 }} axisLine={false} />
-            <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `\u00A3${Math.abs(v / 1000).toFixed(0)}k`} />
+            <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `£${Math.abs(v / 1000).toFixed(0)}k`} />
             <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-              formatter={v => [`\u00A3${Math.abs(v).toLocaleString()}`, '']} />
+              formatter={v => [`£${Math.abs(v).toLocaleString()}`, '']} />
             <Bar dataKey="value" radius={[6, 6, 0, 0]}>
               {waterfallData.map((entry, idx) => (
                 <Cell key={idx} fill={entry.value >= 0 ? (idx === waterfallData.length - 1 ? C.amber : C.green) : C.red} />
@@ -210,8 +210,8 @@ export default function VenueGrid() {
                 <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
                   <td style={{ padding: '10px', color: C.amber, fontWeight: 700 }}>#{i + 1}</td>
                   <td style={{ padding: '10px', color: C.ink, fontWeight: 500 }}>{v.name}</td>
-                  <td style={{ padding: '10px', color: C.text }}>{`\u00A3${(v.revenue / 1000).toFixed(0)}k`}</td>
-                  <td style={{ padding: '10px', color: C.amber }}>{`\u00A3${(v.ebitda / 1000).toFixed(0)}k`}</td>
+                  <td style={{ padding: '10px', color: C.text }}>{`£${(v.revenue / 1000).toFixed(0)}k`}</td>
+                  <td style={{ padding: '10px', color: C.amber }}>{`£${(v.ebitda / 1000).toFixed(0)}k`}</td>
                   <td style={{ padding: '10px', color: v.ebitdaMargin >= 15 ? C.green : C.red }}>{v.ebitdaMargin}%</td>
                   <td style={{ padding: '10px', color: v.labour <= 30 ? C.green : v.labour <= 33 ? C.orange : C.red }}>{v.labour}%</td>
                   <td style={{ padding: '10px', color: v.gp >= 67 ? C.green : C.red }}>{v.gp}%</td>

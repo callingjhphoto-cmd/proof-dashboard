@@ -31,14 +31,17 @@ function Card({ title, children, C, style }) {
   )
 }
 
-function Metric({ label, value, vs, C }) {
+function Metric({ label, value, vs, upIsGood, C }) {
   const diff = vs ? ((value - vs) / vs * 100).toFixed(1) : null
   const isUp = diff > 0
+  // For costs (COGS, Labour, Overheads), going UP is bad (red). For revenue, going UP is good (green).
+  const isGood = upIsGood ? isUp : !isUp
+  const diffColor = diff == 0 ? C.textDim : (isGood ? C.green : C.red)
   return (
     <div style={{ textAlign: 'center' }}>
       <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>{label}</div>
-      <div style={{ fontSize: 22, fontWeight: 700, color: C.ink }}>\u00A3{(value / 1000).toFixed(0)}k</div>
-      {diff && <div style={{ fontSize: 11, color: isUp ? C.green : C.red, marginTop: 2 }}>{isUp ? '+' : ''}{diff}% vs LM</div>}
+      <div style={{ fontSize: 22, fontWeight: 700, color: C.ink }}>£{(value / 1000).toFixed(0)}k</div>
+      {diff && <div style={{ fontSize: 11, color: diffColor, marginTop: 2 }}>{isUp ? '+' : ''}{diff}% vs last month</div>}
     </div>
   )
 }
@@ -58,13 +61,13 @@ export default function PnL({ C }) {
         marginBottom: 20,
         background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '20px 24px',
       }}>
-        <Metric label="Revenue" value={current.revenue} vs={prev.revenue} C={C} />
-        <Metric label="COGS" value={current.cogs} vs={prev.cogs} C={C} />
-        <Metric label="Labour" value={current.labour} vs={prev.labour} C={C} />
-        <Metric label="Overheads" value={current.overheads} vs={prev.overheads} C={C} />
+        <Metric label="Revenue" value={current.revenue} vs={prev.revenue} upIsGood={true} C={C} />
+        <Metric label="COGS" value={current.cogs} vs={prev.cogs} upIsGood={false} C={C} />
+        <Metric label="Labour" value={current.labour} vs={prev.labour} upIsGood={false} C={C} />
+        <Metric label="Overheads" value={current.overheads} vs={prev.overheads} upIsGood={false} C={C} />
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>Net Profit</div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: C.amber }}>\u00A3{(current.net / 1000).toFixed(0)}k</div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: C.amber }}>£{(current.net / 1000).toFixed(0)}k</div>
           <div style={{ fontSize: 11, color: C.green, marginTop: 2 }}>+{((current.net - prev.net) / prev.net * 100).toFixed(1)}% vs LM</div>
         </div>
       </div>
@@ -77,7 +80,7 @@ export default function PnL({ C }) {
               <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />
               <XAxis dataKey="month" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} />
               <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickFormatter={v => `${(v/1000)}k`} />
-              <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }} formatter={v => [`\u00A3${v.toLocaleString()}`, '']} />
+              <Tooltip contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }} formatter={v => [`£${v.toLocaleString()}`, '']} />
               <Bar dataKey="revenue" fill="#D4A853" radius={[4, 4, 0, 0]} name="Revenue" />
               <Bar dataKey="cogs" fill="#555" radius={[4, 4, 0, 0]} name="COGS" />
               <Bar dataKey="labour" fill="#3B82F6" radius={[4, 4, 0, 0]} name="Labour" />
