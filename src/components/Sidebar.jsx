@@ -34,6 +34,7 @@ const NAV_BY_ROLE = {
     { to: '/bookings', icon: BookOpen, label: 'Bookings' },
     { to: '/suppliers', icon: Truck, label: 'Suppliers' },
     { to: '/reviews', icon: Star, label: 'Reviews' },
+    { to: '/menu-engineering', icon: UtensilsCrossed, label: 'Menu Engineering' },
     { divider: true, label: 'Customers' },
     { to: '/customers', icon: UserCircle, label: 'Directory' },
     { to: '/campaigns', icon: Send, label: 'Campaigns' },

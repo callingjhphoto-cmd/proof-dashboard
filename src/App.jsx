@@ -23,6 +23,7 @@ import MorningBriefing from './pages/owner/MorningBriefing'
 import Bookings from './pages/Bookings'
 import Suppliers from './pages/Suppliers'
 import Reviews from './pages/Reviews'
+import MenuEngineering from './pages/owner/MenuEngineering'
 
 // CRM pages
 import CustomerDirectory from './pages/crm/CustomerDirectory'
@@ -83,6 +84,7 @@ function OwnerRoutes() {
       <Route path="/bookings" element={<Bookings />} />
       <Route path="/suppliers" element={<Suppliers />} />
       <Route path="/reviews" element={<Reviews />} />
+      <Route path="/menu-engineering" element={<MenuEngineering />} />
       <Route path="/staff/:staffId" element={<StaffProfile />} />
     </Routes>
   )
