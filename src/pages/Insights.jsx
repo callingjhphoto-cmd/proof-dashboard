@@ -1,4 +1,4 @@
-import { Brain, Target, TrendingUp, TrendingDown, Star, AlertTriangle, Zap } from 'lucide-react'
+import { Brain, Target, TrendingUp, TrendingDown, Star, AlertTriangle, Zap, Calendar } from 'lucide-react'
 
 const dailyBriefing = {
   priorities: [
@@ -37,6 +37,16 @@ const revenuePerCover = [
   { week: 'W4', rpc: 45.10 }, { week: 'W5', rpc: 43.60 }, { week: 'W6', rpc: 46.30 },
   { week: 'W7', rpc: 44.80 }, { week: 'W8', rpc: 47.20 }, { week: 'W9', rpc: 45.50 },
   { week: 'W10', rpc: 48.10 }, { week: 'W11', rpc: 46.90 }, { week: 'W12', rpc: 49.20 },
+]
+
+const weekForecast = [
+  { day: 'Mon', predicted: 62, actual: 58, revenue: 3180, weather: 'Overcast' },
+  { day: 'Tue', predicted: 68, actual: 72, revenue: 3420, weather: 'Clear' },
+  { day: 'Wed', predicted: 75, actual: null, revenue: null, weather: 'Clear' },
+  { day: 'Thu', predicted: 85, actual: null, revenue: null, weather: 'Rainy' },
+  { day: 'Fri', predicted: 142, actual: null, revenue: null, weather: 'Clear' },
+  { day: 'Sat', predicted: 155, actual: null, revenue: null, weather: 'Clear' },
+  { day: 'Sun', predicted: 95, actual: null, revenue: null, weather: 'Overcast' },
 ]
 
 const sevColors = { critical: '#EF4444', warning: '#F97316', info: '#3B82F6', success: '#22C55E' }
@@ -163,6 +173,46 @@ export default function Insights({ C }) {
           </div>
         </Card>
       </div>
+
+      {/* AI Demand Forecast */}
+      <Card title="AI Demand Forecast — This Week" icon={Calendar} C={C} style={{ marginTop: 16 }}>
+        <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 14 }}>
+          Predicted covers based on historical patterns, bookings, weather, and local events
+        </div>
+        <div className="grid-7day">
+          {weekForecast.map((d, i) => {
+            const isPast = d.actual !== null
+            const accuracy = isPast ? Math.round((1 - Math.abs(d.predicted - d.actual) / d.predicted) * 100) : null
+            return (
+              <div key={i} style={{
+                padding: 14, borderRadius: 10, textAlign: 'center',
+                background: isPast ? 'rgba(34,197,94,0.04)' : C.bg,
+                border: `1px solid ${isPast ? C.green + '30' : C.border}`,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: C.ink }}>{d.day}</div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: C.ink, margin: '6px 0' }}>{d.predicted}</div>
+                <div style={{ fontSize: 10, color: C.textDim }}>predicted</div>
+                {isPast && (
+                  <>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: C.green, marginTop: 6 }}>{d.actual} actual</div>
+                    <div style={{ fontSize: 10, color: accuracy >= 90 ? C.green : C.orange }}>{accuracy}% accurate</div>
+                  </>
+                )}
+                {d.revenue && (
+                  <div style={{ fontSize: 11, color: C.amber, marginTop: 4 }}>{'£'}{d.revenue.toLocaleString()}</div>
+                )}
+                <div style={{ fontSize: 9, color: C.textDim, marginTop: 4 }}>{d.weather}</div>
+              </div>
+            )
+          })}
+        </div>
+        <div style={{
+          marginTop: 14, padding: '10px 12px', borderRadius: 8, background: 'rgba(212,168,83,0.06)',
+          border: `1px solid rgba(212,168,83,0.15)`, fontSize: 12, color: C.text, lineHeight: 1.5,
+        }}>
+          <span style={{ fontWeight: 600, color: C.amber }}>Staffing recommendation:</span> Friday and Saturday both forecast 140+ covers. Ensure 4 bar staff and 3 floor minimum on both days. Thursday forecast increased due to rainfall driving walk-in traffic.
+        </div>
+      </Card>
     </div>
   )
 }
