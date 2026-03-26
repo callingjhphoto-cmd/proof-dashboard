@@ -12,15 +12,15 @@ const C = {
 const announcements = [
   {
     id: 1, pinned: true,
-    title: 'Spring Menu Launch \u2014 Wednesday 19 March',
+    title: 'Spring Menu Launch — Wednesday 19 March',
     from: 'Sarah Mitchell (Bar Lead)',
     date: '17 Mar 2026',
-    body: 'The new spring cocktail menu goes live on Wednesday. All bar staff MUST review the new specs before your first shift. Key changes: Sakura Spritz (new), Mezcal Paloma (updated recipe), Mulled Wine (removed). Training module is live \u2014 please complete it before Wednesday.',
+    body: 'The new spring cocktail menu goes live on Wednesday. All bar staff MUST review the new specs before your first shift. Key changes: Sakura Spritz (new), Mezcal Paloma (updated recipe), Mulled Wine (removed). Training module is live — please complete it before Wednesday.',
     category: 'Menu',
   },
   {
     id: 2, pinned: true,
-    title: 'Friday 21 March \u2014 142 Cover Booking',
+    title: 'Friday 21 March — 142 Cover Booking',
     from: 'Lily Chen (Floor Manager)',
     date: '17 Mar 2026',
     body: 'We have a large corporate booking on Friday. All hands on deck. Please confirm your availability ASAP if you have not already. Shift times may extend by 30 minutes. Pre-batch Espresso Martinis and Negronis will be prepared from 12:00.',
@@ -36,7 +36,7 @@ const announcements = [
   },
   {
     id: 4, pinned: false,
-    title: 'Staff Social \u2014 Monday 24 March',
+    title: 'Staff Social — Monday 24 March',
     from: 'Sarah Mitchell (Bar Lead)',
     date: '14 Mar 2026',
     body: 'Team drinks at The Dove, Hammersmith after close on Monday 24th. Everyone welcome. First round on the house (within reason).',
@@ -47,7 +47,7 @@ const announcements = [
     title: 'Holiday Request Deadline: Easter',
     from: 'Lily Chen (Floor Manager)',
     date: '10 Mar 2026',
-    body: 'All Easter holiday requests must be submitted by Friday 21 March. Easter weekend (18-21 April) is blackout for new requests \u2014 all staff are expected to be available unless already approved.',
+    body: 'All Easter holiday requests must be submitted by Friday 21 March. Easter weekend (18-21 April) is blackout for new requests — all staff are expected to be available unless already approved.',
     category: 'HR',
   },
 ]

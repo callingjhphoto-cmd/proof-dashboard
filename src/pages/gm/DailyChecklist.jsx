@@ -15,7 +15,7 @@ const openingChecks = [
   { id: 2, task: 'Verify POS system is operational', required: true },
   { id: 3, task: 'Confirm all bookings for today (108 covers)', required: true },
   { id: 4, task: 'Review yesterday\'s close-out notes', required: true },
-  { id: 5, task: 'Check cold room temperatures (must be 1-4\u00b0C)', required: true },
+  { id: 5, task: 'Check cold room temperatures (must be 1-4°C)', required: true },
   { id: 6, task: 'Verify ice machine is full', required: false },
   { id: 7, task: 'Set up bar garnish station', required: false },
   { id: 8, task: 'Brief staff on today\'s specials', required: true },

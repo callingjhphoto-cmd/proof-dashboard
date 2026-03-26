@@ -3,10 +3,10 @@ import { Brain, Target, TrendingUp, TrendingDown, Star, AlertTriangle, Zap } fro
 const dailyBriefing = {
   priorities: [
     { severity: 'warning', text: 'Labour running hot at 34%. Consider cutting Sarah\'s evening shift to 21:00 or moving Anya to Thursday instead. Saving: £36.' },
-    { severity: 'info', text: 'Wine GP dropped to 62% this week (target 68%). Malbec by-the-glass is the main drag \u2014 current cost £4.20/glass on a £11 sell. Recommend switching to Trivento Reserve (£3.10/glass) or increasing price to £12.50.' },
-    { severity: 'success', text: 'Friday fully booked at 142 covers (18% above average). Ensure 4 bar staff + 3 floor. Pre-batch Espresso Martinis and Negronis \u2014 these account for 38% of Friday cocktail orders.' },
+    { severity: 'info', text: 'Wine GP dropped to 62% this week (target 68%). Malbec by-the-glass is the main drag — current cost £4.20/glass on a £11 sell. Recommend switching to Trivento Reserve (£3.10/glass) or increasing price to £12.50.' },
+    { severity: 'success', text: 'Friday fully booked at 142 covers (18% above average). Ensure 4 bar staff + 3 floor. Pre-batch Espresso Martinis and Negronis — these account for 38% of Friday cocktail orders.' },
   ],
-  insight: 'This week\'s data shows a clear pattern: cocktail sales peak between 20:00-21:30 on Thursday-Saturday, accounting for 62% of weekly spirits revenue. Your Espresso Martini alone generates £1,131/week at 82% GP \u2014 it\'s your single highest-margin item. Consider a \u201cMartini Hour\u201d promotion on slower nights (Mon-Wed) to shift demand.'
+  insight: 'This week\'s data shows a clear pattern: cocktail sales peak between 20:00-21:30 on Thursday-Saturday, accounting for 62% of weekly spirits revenue. Your Espresso Martini alone generates £1,131/week at 82% GP — it\'s your single highest-margin item. Consider a “Martini Hour” promotion on slower nights (Mon-Wed) to shift demand.'
 }
 
 const menuMatrix = {
@@ -118,12 +118,12 @@ export default function Insights({ C }) {
                   }}>
                     <span style={{ color: C.text }}>{item.item}</span>
                     <span style={{ color: C.textMuted }}>
-                      Pop: {item.popularity}% {'\u2022'} GP: {item.profit}% {'\u2022'} <span style={{ color: C.amber }}>£{item.revenue}/wk</span>
+                      Pop: {item.popularity}% {'•'} GP: {item.profit}% {'•'} <span style={{ color: C.amber }}>£{item.revenue}/wk</span>
                     </span>
                   </div>
                 ))}
                 <div style={{ fontSize: 11, color: C.textDim, marginTop: 6, fontStyle: 'italic' }}>
-                  {'\u2192'} {matrixActions[type]}
+                  {'→'} {matrixActions[type]}
                 </div>
               </div>
             )

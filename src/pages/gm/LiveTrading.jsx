@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { TrendingUp, PoundSterling, Users, Clock, Zap, UtensilsCrossed, ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { TrendingUp, PoundSterling, Users, Clock, Zap, UtensilsCrossed, ArrowUpRight, ArrowDownRight, Award, Target } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 const C = {
@@ -7,6 +7,7 @@ const C = {
   amber: '#D4A853', amberBg: 'rgba(212,168,83,0.08)',
   green: '#22C55E', greenBg: 'rgba(34,197,94,0.08)',
   red: '#EF4444', redBg: 'rgba(239,68,68,0.08)',
+  orange: '#F97316',
   blue: '#3B82F6', teal: '#14B8A6',
   text: '#E5E5E5', textMuted: '#888', textDim: '#555', ink: '#fff',
 }
@@ -111,6 +112,86 @@ const topSelling = [
   { item: 'Old Fashioned', count: 7, revenue: 98 },
 ]
 
+// ─── TOP SELLERS — FULL PROFIT BREAKDOWN ────────────────────────────
+// Labour: £12/hr, avg 2 min per drink = £0.40 per drink
+// Fixed costs: £500/day across ~300 items = £1.67 per item
+const LABOUR_PER_ITEM = 0.40
+const FIXED_PER_ITEM = 1.67
+
+const topSellersData = {
+  today: [
+    { item: 'Espresso Martini', qty: 47, price: 12.00, cogsUnit: 2.80 },
+    { item: 'Margarita', qty: 38, price: 12.00, cogsUnit: 3.00 },
+    { item: 'Negroni', qty: 31, price: 12.00, cogsUnit: 2.88 },
+    { item: 'Old Fashioned', qty: 28, price: 13.00, cogsUnit: 3.25 },
+    { item: 'Aperol Spritz', qty: 26, price: 11.00, cogsUnit: 2.75 },
+    { item: 'G&T', qty: 24, price: 10.00, cogsUnit: 2.50 },
+    { item: 'House Wine (glass)', qty: 22, price: 8.00, cogsUnit: 2.40 },
+    { item: 'Pint of Lager', qty: 35, price: 6.50, cogsUnit: 2.27 },
+    { item: 'Mojito', qty: 19, price: 12.00, cogsUnit: 3.60 },
+    { item: 'Soft Drink', qty: 30, price: 3.50, cogsUnit: 0.70 },
+  ],
+  week: [
+    { item: 'Espresso Martini', qty: 312, price: 12.00, cogsUnit: 2.80 },
+    { item: 'Pint of Lager', qty: 278, price: 6.50, cogsUnit: 2.27 },
+    { item: 'Margarita', qty: 245, price: 12.00, cogsUnit: 3.00 },
+    { item: 'Negroni', qty: 198, price: 12.00, cogsUnit: 2.88 },
+    { item: 'G&T', qty: 187, price: 10.00, cogsUnit: 2.50 },
+    { item: 'Old Fashioned', qty: 176, price: 13.00, cogsUnit: 3.25 },
+    { item: 'Soft Drink', qty: 210, price: 3.50, cogsUnit: 0.70 },
+    { item: 'Aperol Spritz', qty: 165, price: 11.00, cogsUnit: 2.75 },
+    { item: 'House Wine (glass)', qty: 154, price: 8.00, cogsUnit: 2.40 },
+    { item: 'Mojito', qty: 132, price: 12.00, cogsUnit: 3.60 },
+  ],
+  month: [
+    { item: 'Espresso Martini', qty: 1340, price: 12.00, cogsUnit: 2.80 },
+    { item: 'Pint of Lager', qty: 1180, price: 6.50, cogsUnit: 2.27 },
+    { item: 'Margarita', qty: 1050, price: 12.00, cogsUnit: 3.00 },
+    { item: 'Negroni', qty: 890, price: 12.00, cogsUnit: 2.88 },
+    { item: 'G&T', qty: 820, price: 10.00, cogsUnit: 2.50 },
+    { item: 'Old Fashioned', qty: 760, price: 13.00, cogsUnit: 3.25 },
+    { item: 'Soft Drink', qty: 910, price: 3.50, cogsUnit: 0.70 },
+    { item: 'Aperol Spritz', qty: 710, price: 11.00, cogsUnit: 2.75 },
+    { item: 'House Wine (glass)', qty: 680, price: 8.00, cogsUnit: 2.40 },
+    { item: 'Mojito', qty: 580, price: 12.00, cogsUnit: 3.60 },
+  ],
+}
+
+function calcRow(item) {
+  const revenue = item.qty * item.price
+  const cogs = item.qty * item.cogsUnit
+  const labour = item.qty * LABOUR_PER_ITEM
+  const fixed = item.qty * FIXED_PER_ITEM
+  const profit = revenue - cogs - labour - fixed
+  const margin = revenue > 0 ? (profit / revenue) * 100 : 0
+  return { ...item, revenue, cogs, labour, fixed, profit, margin }
+}
+
+function marginColor(m) {
+  if (m > 55) return C.green
+  if (m >= 40) return C.orange
+  return C.red
+}
+
+function SortIcon({ column, sortCol, sortDir }) {
+  if (sortCol !== column) return <span style={{ opacity: 0.2, marginLeft: 4, fontSize: 10 }}>{'↕'}</span>
+  return <span style={{ marginLeft: 4, fontSize: 10 }}>{sortDir === 'asc' ? '↑' : '↓'}</span>
+}
+
+const SELLER_PERIOD_LABELS = { today: 'Today', week: 'This Week', month: 'This Month' }
+
+const SELLER_COLUMNS = [
+  { key: 'rank', label: '#', sortable: false },
+  { key: 'item', label: 'Item', sortable: true },
+  { key: 'qty', label: 'Qty Sold', sortable: true },
+  { key: 'revenue', label: 'Revenue', sortable: true },
+  { key: 'cogs', label: 'COGS', sortable: true },
+  { key: 'labour', label: 'Labour', sortable: true },
+  { key: 'fixed', label: 'Fixed Costs', sortable: true },
+  { key: 'profit', label: 'Profit', sortable: true },
+  { key: 'margin', label: 'Margin %', sortable: true },
+]
+
 // ─── COMPONENT ──────────────────────────────────────────────────────
 
 export default function LiveTrading() {
@@ -118,6 +199,9 @@ export default function LiveTrading() {
   const [liveCovers, setLiveCovers] = useState(216)
   const [pulse, setPulse] = useState(false)
   const [activePeriod, setActivePeriod] = useState('hour')
+  const [sellersPeriod, setSellersPeriod] = useState('today')
+  const [sortCol, setSortCol] = useState('qty')
+  const [sortDir, setSortDir] = useState('desc')
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -140,6 +224,47 @@ export default function LiveTrading() {
   const prevTotal = prevPeriodTotals[activePeriod]
   const periodChange = prevTotal ? ((periodTotal - prevTotal) / prevTotal * 100).toFixed(1) : null
   const isPositive = periodChange && parseFloat(periodChange) >= 0
+
+  // ── Top Sellers computed data ──
+  const sellersRows = useMemo(() => {
+    const rows = topSellersData[sellersPeriod].map(calcRow)
+    rows.sort((a, b) => {
+      const valA = a[sortCol]
+      const valB = b[sortCol]
+      if (typeof valA === 'string') return sortDir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA)
+      return sortDir === 'asc' ? valA - valB : valB - valA
+    })
+    return rows
+  }, [sellersPeriod, sortCol, sortDir])
+
+  const sellersTotals = useMemo(() => {
+    return sellersRows.reduce((acc, r) => ({
+      qty: acc.qty + r.qty,
+      revenue: acc.revenue + r.revenue,
+      cogs: acc.cogs + r.cogs,
+      labour: acc.labour + r.labour,
+      fixed: acc.fixed + r.fixed,
+      profit: acc.profit + r.profit,
+    }), { qty: 0, revenue: 0, cogs: 0, labour: 0, fixed: 0, profit: 0 })
+  }, [sellersRows])
+
+  const totalMargin = sellersTotals.revenue > 0 ? (sellersTotals.profit / sellersTotals.revenue) * 100 : 0
+
+  const avgPourProfit = sellersRows.length > 0
+    ? sellersRows.reduce((sum, r) => sum + (r.profit / r.qty), 0) / sellersRows.length
+    : 0
+
+  const bestMarginItem = sellersRows.reduce((best, r) => r.margin > (best?.margin || 0) ? r : best, null)
+  const highestVolumeItem = sellersRows.reduce((best, r) => r.qty > (best?.qty || 0) ? r : best, null)
+
+  function handleSellerSort(col) {
+    if (sortCol === col) {
+      setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortCol(col)
+      setSortDir('desc')
+    }
+  }
 
   return (
     <div className="animate-in">

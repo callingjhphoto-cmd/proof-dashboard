@@ -88,7 +88,7 @@ export default function Reports() {
                   background: done ? C.green : 'transparent',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 10, color: '#fff',
-                }}>{done ? '\u2713' : ''}</div>
+                }}>{done ? '✓' : ''}</div>
                 {section}
               </div>
             )

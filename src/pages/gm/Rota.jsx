@@ -158,7 +158,7 @@ export default function Rota() {
                           fontWeight: isOff ? 400 : 600,
                           fontFamily: isOff ? 'inherit' : "'JetBrains Mono', monospace",
                         }}>
-                          {isOff ? '\u2014' : sh}
+                          {isOff ? '—' : sh}
                         </div>
                       </td>
                     )

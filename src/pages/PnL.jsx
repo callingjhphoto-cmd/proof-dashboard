@@ -119,7 +119,7 @@ export default function PnL({ C }) {
       </div>
 
       {/* Labour Trend */}
-      <Card title="Labour % \u2014 Last 12 Weeks" C={C}>
+      <Card title="Labour % — Last 12 Weeks" C={C}>
         <ResponsiveContainer width="100%" height={180}>
           <LineChart data={labourTrend}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1E1E21" />

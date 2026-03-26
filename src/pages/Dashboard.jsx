@@ -13,18 +13,18 @@ const revenueData = [
 ]
 
 const alerts = [
-  { severity: 'warning', text: 'Labour at 34% \u2014 4% above weekly target', time: '2h ago' },
+  { severity: 'warning', text: 'Labour at 34% — 4% above weekly target', time: '2h ago' },
   { severity: 'critical', text: 'Low stock: Hendricks Gin (2 bottles remaining)', time: '1h ago' },
   { severity: 'info', text: 'Friday booking: 142 covers (18% above avg)', time: '4h ago' },
   { severity: 'success', text: 'GP% trending up: 68.2% vs 66.5% last week', time: '6h ago' },
 ]
 
 const shift = [
-  { name: 'Sarah M.', role: 'Bar Lead', hours: '14:00\u201323:00', status: 'on', staffId: 'sarah-mitchell' },
-  { name: 'Marcus T.', role: 'Bartender', hours: '16:00\u201323:00', status: 'on', staffId: 'marcus-taylor' },
-  { name: 'Lily C.', role: 'Floor Mgr', hours: '11:00\u201320:00', status: 'ending', staffId: 'lily-chen' },
-  { name: 'Tom R.', role: 'Server', hours: '17:00\u201323:00', status: 'upcoming', staffId: 'tom-robinson' },
-  { name: 'Anya K.', role: 'Server', hours: '17:00\u201323:00', status: 'upcoming', staffId: 'anya-kowalski' },
+  { name: 'Sarah M.', role: 'Bar Lead', hours: '14:00–23:00', status: 'on', staffId: 'sarah-mitchell' },
+  { name: 'Marcus T.', role: 'Bartender', hours: '16:00–23:00', status: 'on', staffId: 'marcus-taylor' },
+  { name: 'Lily C.', role: 'Floor Mgr', hours: '11:00–20:00', status: 'ending', staffId: 'lily-chen' },
+  { name: 'Tom R.', role: 'Server', hours: '17:00–23:00', status: 'upcoming', staffId: 'tom-robinson' },
+  { name: 'Anya K.', role: 'Server', hours: '17:00–23:00', status: 'upcoming', staffId: 'anya-kowalski' },
 ]
 
 const sevColors = { critical: '#EF4444', warning: '#F97316', info: '#3B82F6', success: '#22C55E' }

@@ -51,8 +51,8 @@ export default function Header({ onMenuClick }) {
   const notifMessages = {
     [ROLES.OWNER]: [
       { text: 'Tower Bridge EBITDA dropped below 10%', time: '2h ago', severity: 'red' },
-      { text: 'City Garden labour at 33.8% \u2014 above target', time: '4h ago', severity: 'orange' },
-      { text: 'Soho Brasserie hit \u00A3195k revenue this month', time: '6h ago', severity: 'green' },
+      { text: 'City Garden labour at 33.8% — above target', time: '4h ago', severity: 'orange' },
+      { text: 'Soho Brasserie hit £195k revenue this month', time: '6h ago', severity: 'green' },
     ],
     [ROLES.GM]: [
       { text: 'Low stock: Hendricks Gin (2 bottles)', time: '1h ago', severity: 'red' },
@@ -64,7 +64,7 @@ export default function Header({ onMenuClick }) {
       { text: 'Spring menu launch Wednesday', time: '8h ago', severity: 'green' },
     ],
     [ROLES.EMPLOYEE]: [
-      { text: 'Your shift tomorrow: 16:00\u201323:00', time: '1h ago', severity: 'amber' },
+      { text: 'Your shift tomorrow: 16:00–23:00', time: '1h ago', severity: 'amber' },
       { text: 'New training module available: Spring Menu', time: '3h ago', severity: 'green' },
     ],
   }

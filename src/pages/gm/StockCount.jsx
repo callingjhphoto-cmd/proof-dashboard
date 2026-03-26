@@ -129,7 +129,7 @@ export default function StockCount() {
                       type="number" min="0"
                       value={item.counted ?? ''}
                       onChange={e => updateCount(item.id, e.target.value)}
-                      placeholder="\u2014"
+                      placeholder="—"
                       style={{
                         width: 60, padding: '6px 8px', borderRadius: 6, textAlign: 'center',
                         background: C.bg, border: `1px solid ${item.counted !== null ? C.teal : C.border}`,
@@ -139,7 +139,7 @@ export default function StockCount() {
                     />
                   </td>
                   <td style={{ padding: '10px', fontWeight: 600, color: variance === null ? C.textDim : variance === 0 ? C.green : C.red }}>
-                    {variance === null ? '\u2014' : variance === 0 ? '\u2713' : `${variance > 0 ? '+' : ''}${variance}`}
+                    {variance === null ? '—' : variance === 0 ? '✓' : `${variance > 0 ? '+' : ''}${variance}`}
                   </td>
                   <td style={{ padding: '10px' }}>
                     {belowHalf ? (

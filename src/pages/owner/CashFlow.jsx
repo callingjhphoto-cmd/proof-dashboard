@@ -107,8 +107,8 @@ export default function CashFlow() {
                   </span>
                 </div>
                 <div style={{ display: 'flex', gap: 8, fontSize: 11 }}>
-                  <span style={{ color: C.green }}>{'\u2191'} £{(m.inflow / 1000).toFixed(0)}k in</span>
-                  <span style={{ color: C.red }}>{'\u2193'} £{(m.outflow / 1000).toFixed(0)}k out</span>
+                  <span style={{ color: C.green }}>{'↑'} £{(m.inflow / 1000).toFixed(0)}k in</span>
+                  <span style={{ color: C.red }}>{'↓'} £{(m.outflow / 1000).toFixed(0)}k out</span>
                 </div>
               </div>
             ))}

@@ -144,7 +144,7 @@ export default function ShiftSwap() {
                   <div style={{ fontSize: 13, color: C.ink, fontWeight: 500 }}>{swap.date} &mdash; {swap.original}</div>
                   <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>
                     Swapped with {swap.swappedWith}
-                    {swap.approvedBy && ` \u2022 Approved by ${swap.approvedBy}`}
+                    {swap.approvedBy && ` • Approved by ${swap.approvedBy}`}
                   </div>
                 </div>
                 <span style={{

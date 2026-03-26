@@ -479,8 +479,8 @@ export default function StaffProfile() {
 
   // Comparison bar data
   const comparisonData = [
-    { metric: 'Weekly Rev', person: person.pos.thisWeek, team: Math.round(teamAvg.weeklyRevenue), unit: '\u00a3' },
-    { metric: 'Avg Tx', person: person.pos.avgTransaction, team: parseFloat(teamAvg.avgTransaction.toFixed(2)), unit: '\u00a3' },
+    { metric: 'Weekly Rev', person: person.pos.thisWeek, team: Math.round(teamAvg.weeklyRevenue), unit: '£' },
+    { metric: 'Avg Tx', person: person.pos.avgTransaction, team: parseFloat(teamAvg.avgTransaction.toFixed(2)), unit: '£' },
     { metric: 'Upsell %', person: person.pos.upsellRate, team: parseFloat(teamAvg.upsellRate.toFixed(1)), unit: '%' },
     { metric: 'Tx/Hour', person: person.pos.transactionsPerHour, team: parseFloat(teamAvg.transactionsPerHour.toFixed(1)), unit: '' },
     { metric: 'Rating', person: person.pos.customerRating, team: parseFloat(teamAvg.customerRating.toFixed(1)), unit: '/5' },
@@ -534,7 +534,7 @@ export default function StaffProfile() {
               <span style={{ fontSize: 12, color: C.textDim }}>
                 Started {new Date(person.startDate).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })} ({tenure(person.startDate)})
               </span>
-              <span style={{ fontSize: 12, color: C.textDim }}>{'\u00a3'}{person.rate.toFixed(2)}/hr</span>
+              <span style={{ fontSize: 12, color: C.textDim }}>{'£'}{person.rate.toFixed(2)}/hr</span>
             </div>
           </div>
 
@@ -560,10 +560,10 @@ export default function StaffProfile() {
       {!isNonPOS ? (
         <>
           <div className="grid-kpi-4" style={{ marginBottom: 16 }}>
-            <Metric icon={PoundSterling} label="Revenue Today" value={`\u00a3${person.pos.today.toLocaleString()}`} color={C.green} />
-            <Metric icon={PoundSterling} label="Revenue This Week" value={`\u00a3${person.pos.thisWeek.toLocaleString()}`} color={C.amber} />
-            <Metric icon={PoundSterling} label="Revenue This Month" value={`\u00a3${person.pos.thisMonth.toLocaleString()}`} color={C.ink} />
-            <Metric icon={ShoppingCart} label="Avg Transaction" value={`\u00a3${person.pos.avgTransaction.toFixed(2)}`} sub={`${person.pos.transactionsPerHour} tx/hour`} />
+            <Metric icon={PoundSterling} label="Revenue Today" value={`£${person.pos.today.toLocaleString()}`} color={C.green} />
+            <Metric icon={PoundSterling} label="Revenue This Week" value={`£${person.pos.thisWeek.toLocaleString()}`} color={C.amber} />
+            <Metric icon={PoundSterling} label="Revenue This Month" value={`£${person.pos.thisMonth.toLocaleString()}`} color={C.ink} />
+            <Metric icon={ShoppingCart} label="Avg Transaction" value={`£${person.pos.avgTransaction.toFixed(2)}`} sub={`${person.pos.transactionsPerHour} tx/hour`} />
           </div>
 
           {/* ─── Revenue Trend Chart ─────────────────────────────────────── */}
@@ -571,10 +571,10 @@ export default function StaffProfile() {
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={person.pos.last7Days}>
                 <XAxis dataKey="day" stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `\u00a3${v}`} />
+                <YAxis stroke="#333" tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `£${v}`} />
                 <Tooltip
                   contentStyle={{ background: '#1A1A1C', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-                  formatter={v => [`\u00a3${v.toLocaleString()}`, 'Revenue']}
+                  formatter={v => [`£${v.toLocaleString()}`, 'Revenue']}
                 />
                 <Line type="monotone" dataKey="revenue" stroke={person.color} strokeWidth={2.5} dot={{ fill: person.color, r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
@@ -632,7 +632,7 @@ export default function StaffProfile() {
                   <td style={{ padding: '10px 12px', fontSize: 13, color: C.textMuted }}>{s.end}</td>
                   <td style={{ padding: '10px 12px', fontSize: 13, color: C.ink, fontWeight: 600 }}>{s.hours}h</td>
                   {!isNonPOS && (
-                    <td style={{ padding: '10px 12px', fontSize: 13, color: C.green, fontWeight: 600 }}>{'\u00a3'}{s.revenue.toLocaleString()}</td>
+                    <td style={{ padding: '10px 12px', fontSize: 13, color: C.green, fontWeight: 600 }}>{'£'}{s.revenue.toLocaleString()}</td>
                   )}
                 </tr>
               ))}
@@ -683,8 +683,8 @@ export default function StaffProfile() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                     <span style={{ fontSize: 12, color: C.textMuted }}>{d.metric}</span>
                     <span style={{ fontSize: 12, color: isAhead ? C.green : C.orange, fontWeight: 600 }}>
-                      {d.unit === '\u00a3' ? `\u00a3${d.person.toLocaleString()}` : `${d.person}${d.unit}`}
-                      <span style={{ color: C.textDim, fontWeight: 400 }}> vs {d.unit === '\u00a3' ? `\u00a3${d.team.toLocaleString()}` : `${d.team}${d.unit}`} avg</span>
+                      {d.unit === '£' ? `£${d.person.toLocaleString()}` : `${d.person}${d.unit}`}
+                      <span style={{ color: C.textDim, fontWeight: 400 }}> vs {d.unit === '£' ? `£${d.team.toLocaleString()}` : `${d.team}${d.unit}`} avg</span>
                     </span>
                   </div>
                   <div style={{ display: 'flex', gap: 4 }}>

@@ -34,7 +34,7 @@ const wineByTheGlass = [
   { name: 'Cloudy Bay Sauvignon Blanc', region: 'Marlborough', glass: '£12.50', btl: '£54' },
   { name: 'Chablis Premier Cru', region: 'Burgundy', glass: '£15.00', btl: '£65' },
   { name: 'Malbec, Catena Zapata', region: 'Mendoza', glass: '£11.50', btl: '£48' },
-  { name: 'Ros\u00e9, Ch\u00e2teau d\'Esclans', region: 'Provence', glass: '£13.00', btl: '£56' },
+  { name: 'Rosé, Château d\'Esclans', region: 'Provence', glass: '£13.00', btl: '£56' },
 ]
 
 const typeConfig = {

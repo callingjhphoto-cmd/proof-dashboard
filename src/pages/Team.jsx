@@ -76,7 +76,7 @@ export default function Team({ C }) {
               onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
             >
               <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{t.name}</div>
-              <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{t.role} {'\u2022'} £{t.rate.toFixed(2)}/hr</div>
+              <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{t.role} {'•'} £{t.rate.toFixed(2)}/hr</div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 11 }}>
                 <span style={{ color: statusColor[t.status] }}>{statusLabel[t.status]}</span>
                 <span style={{ color: C.textDim }}>{t.shift}</span>
