@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Send, Clock, FileText, PenTool, ChevronDown, ChevronUp, Mail, MessageSquare, Users, BarChart3, Target, Plus, Eye } from 'lucide-react'
+import { Send, Clock, FileText, PenTool, ChevronDown, ChevronUp, Mail, MessageSquare, Users, BarChart3, Target, Plus, Eye, ToggleLeft, ToggleRight, AlertCircle } from 'lucide-react'
 import { CAMPAIGNS, TEMPLATES, CUSTOMERS, SEGMENTS } from '../../data/customers'
 
 const C = {
@@ -44,6 +44,7 @@ export default function Campaigns() {
   const [showCreate, setShowCreate] = useState(false)
   const [createForm, setCreateForm] = useState({ name: '', segment: 'regular', channel: 'email', message: '' })
   const [showTemplates, setShowTemplates] = useState(false)
+  const [smsEnabled, setSmsEnabled] = useState(false)
 
   const totalSent = CAMPAIGNS.filter(c => c.status === 'sent').reduce((s, c) => s + c.sent, 0)
   const totalOpened = CAMPAIGNS.filter(c => c.status === 'sent').reduce((s, c) => s + c.opened, 0)
@@ -73,6 +74,42 @@ export default function Campaigns() {
         <StatCard icon={Users} label="Messages Sent" value={totalSent} color={C.blue} />
         <StatCard icon={Eye} label="Avg Open Rate" value={`${avgOpenRate}%`} color={C.green} />
         <StatCard icon={Target} label="Redemptions" value={totalRedeemed} color={C.amber} />
+      </div>
+
+      {/* SMS Settings */}
+      <div style={{
+        background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px', marginBottom: 20,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <MessageSquare size={18} color={smsEnabled ? C.green : C.textDim} />
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>SMS Sending</div>
+              <div style={{ fontSize: 12, color: C.textMuted }}>{smsEnabled ? 'Enabled' : 'Disabled'}</div>
+            </div>
+          </div>
+          <button
+            onClick={() => setSmsEnabled(!smsEnabled)}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              display: 'flex', alignItems: 'center',
+            }}
+          >
+            {smsEnabled
+              ? <ToggleRight size={36} color={C.green} />
+              : <ToggleLeft size={36} color={C.textDim} />
+            }
+          </button>
+        </div>
+        <div style={{
+          display: 'flex', alignItems: 'flex-start', gap: 8, padding: '10px 14px', borderRadius: 8,
+          background: C.amberBg, border: `1px solid ${C.amber}20`,
+        }}>
+          <AlertCircle size={16} color={C.amber} style={{ flexShrink: 0, marginTop: 2 }} />
+          <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.5 }}>
+            For private members' bars, we recommend keeping SMS disabled. For pub groups targeting regular customers, SMS campaigns can increase return visits by 15-25%.
+          </div>
+        </div>
       </div>
 
       {/* Create Campaign */}
@@ -112,7 +149,7 @@ export default function Campaigns() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <label style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Channel</label>
               <div style={{ display: 'flex', gap: 8 }}>
-                {['email', 'sms'].map(ch => (
+                {['email', ...(smsEnabled ? ['sms'] : [])].map(ch => (
                   <button key={ch} onClick={() => setCreateForm({ ...createForm, channel: ch })} style={{
                     padding: '5px 12px', borderRadius: 6, fontSize: 12, cursor: 'pointer',
                     border: `1px solid ${createForm.channel === ch ? C.amber + '60' : C.border}`,
