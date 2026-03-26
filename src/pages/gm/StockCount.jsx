@@ -74,15 +74,15 @@ export default function StockCount() {
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '16px 20px' }}>
           <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', marginBottom: 6 }}>Estimated Value</div>
           <div style={{ fontSize: 26, fontWeight: 700, color: C.ink }}>
-            {'\u00a3'}{stock.reduce((s, i) => s + (i.counted ?? i.expected) * i.price, 0).toFixed(0)}
+            {'£'}{stock.reduce((s, i) => s + (i.counted ?? i.expected) * i.price, 0).toFixed(0)}
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
         <div style={{
-          flex: 1, display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', borderRadius: 8,
+          display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', borderRadius: 8,
           background: C.card, border: `1px solid ${C.border}`,
         }}>
           <Search size={16} color={C.textDim} />
@@ -91,7 +91,7 @@ export default function StockCount() {
             style={{ flex: 1, background: 'transparent', border: 'none', color: C.text, fontSize: 13, outline: 'none' }}
           />
         </div>
-        <div style={{ display: 'flex', gap: 4 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {categories.map(cat => (
             <button key={cat} onClick={() => setCategoryFilter(cat)} style={{
               padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: 'pointer',

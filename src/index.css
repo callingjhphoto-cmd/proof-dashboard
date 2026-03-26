@@ -37,6 +37,12 @@ body {
 .grid-2col-sidebar { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
 .grid-7day { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
 
+/* Medium screens: small laptops */
+@media (max-width: 1024px) {
+  .grid-kpi-5 { grid-template-columns: repeat(3, 1fr) !important; }
+  .grid-2col-sidebar { grid-template-columns: 1fr !important; }
+}
+
 /* Mobile: tablets */
 @media (max-width: 768px) {
   /* Sidebar hidden by default */
@@ -57,8 +63,8 @@ body {
 }
 
 /* Mobile: phones */
-@media (max-width: 640px) {
-  .role-grid { grid-template-columns: 1fr !important; max-width: 400px !important; }
+@media (max-width: 768px) {
+  .role-grid { grid-template-columns: 1fr !important; max-width: 420px !important; }
 }
 
 @media (max-width: 480px) {

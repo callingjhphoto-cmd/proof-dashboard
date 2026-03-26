@@ -1,10 +1,27 @@
-import { FileText, Download, Calendar, TrendingUp } from 'lucide-react'
+import { FileText, Download, Calendar, TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react'
 
 const C = {
   bg: '#0A0A0B', card: '#111113', border: '#1E1E21',
   amber: '#D4A853', amberBg: 'rgba(212,168,83,0.08)',
-  green: '#22C55E', red: '#EF4444', blue: '#3B82F6',
+  green: '#22C55E', greenBg: 'rgba(34,197,94,0.08)',
+  red: '#EF4444', redBg: 'rgba(239,68,68,0.08)',
+  orange: '#F97316',
+  blue: '#3B82F6',
   text: '#E5E5E5', textMuted: '#888', textDim: '#555', ink: '#fff',
+}
+
+const febSummary = {
+  highlights: [
+    { label: 'Portfolio Revenue', value: '£742k', change: '+3.8%', up: true },
+    { label: 'Net Profit', value: '£74k', change: '+12.1%', up: true },
+    { label: 'Avg Labour %', value: '31.4%', change: '+1.2pts', up: false },
+    { label: 'Avg GP %', value: '67.2%', change: '+0.8pts', up: true },
+  ],
+  topVenue: 'The Ivy Soho Brasserie',
+  topVenueDetail: '22.0% EBITDA margin, highest in portfolio',
+  watchVenue: 'The Ivy Tower Bridge',
+  watchVenueDetail: 'Revenue down 8.5% MoM. Labour at 36.2%.',
+  aiInsight: 'Cocktail revenue grew 14% across all venues, driven by Espresso Martini demand. Recommend standardising pre-batch protocols across all sites to capture this trend.',
 }
 
 const reports = [
@@ -76,6 +93,53 @@ export default function Reports() {
               </div>
             )
           })}
+        </div>
+      </div>
+
+      {/* February Report Preview */}
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: C.ink }}>February 2026 &mdash; Executive Summary</div>
+            <div style={{ fontSize: 12, color: C.textMuted, marginTop: 4 }}>Preview of last completed report</div>
+          </div>
+          <button style={{
+            display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 8,
+            background: C.amber, border: 'none', color: '#000', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+          }}>
+            <Download size={14} /> Full PDF
+          </button>
+        </div>
+
+        <div className="grid-kpi-4" style={{ marginBottom: 16 }}>
+          {febSummary.highlights.map((h, i) => (
+            <div key={i} style={{ padding: '12px 16px', borderRadius: 8, background: C.bg, border: `1px solid ${C.border}` }}>
+              <div style={{ fontSize: 10, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>{h.label}</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: C.ink }}>{h.value}</div>
+              <div style={{ fontSize: 11, color: h.up ? C.green : C.red, marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
+                {h.up ? <TrendingUp size={10} /> : <TrendingDown size={10} />} {h.change} vs Jan
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid-2col" style={{ marginBottom: 12 }}>
+          <div style={{ padding: '12px 16px', borderRadius: 8, background: C.greenBg, borderLeft: `3px solid ${C.green}` }}>
+            <div style={{ fontSize: 11, color: C.green, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>Top Performer</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>{febSummary.topVenue}</div>
+            <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{febSummary.topVenueDetail}</div>
+          </div>
+          <div style={{ padding: '12px 16px', borderRadius: 8, background: C.redBg, borderLeft: `3px solid ${C.red}` }}>
+            <div style={{ fontSize: 11, color: C.red, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <AlertTriangle size={10} /> Requires Attention
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>{febSummary.watchVenue}</div>
+            <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{febSummary.watchVenueDetail}</div>
+          </div>
+        </div>
+
+        <div style={{ padding: '12px 16px', borderRadius: 8, background: C.amberBg, borderLeft: `3px solid ${C.amber}`, fontSize: 13, color: C.text, lineHeight: 1.5 }}>
+          <span style={{ fontWeight: 600, color: C.amber }}>AI Insight:</span> {febSummary.aiInsight}
         </div>
       </div>
 
