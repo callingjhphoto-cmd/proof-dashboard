@@ -226,6 +226,56 @@ export default function VenueGrid() {
           </tbody>
         </table>
       </div>
+
+      {/* Portfolio Health Summary */}
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginTop: 20 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Portfolio Health Check</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+          {[
+            {
+              label: 'Revenue Trend',
+              status: venues.filter(v => v.revenueChange >= 0).length >= 3 ? 'healthy' : 'warning',
+              detail: `${venues.filter(v => v.revenueChange >= 0).length} of ${venues.length} venues growing vs last month`,
+            },
+            {
+              label: 'Labour Control',
+              status: parseFloat(avgLabour) <= 30 ? 'healthy' : parseFloat(avgLabour) <= 33 ? 'warning' : 'critical',
+              detail: `Portfolio average ${avgLabour}% (target: 30%). ${venues.filter(v => v.labour > 33).length} venue(s) above 33%`,
+            },
+            {
+              label: 'GP Performance',
+              status: parseFloat(avgGP) >= 67 ? 'healthy' : parseFloat(avgGP) >= 64 ? 'warning' : 'critical',
+              detail: `Portfolio average ${avgGP}%. ${venues.filter(v => v.gp < v.gpTarget).length} venue(s) below target`,
+            },
+            {
+              label: 'Cash Position',
+              status: 'healthy',
+              detail: `£342k balance. 4.2 months runway at current burn. No overdue payments`,
+            },
+          ].map((check, i) => {
+            const statusStyle = {
+              healthy: { color: C.green, bg: C.greenBg, label: 'Healthy' },
+              warning: { color: C.orange, bg: 'rgba(249,115,22,0.08)', label: 'Watch' },
+              critical: { color: C.red, bg: C.redBg, label: 'Action Needed' },
+            }[check.status]
+            return (
+              <div key={i} style={{
+                padding: '14px 16px', borderRadius: 10, background: C.bg, border: `1px solid ${C.border}`,
+                borderLeft: `3px solid ${statusStyle.color}`,
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{check.label}</span>
+                  <span style={{
+                    padding: '3px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600,
+                    color: statusStyle.color, background: statusStyle.bg,
+                  }}>{statusStyle.label}</span>
+                </div>
+                <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.4 }}>{check.detail}</div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }

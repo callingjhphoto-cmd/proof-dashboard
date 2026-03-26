@@ -168,6 +168,33 @@ export default function DailyChecklist() {
         </div>
       </div>
 
+      {/* EHO Readiness */}
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <CheckCircle size={16} color={C.green} /> EHO Readiness Score
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+          <div style={{ fontSize: 42, fontWeight: 800, color: C.green, fontFamily: "'JetBrains Mono', monospace" }}>94%</div>
+          <div>
+            <div style={{ fontSize: 12, color: C.text }}>Ready for inspection</div>
+            <div style={{ fontSize: 11, color: C.textDim }}>Last EHO visit: 14 Jan 2026 (Rating: 5/5)</div>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+          {[
+            { area: 'Food Safety (HACCP)', score: 100, status: 'All logs current' },
+            { area: 'Allergen Records', score: 95, status: '1 update pending' },
+            { area: 'Temperature Logs', score: 88, status: 'Cold room logged at 09:15' },
+          ].map((a, i) => (
+            <div key={i} style={{ padding: '10px 12px', borderRadius: 8, background: C.bg, border: `1px solid ${C.border}` }}>
+              <div style={{ fontSize: 11, color: C.textDim, marginBottom: 4 }}>{a.area}</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: a.score >= 95 ? C.green : a.score >= 80 ? C.amber : C.red }}>{a.score}%</div>
+              <div style={{ fontSize: 10, color: C.textMuted, marginTop: 2 }}>{a.status}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Incident Log */}
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>

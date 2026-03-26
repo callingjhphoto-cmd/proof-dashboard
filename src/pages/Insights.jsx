@@ -1,4 +1,4 @@
-import { Brain, Target, TrendingUp, TrendingDown, Star, AlertTriangle, Zap, Calendar } from 'lucide-react'
+import { Brain, Target, TrendingUp, TrendingDown, Star, AlertTriangle, Zap, Calendar, AlertCircle, Info } from 'lucide-react'
 
 const dailyBriefing = {
   priorities: [
@@ -105,6 +105,70 @@ export default function Insights({ C }) {
             <Zap size={14} /> Weekly Insight
           </div>
           {dailyBriefing.insight}
+        </div>
+      </Card>
+
+      {/* Ops Director Intelligence */}
+      <Card title="Operations Director Intelligence" icon={Target} C={C} style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 14, lineHeight: 1.5 }}>
+          Deep operational insights with severity rating, current performance vs target, and recommended actions.
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {[
+            { severity: 'critical', metric: 'Wage-to-Revenue Ratio', current: '34%', target: '28-32%', icon: AlertCircle,
+              insight: 'Your wage-to-revenue ratio is 34% \u2014 2% above the upper target of 32%. Tuesday and Wednesday are overstaffed by an estimated 1.5 heads each day. Combined excess cost: \u00A3204/week (\u00A310,608/year).',
+              action: 'Cut 1 staff member from Tuesday evening (18:00-23:00) and 1 from Wednesday (18:00-22:00). Review Sunday staffing \u2014 you are paying for 5 staff on a day that generates \u00A31,838 (39.2% labour cost).' },
+            { severity: 'critical', metric: 'Spirits Stock Variance', current: '4.2%', target: '2%', icon: AlertTriangle,
+              insight: 'Stock variance on spirits is 4.2% (target: 2%). At current spirit revenue (\u00A34,800/week), this equates to \u00A3201/week in unaccounted product. Over a year, that is \u00A310,452. Possible causes: overpouring (most likely \u2014 free-pour accounts for 60% of variance in comparable venues), miscounting (20%), or theft (20%).',
+              action: 'Implement measured pours on premium spirits (\u00A38+ cost/unit). Install jiggers at all stations. Run a 2-week pour audit comparing POS sales to stock movement. Focus on: vodka (highest variance at 5.8%), gin (4.1%), and tequila (3.9%).' },
+            { severity: 'warning', metric: 'Average Dwell Time', current: '1.8 hours', target: '2.2 hours', icon: TrendingDown,
+              insight: 'Your average dwell time is 1.8 hours. Industry benchmark for a premium bar-restaurant of your type is 2.2 hours. Each additional 10 minutes of dwell time correlates with \u00A34.20 additional spend (based on your data). Closing the 24-minute gap would add approximately \u00A310.08 per cover.',
+              action: 'Train staff to offer dessert/coffee/digestif menu proactively. Current upsell rate on dessert is 12% (industry top performers: 25-30%). Coffee upsell: 18% (target: 35%). Introduce a "To Finish" card presented with the bill showing digestif options (\u00A38-14 price point). At 140 avg covers/day, converting an extra 15% to a \u00A310 dessert/digestif = \u00A3210/day.' },
+            { severity: 'warning', metric: 'Draught Beer Wastage', current: '4.8%', target: '3%', icon: AlertTriangle,
+              insight: 'Draught wastage this month: 4.8% (target: 3%). This equates to \u00A3340/week in lost product. Peroni (6.1%), Guinness (5.2%), Camden Hells (4.4%). Line cleaning log shows last clean was 9 days ago (target: every 7 days). Historical data: wastage drops to 2.8% in weeks following a line clean.',
+              action: 'Schedule line clean today. Review first-pour technique on Peroni (likely over-pouring). Consider switching Guinness to a smaller keg size if daily throughput does not justify 50L. Estimated recovery if wastage returns to 3%: \u00A3237/week (\u00A312,324/year).' },
+            { severity: 'info', metric: 'Pre-Dinner Cocktail Capture', current: '36%', target: '50%', icon: Target,
+              insight: 'Your pre-dinner cocktail capture rate is 36% \u2014 meaning only 36% of dining customers order a cocktail before their meal. Best-in-class London venues achieve 55-65% (Hawksmoor: est. 65%). Your cocktail average ticket is \u00A314.20. Closing the gap to 50% would add approximately 20 additional cocktails per day.',
+              action: 'Present cocktail menu to every table within 90 seconds of seating (current avg: 3.2 minutes). Add 3 "To Start" cocktails to the food menu first page. Train hosts to suggest "drinks at the bar while your table is prepared" for walk-ins. Estimated revenue uplift: \u00A3284/day (\u00A31,988/week).' },
+            { severity: 'info', metric: 'Google Review Response Rate', current: '42%', target: '90%', icon: Star,
+              insight: 'You respond to 42% of Google reviews (target: 90%+). Venues that respond to 90%+ of reviews see an average 0.2-0.3 star improvement over 6 months. You currently have 14 unresponded reviews from the last 30 days, including 3 negative reviews (2-star or below). Unanswered negative reviews are visible to every potential customer searching for your venue.',
+              action: 'Respond to all 14 outstanding reviews this week. Set up a daily 10-minute slot to respond to new reviews. For negative reviews: acknowledge, do not argue, invite back. For positive: thank specifically, mention something personal. Consider an automated alert for new reviews below 3 stars.' },
+          ].map((insight, i) => {
+            const Icon = insight.icon
+            return (
+              <div key={i} style={{
+                background: insight.severity === 'critical' ? 'rgba(239,68,68,0.04)' : insight.severity === 'warning' ? 'rgba(249,115,22,0.04)' : C.bg,
+                border: `1px solid ${sevColors[insight.severity]}20`,
+                borderLeft: `3px solid ${sevColors[insight.severity]}`,
+                borderRadius: 10, padding: '14px 16px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon size={16} color={sevColors[insight.severity]} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{insight.metric}</span>
+                    <span style={{ fontSize: 9, padding: '2px 8px', borderRadius: 4, background: sevColors[insight.severity] + '20', color: sevColors[insight.severity], textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>{insight.severity}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: 10, color: C.textDim }}>Current</div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: sevColors[insight.severity], fontFamily: "'JetBrains Mono', monospace" }}>{insight.current}</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: 10, color: C.textDim }}>Target</div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: C.textMuted, fontFamily: "'JetBrains Mono', monospace" }}>{insight.target}</div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 10 }}>{insight.insight}</div>
+                <div style={{ padding: '10px 14px', borderRadius: 8, background: sevColors[insight.severity] + '08', border: `1px solid ${sevColors[insight.severity]}15` }}>
+                  <div style={{ fontSize: 10, fontWeight: 600, color: sevColors[insight.severity], textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Zap size={10} /> Recommended Action
+                  </div>
+                  <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>{insight.action}</div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </Card>
 

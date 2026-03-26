@@ -412,6 +412,48 @@ export default function LiveTrading() {
         </div>
       </div>
 
+      {/* Staff Revenue Leaderboard */}
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Staff Leaderboard &mdash; Today</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[
+            { name: 'Sarah M.', role: 'Bar Lead', revenue: 3420, txns: 42, avg: 81.43, upsell: '28%' },
+            { name: 'Marcus T.', role: 'Bartender', revenue: 2180, txns: 34, avg: 64.12, upsell: '22%' },
+            { name: 'Tom R.', role: 'Server', revenue: 1840, txns: 28, avg: 65.71, upsell: '18%' },
+            { name: 'Anya K.', role: 'Server', revenue: 1620, txns: 24, avg: 67.50, upsell: '15%' },
+            { name: 'Ben H.', role: 'Bartender', revenue: 1480, txns: 22, avg: 67.27, upsell: '20%' },
+          ].map((s, i) => (
+            <div key={i} style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '10px 14px', borderRadius: 8, background: i === 0 ? `${C.teal}08` : C.bg,
+              border: `1px solid ${i === 0 ? `${C.teal}30` : C.border}`,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: i === 0 ? C.teal : i === 1 ? C.amber : C.textDim + '30',
+                  fontSize: 11, fontWeight: 700, color: i < 2 ? '#000' : C.textMuted,
+                }}>{i + 1}</div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>{s.name}</div>
+                  <div style={{ fontSize: 10, color: C.textDim }}>{s.role}</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center', fontSize: 12 }}>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontWeight: 700, color: C.teal, fontFamily: "'JetBrains Mono', monospace" }}>{'£'}{s.revenue.toLocaleString()}</div>
+                  <div style={{ fontSize: 10, color: C.textDim }}>{s.txns} txns</div>
+                </div>
+                <div style={{ textAlign: 'right', minWidth: 50 }}>
+                  <div style={{ color: C.textMuted }}>{s.upsell}</div>
+                  <div style={{ fontSize: 10, color: C.textDim }}>upsell</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Recent Transactions */}
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 16 }}>Recent Transactions</div>
